@@ -1,8 +1,8 @@
 ![CrowdStrike Falcon](/images/cs-logo.png?raw=true)
 
-# $SAMPLE_NAME sample Foundry app
+# Charlotte Toolkit sample Foundry app
 
-The $SAMPLE_NAME sample Foundry app is a community-driven, open source project which serves as an example of an app which can be built using CrowdStrike's Foundry ecosystem. `$REPOSITORY_NAME` is an open source project, not a CrowdStrike product. As such, it carries no formal support, expressed or implied.
+The Charlotte Toolkit sample Foundry app is a community-driven, open source project which serves as an example of an app which can be built using CrowdStrike's Foundry ecosystem. `foundry-sample-charlotte-toolkit` is an open source project, not a CrowdStrike product. As such, it carries no formal support, expressed or implied.
 
 This app is one of several App Templates included in Foundry that you can use to jumpstart your development. It comes complete with a set of preconfigured capabilities aligned to its business purpose. Deploy this app from the Templates page with a single click in the Foundry UI, or create an app from this template using the CLI.
 
@@ -11,15 +11,12 @@ This app is one of several App Templates included in Foundry that you can use to
 
 ## Description
 
-_A description of this app's use case and what it does._
+Charlotte Toolkit brings AI-powered security analysis directly into your CrowdStrike Falcon incidents. Instead of switching between tools or copying data, Charlotte provides expert-level security analysis right where you're working.
 
 ## Prerequisites
 
 * The Foundry CLI (instructions below).
-* _Delete or add tools below as required. These are from other samples._
-* Python 3.13+ (needed if modifying the app's functions). See [Python For Beginners](https://www.python.org/about/gettingstarted/) for installation instructions.
-* Go v1.23+ (needed if modifying the app's functions). See https://go.dev/learn for installation instructions.
-* Yarn (needed if modifying the app's UI). See https://yarnpkg.com/getting-started for installation instructions.
+* Node 22+ (needed if modifying the app's UI). See https://nodejs.org for installation instructions.
 
 ### Install the Foundry CLI
 
@@ -49,11 +46,11 @@ Run `foundry version` to verify it's installed correctly.
 
 ## Getting Started
 
-Clone this sample to your local system, or [download as a zip file](https://github.com/CrowdStrike/$REPOSITORY_NAME/archive/refs/heads/main.zip) and import it into Foundry.
+Clone this sample to your local system, or [download as a zip file](https://github.com/CrowdStrike/foundry-sample-charlotte-toolkit/archive/refs/heads/main.zip) and import it into Foundry.
 
 ```shell
-git clone https://github.com/CrowdStrike/$REPOSITORY_NAME
-cd $REPOSITORY_NAME
+git clone https://github.com/CrowdStrike/foundry-sample-charlotte-toolkit
+cd foundry-sample-charlotte-toolkit
 ```
 
 Log in to Foundry:
@@ -66,7 +63,7 @@ Select the following permissions:
 
 - [ ] Create and run RTR scripts
 - [x] Create, execute and test workflow templates
-- [x] Create, run and view API integrations
+- [ ] Create, run and view API integrations
 - [ ] Create, edit, delete, and list queries
 
 Deploy the app:
@@ -84,11 +81,19 @@ Once the deployment has finished, you can release the app:
 foundry apps release
 ```
 
-Next, go to **Foundry** > **App catalog**, find your app, and install it. Go to **Fusion SOAR** > **Workflows** to see the scheduled workflow from this app.
+Next, go to **Foundry** > **App catalog**, find your app, and install it. Go to **Next-Gen SIEM** > **Incidents**, then click on an incident and **See full incident**. Once you click on a node in the workbench, you'll be able to see the UI extension from this app.
 
 ## About this sample app
 
-_Describe your app and its components._
+**Key Features:**
+- **AI-Powered Analysis**: Multi-model support (Claude Latest, Claude 3.7 Sonnet, GPT-4o)
+- **Automatic Context Detection**: Extracts security indicators from your incidents automatically
+- **Comprehensive Coverage**: File analysis, network intelligence, email security, threat intelligence
+- **Professional Output**: Executive summaries, technical details, actionable recommendations
+- **MITRE ATT&CK Integration**: Tactical context with standardized threat framework
+- **Secure by Design**: All analysis happens within your CrowdStrike environment
+
+See this sample's [App docs README](app_docs/README.md) for more information.
 
 ## Foundry resources
 

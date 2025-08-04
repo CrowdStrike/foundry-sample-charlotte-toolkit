@@ -1,0 +1,586 @@
+/* Security Analysis Features - IOC Display, MITRE, Structured Analysis */
+
+/* Structured Security Analysis Styling */
+.structured-analysis {
+  padding: var(--spacing-sm);
+}
+
+/* Unified IOC Display System - Consolidates all IOC styling */
+.ioc-display-item,
+.ioc-container,
+.ioc-code-display {
+  background-color: var(--cs-background-lightest, #fefefe);
+  border: var(--border-width-thin, 1px) solid var(--cs-border-color-light, #e2e8f0);
+  padding: var(--spacing-base);
+  margin-bottom: var(--spacing-sm);
+  border-radius: var(--spacing-sm);
+  transition: all var(--transition-fast);
+  overflow: hidden;
+}
+
+.ioc-display-item:hover,
+.ioc-container:hover,
+.ioc-code-display:hover {
+  background-color: var(--cs-background-light, #f8fafc);
+  border-color: var(--cs-border-color-medium, #cbd5e0);
+}
+
+/* Unified IOC Code Styling */
+.ioc-display-item code,
+.ioc-container code,
+.ioc-code {
+  background-color: transparent !important;
+  color: var(--cs-text-primary);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  padding: 0 var(--spacing-sm);
+  border-radius: var(--spacing-xs);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+}
+
+.ioc-code:hover {
+  background-color: var(--cs-background-lighter) !important;
+}
+
+/* Unified Recommendation Styling - Plain text styling like Executive Summary and Technical Analysis */
+.recommendation-item {
+  color: var(--cs-text-primary);
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-base);
+  margin-bottom: var(--spacing-sm);
+
+  /* Remove all background colors, borders, padding, and hover effects */
+}
+
+/* Markdown Recommendations Styling - Plain text styling to match other sections */
+.markdown-recommendations ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.markdown-recommendations li {
+  color: var(--cs-text-primary);
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-base);
+  margin-bottom: var(--spacing-sm);
+
+  /* Remove all background colors, borders, padding, and hover effects */
+}
+
+/* Compact Bullet List - Reduced spacing between items */
+.compact-bullet-list {
+  list-style: none;
+  padding-left: 0;
+}
+
+.compact-bullet-list > li {
+  margin-bottom: var(--spacing-xs);
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-base);
+}
+
+/* Threat Context Items - Unified styling for all items in Threat Context section */
+.threat-context-item {
+  background-color: var(--cs-background-lightest, #fefefe);
+  border: var(--border-width-thin, 1px) solid var(--cs-border-color-light, #e2e8f0);
+  padding: var(--spacing-base);
+  margin-bottom: var(--spacing-sm);
+  border-radius: var(--spacing-sm);
+  transition: all var(--transition-fast);
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-base);
+}
+
+.threat-context-item:hover {
+  background-color: var(--cs-background-light, #f8fafc);
+  border-color: var(--cs-border-color-medium, #cbd5e0);
+}
+
+.threat-context-item:last-child {
+  margin-bottom: 0;
+}
+
+/* Code elements within threat context items */
+.threat-context-item code {
+  background-color: transparent !important;
+  color: var(--cs-text-primary);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  word-break: break-all;
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
+  max-width: 100%;
+}
+
+/* IOC Section Spacing - Simplified */
+.ioc-section-spacing {
+  margin-bottom: var(--spacing-xl);
+}
+
+.ioc-section-spacing:last-child {
+  margin-bottom: 0;
+}
+
+/* IOC Type Header Styling */
+.ioc-type-header {
+  margin-bottom: var(--spacing-base);
+  padding-bottom: var(--spacing-xs);
+  border-bottom: var(--border-width-thin, 1px) solid var(--cs-border-color-light, #e2e8f0);
+}
+
+.ioc-type-header span {
+  color: var(--cs-text-primary, #1f2937);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-base);
+}
+
+/* Enhanced IOC Value Item Styling */
+.ioc-value-item {
+  background-color: var(--cs-background-light, #f8fafc);
+  border: var(--border-width-thin, 1px) solid var(--cs-border-color-light, #e2e8f0);
+  border-radius: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-base);
+  margin-bottom: var(--spacing-sm);
+  transition: all var(--transition-fast);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-base);
+}
+
+.ioc-value-item:hover {
+  background-color: var(--cs-background-lightest, #fefefe);
+  border-color: var(--cs-border-color-medium, #cbd5e0);
+  box-shadow: var(--cs-drop-shadow-xs, 0 1px 2px rgb(0 0 0 / 0.05));
+}
+
+.ioc-value-item:last-child {
+  margin-bottom: 0;
+}
+
+/* IOC Code Elements Enhancement */
+.ioc-value-item code {
+  background-color: transparent !important;
+  color: var(--cs-text-primary, #1f2937);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  padding: 0;
+  border-radius: 0;
+  word-break: break-all;
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
+  line-height: 1.4;
+}
+
+/* Copy Button Styling for IOCs */
+.ioc-copy-btn {
+  opacity: 0.7;
+  transition: all var(--transition-fast);
+}
+
+.ioc-copy-btn:hover {
+  opacity: 1;
+  background-color: var(--cs-background-lightest, #fefefe);
+}
+
+.ioc-copy-btn .copy-success {
+  color: var(--cs-status-success, #10b981);
+}
+
+/* Confidence and Threat Level Badge Positioning */
+.badge-container {
+  display: flex;
+  gap: var(--spacing-base);
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+/* Enhanced scrollbar for structured content */
+.structured-analysis::-webkit-scrollbar {
+  width: var(--scrollbar-width-normal);
+}
+
+.structured-analysis::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.structured-analysis::-webkit-scrollbar-thumb {
+  border-radius: var(--spacing-xs);
+}
+
+/* Text Overflow Prevention - Critical for long IOC values */
+.threat-context-card code,
+.iocs-card code {
+  /* Force word breaking for long monospace text */
+  word-break: break-all !important;
+  overflow-wrap: break-word !important;
+  white-space: pre-wrap !important;
+  max-width: 100% !important;
+  display: inline-block !important;
+}
+
+
+/* Generic break-words utility for monospace text */
+.text-xs.font-mono.break-words,
+.font-mono.break-words {
+  word-break: break-all !important;
+  overflow-wrap: break-word !important;
+  white-space: pre-wrap !important;
+  max-width: 100% !important;
+}
+
+/* MITRE Techniques Enhanced Styling */
+.mitre-techniques-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.mitre-technique-card.enhanced-card {
+  background-color: var(--cs-background-lightest, #fefefe);
+  border: var(--border-width-thin, 1px) solid var(--cs-border-color-light, #e2e8f0);
+  border-radius: var(--spacing-base);
+  padding: var(--spacing-lg);
+  transition: all var(--transition-fast);
+  margin-bottom: 0; /* Override default spacing */
+}
+
+/* Removed hover effects for cleaner appearance */
+
+/* Technique Header Styling */
+.technique-header {
+  margin-bottom: var(--spacing-base);
+}
+
+.technique-title-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.technique-id {
+  color: var(--cs-text-primary);
+  font-weight: var(--font-weight-bold);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-sm);
+  background-color: var(--cs-background-light, #f8fafc);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--spacing-xs);
+  border: var(--border-width-thin, 1px) solid var(--cs-border-color-light, #e2e8f0);
+  text-decoration: none;
+  display: inline-block;
+  transition: all var(--transition-fast);
+  cursor: pointer;
+}
+
+/* Removed hover effects for cleaner appearance */
+
+.technique-name-line {
+  display: flex;
+  align-items: center;
+}
+
+.technique-name {
+  color: var(--cs-text-primary, #1f2937);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-base);
+  line-height: 1.4;
+}
+
+.technique-icon {
+  color: var(--cs-color-primary, #2563eb);
+  font-size: var(--font-size-base);
+}
+
+/* Tactic Badge Styling */
+.tactic-badge-container {
+  display: flex;
+  align-items: center;
+}
+
+.tactic-badge {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-wide);
+}
+
+/* Technique Description Styling */
+.technique-description {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-base);
+}
+
+.technique-paragraph {
+  margin: 0; /* Remove default paragraph margins */
+  line-height: 1.6;
+  color: var(--cs-text-primary, #1f2937);
+}
+
+.technique-paragraph + .technique-paragraph {
+  margin-top: var(--spacing-base);
+}
+
+/* Responsive Design for MITRE Techniques */
+@media (max-width: var(--breakpoint-md)) {
+  .mitre-techniques-container {
+    gap: var(--spacing-base);
+  }
+  
+  .mitre-technique-card.enhanced-card {
+    padding: var(--spacing-base);
+  }
+  
+  .technique-id {
+    font-size: var(--font-size-xs);
+    padding: var(--spacing-xs);
+  }
+  
+  .technique-name {
+    font-size: var(--font-size-sm);
+  }
+  
+  .technique-paragraph {
+    font-size: var(--font-size-sm);
+  }
+  
+  .tactic-badge {
+    font-size: var(--font-size-2xs);
+  }
+}
+
+@media (max-width: var(--breakpoint-sm)) {
+  .mitre-techniques-container {
+    gap: var(--spacing-sm);
+  }
+  
+  .mitre-technique-card.enhanced-card {
+    padding: var(--spacing-sm);
+  }
+  
+  .technique-description {
+    gap: var(--spacing-sm);
+  }
+  
+  .technique-paragraph {
+    font-size: var(--font-size-xs);
+    line-height: 1.5;
+  }
+  
+  .technique-name {
+    font-size: var(--font-size-sm);
+  }
+}
+
+/* Legacy MITRE card support */
+.mitre-technique-card:not(.enhanced-card) {
+  background-color: var(--cs-background-lightest);
+  border: var(--border-width-thin) solid var(--cs-border-color-light);
+  border-radius: var(--spacing-sm);
+  padding: var(--spacing-base);
+  margin-bottom: var(--spacing-sm);
+  transition: all var(--transition-fast);
+}
+
+.mitre-technique-card:not(.enhanced-card):hover {
+  border-color: var(--cs-border-color-medium);
+  background-color: var(--cs-background-light);
+}
+
+/* Universal Formatting Styles - Applied to ALL security sections */
+.formatted-paragraph {
+  margin-bottom: var(--spacing-base);
+  line-height: 1.6;
+  color: var(--cs-text-primary);
+}
+
+.formatted-paragraph:last-child {
+  margin-bottom: 0;
+}
+
+.formatted-paragraph + .formatted-paragraph {
+  margin-top: var(--spacing-base);
+}
+
+/* Technical Details Formatted Styling */
+.technical-details-formatted {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-base);
+}
+
+.technical-paragraph {
+  margin-bottom: var(--spacing-base);
+}
+
+.technical-paragraph:last-child {
+  margin-bottom: 0;
+}
+
+.technical-paragraph .prose {
+  margin: 0;
+}
+
+.technical-paragraph p {
+  margin-bottom: var(--spacing-sm);
+  line-height: 1.6;
+}
+
+.technical-paragraph p:last-child {
+  margin-bottom: 0;
+}
+
+/* Executive Summary Formatted Styling */
+.executive-summary-card .formatted-paragraph {
+  font-size: var(--font-size-sm);
+  line-height: 1.6;
+  margin-bottom: var(--spacing-base);
+}
+
+@media (min-width: var(--breakpoint-sm)) {
+  .executive-summary-card .formatted-paragraph {
+    font-size: var(--font-size-base);
+  }
+}
+
+/* Analysis Methodology Formatted Styling */
+.analysis-methodology-card .formatted-paragraph {
+  margin-bottom: var(--spacing-base);
+  line-height: 1.6;
+}
+
+.analysis-methodology-card .formatted-paragraph:first-of-type {
+  margin-top: var(--spacing-sm);
+}
+
+/* Legacy Reasoning Assessment support */
+.reasoning-assessment-card .formatted-paragraph {
+  margin-bottom: var(--spacing-base);
+  line-height: 1.6;
+}
+
+.reasoning-assessment-card .formatted-paragraph:first-of-type {
+  margin-top: var(--spacing-sm);
+}
+
+/* Responsive adjustments for formatted text */
+@media (max-width: var(--breakpoint-md)) {
+  .formatted-paragraph {
+    font-size: var(--font-size-sm);
+    margin-bottom: var(--spacing-sm);
+  }
+  
+  .technical-details-formatted {
+    gap: var(--spacing-sm);
+  }
+  
+  .technical-paragraph {
+    margin-bottom: var(--spacing-sm);
+  }
+}
+
+@media (max-width: var(--breakpoint-sm)) {
+  .formatted-paragraph {
+    font-size: var(--font-size-xs);
+    line-height: 1.5;
+    margin-bottom: var(--spacing-xs);
+  }
+  
+  .technical-details-formatted {
+    gap: var(--spacing-xs);
+  }
+}
+
+/* Theme-aware utility classes for structured analysis */
+.secondary-text {
+  color: var(--cs-text-secondary) !important;
+}
+
+.threat-error-icon {
+  color: var(--cs-text-secondary) !important;
+}
+
+.recommendation-icon {
+  color: var(--cs-color-alert-primary) !important;
+}
+
+
+/* Validation item styling */
+.validation-item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-xs);
+  color: var(--cs-text-primary);
+}
+
+.validation-item:last-child {
+  margin-bottom: 0;
+}
+
+/* Simplified responsive adjustments - Consolidated to 2 breakpoints */
+@media (max-width: var(--breakpoint-md)) {
+  .badge-container {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-sm);
+  }
+
+  .recommendation-item {
+    font-size: var(--font-size-sm);
+  }
+
+  .structured-analysis {
+    padding: var(--spacing-xs);
+    gap: var(--spacing-lg);
+  }
+
+  .structured-analysis h3 {
+    font-size: var(--font-size-lg) !important;
+    gap: var(--spacing-md);
+    display: flex;
+    align-items: center;
+  }
+
+  .structured-analysis sl-badge {
+    font-size: var(--font-size-micro);
+    padding: var(--spacing-xs) var(--spacing-sm);
+  }
+}
+
+@media (max-width: var(--breakpoint-sm)) {
+  .structured-analysis {
+    padding: 0;
+    gap: var(--spacing-base);
+  }
+
+  .structured-analysis h3 {
+    font-size: var(--font-size-base) !important;
+    line-height: var(--line-height-tight);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+  }
+
+  .recommendation-item {
+    font-size: var(--font-size-xs);
+    gap: var(--spacing-sm);
+  }
+
+  .space-y-2 > * + * {
+    margin-top: var(--spacing-sm);
+  }
+
+  .space-y-4 > * + * {
+    margin-top: var(--spacing-base);
+  }
+}

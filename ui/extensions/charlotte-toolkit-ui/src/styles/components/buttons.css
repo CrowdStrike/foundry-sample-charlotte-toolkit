@@ -1,0 +1,52 @@
+/* Button Components - Copy buttons, action buttons, and states */
+
+/* Essential component styling using proper specificity */
+.compact-copy-btn::part(base) {
+  padding: var(--spacing-sm) var(--spacing-md);
+  min-height: auto;
+  font-size: var(--font-size-base);
+}
+
+.compact-copy-btn sl-icon {
+  font-size: var(--font-size-base);
+}
+
+/* Copy button hover effects */
+.compact-copy-btn:hover {
+  background-color: var(--cs-background-lighter);
+}
+
+/* Code block group hover effects */
+.group:hover .compact-copy-btn {
+  opacity: 1;
+}
+
+/* Copy button improvements for IOCs */
+.ioc-copy-btn {
+  opacity: 0;
+  transition: opacity var(--transition-normal);
+  flex-shrink: 0;
+  min-width: var(--spacing-4xl);
+}
+
+.ioc-display-item:hover .ioc-copy-btn {
+  opacity: 1;
+}
+
+/* Button success state styling */
+.copy-success {
+  color: var(--cs-status-success);
+}
+
+/* Standardized responsive adjustments */
+@media (max-width: var(--breakpoint-sm)) {
+  .compact-copy-btn::part(base) {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    min-height: var(--spacing-3xl);
+    font-size: var(--font-size-xs);
+  }
+
+  .compact-copy-btn sl-icon {
+    font-size: var(--font-size-xs);
+  }
+}

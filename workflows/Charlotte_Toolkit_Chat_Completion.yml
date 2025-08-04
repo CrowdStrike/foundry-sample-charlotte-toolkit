@@ -1,0 +1,74 @@
+name: Charlotte Toolkit Chat Completion
+description: 'Send chat completion requests to Charlotte. '
+provision_on_install: true
+trigger:
+    next:
+        - charlotte_ai___llm_completion_a6ebd2e2
+    name: On demand
+    parameters:
+        properties:
+            data_to_include:
+                items:
+                    type: string
+                type: array
+                description: Additional context data sources
+                default: []
+            json_schema:
+                type: string
+                description: Structure for response format
+                default: ""
+            model_name:
+                enum:
+                    - Claude Latest
+                    - Claude 3.7 Sonnet
+                    - GPT-4o
+                type: string
+                description: Selected Charlotte AI model
+                default: Claude Latest
+            stop_words:
+                items:
+                    type: string
+                maxItems: 4
+                type: array
+                description: Custom stop sequences (max 4)
+                default: []
+            temperature:
+                maximum: 1
+                minimum: 0
+                type: number
+                description: AI creativity control (0.0 precise, 1.0 creative)
+                default: 0.1
+            user_prompt:
+                type: string
+                description: User's security analysis query
+        required:
+            - user_prompt
+        type: object
+actions:
+    charlotte_ai___llm_completion_a6ebd2e2:
+        id: bdfecafafdb44919a458fcf51d6b93a7_98dec86072334d24b37dd798098cfd63
+        properties:
+            data_to_include:
+                - ${data_to_include}
+            json_schema: ${json_schema}
+            model_name: ${model_name}
+            stop_words:
+                - ${stop_words}
+            temperature: ${temperature}
+            user_prompt: ${user_prompt}
+output_fields:
+    - charlotte_ai___llm_completion_a6ebd2e2.FaaS.nlpassistantapi.llminvocator_handler.completion
+    - charlotte_ai___llm_completion_a6ebd2e2.FaaS.nlpassistantapi.llminvocator_handler.meta.model_name
+    - Trigger.TriggerSource.User.Email
+    - Trigger.TriggerSource.User.UUID
+    - Workflow.Execution.Time
+summary: |-
+    ${charlotte_ai___llm_completion_a6ebd2e2.FaaS.nlpassistantapi.llminvocator_handler.completion}
+
+    ${charlotte_ai___llm_completion_a6ebd2e2.FaaS.nlpassistantapi.llminvocator_handler.meta.model_name}
+
+    ${Trigger.TriggerSource.User.Email}
+
+    ${Trigger.TriggerSource.User.UUID}
+
+    ${Workflow.Execution.Time}

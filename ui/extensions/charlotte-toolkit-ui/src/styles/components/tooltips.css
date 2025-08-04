@@ -1,0 +1,37 @@
+/* Tooltip System - Proper Shoelace integration with 2 second delay */
+
+/* Use Shoelace's built-in delay system and max-width CSS custom property */
+sl-tooltip {
+  --sl-tooltip-show-delay: var(--duration-tooltip-delay);
+  --sl-tooltip-hide-delay: 0ms;
+  --max-width: 33vw; /* Using Shoelace's native CSS custom property */
+}
+
+/* Proper tooltip styling - Using CrowdStrike Falcon Shoelace design tokens */
+sl-tooltip::part(body) {
+  background-color: var(--cs-tooltip-background);
+  color: var(--cs-tooltip-color);
+  border: var(--border-width-thin) solid var(--cs-tooltip-border-color);
+  padding: var(--spacing-base) var(--spacing-lg);
+  border-radius: var(--cs-border-radius-s);
+  font-size: var(--cs-font-size-s);
+  font-weight: var(--cs-font-weight-regular);
+  line-height: var(--line-height-tight);
+  box-shadow: var(--cs-drop-shadow-s);
+  overflow-wrap: break-word;
+  z-index: var(--z-index-tooltip);
+}
+
+/* Ensure proper arrow styling with CrowdStrike Falcon Shoelace tokens */
+sl-tooltip::part(arrow) {
+  border-color: var(--cs-tooltip-background);
+}
+
+/* Specific styling for truncated text tooltips with increased width */
+.truncated-text-tooltip {
+  --max-width: 40vw; /* Using Shoelace's native CSS custom property */
+}
+
+.truncated-text-tooltip::part(body) {
+  word-break: break-all; /* Handle long URLs/hashes */
+}

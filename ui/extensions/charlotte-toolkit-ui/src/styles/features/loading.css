@@ -1,0 +1,163 @@
+/* Enhanced Loading States - CrowdStrike Branding */
+
+/* Main loading container with improved layout */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--container-height-2xl); /* Using design token for consistency */
+  gap: var(--spacing-3xl); /* Increased gap for better spacing */
+  padding: var(--spacing-4xl);
+  color: var(--cs-text-secondary);
+}
+
+/* Enhanced spinner with CrowdStrike branding */
+.loading-spinner {
+  --track-width: var(--border-width-thick);
+  --track-color: var(--cs-border-color-light);
+  --indicator-color: var(--cs-color-primary);
+  --speed: var(--duration-loading-cycle);
+
+  width: var(--component-size-lg); /* Larger spinner using design token */
+  height: var(--component-size-lg);
+
+  /* Add subtle glow effect for CrowdStrike branding */
+  filter: drop-shadow(0 0 8px rgb(var(--cs-color-primary-rgb, 0, 123, 255), var(--opacity-medium)));
+
+  /* Smooth animation */
+  animation: loading-pulse 2s ease-in-out infinite alternate;
+}
+
+/* Breathing animation for the spinner */
+@keyframes loading-pulse {
+  0% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 8px rgb(var(--cs-color-primary-rgb, 0, 123, 255), var(--opacity-medium)));
+  }
+
+  100% {
+    transform: scale(var(--scale-hover));
+    filter: drop-shadow(0 0 12px rgb(var(--cs-color-primary-rgb, 0, 123, 255), 0.4));
+  }
+}
+
+/* Slack-style pulsing loading text with premium typography */
+.loading-text-pulse {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-medium);
+  font-family:
+    system-ui,
+    "SF Pro Display",
+    -apple-system,
+    sans-serif;
+  color: var(--cs-text-primary);
+  text-align: center;
+  line-height: var(--line-height-tight);
+  letter-spacing: var(--letter-spacing-normal);
+
+  /* Slack-style pulsing animation - smooth opacity breathing synced with spinner */
+  animation: loading-text-pulse var(--duration-loading-cycle) var(--easing-ease-in-out) infinite;
+}
+
+/* Slack-style pulsing animation - gentle breathing effect */
+@keyframes loading-text-pulse {
+  0%,
+  100% {
+    opacity: var(--opacity-heavy);
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+/* Loading icon container for future icon enhancements */
+.loading-icon-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Standardized responsive adjustments */
+@media (max-width: var(--breakpoint-md)) {
+  .loading-container {
+    min-height: var(--container-height-3xl);
+    gap: var(--spacing-2xl);
+    padding: var(--spacing-3xl);
+  }
+
+  .loading-spinner {
+    width: var(--component-size-md);
+    height: var(--component-size-md);
+  }
+
+  .loading-text-pulse {
+    font-size: var(--font-size-lg);
+  }
+}
+
+@media (max-width: var(--breakpoint-sm)) {
+  .loading-container {
+    min-height: calc(var(--container-height-3xl) - var(--spacing-4xl));
+    gap: var(--spacing-xl);
+    padding: var(--spacing-xl);
+  }
+
+  .loading-spinner {
+    width: var(--component-size-sm);
+    height: var(--component-size-sm);
+  }
+
+  .loading-text-pulse {
+    font-size: var(--font-size-lg);
+    letter-spacing: var(--letter-spacing-wider);
+  }
+}
+
+/* Accessibility: Respect reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .loading-spinner {
+    animation: none;
+    filter: none;
+  }
+
+  .loading-text,
+  .loading-text-pulse {
+    animation: none;
+    opacity: 1;
+  }
+
+  @keyframes loading-pulse {
+    0%,
+    100% {
+      transform: scale(1);
+      filter: none;
+    }
+  }
+
+  @keyframes loading-text-fade {
+    0%,
+    100% {
+      opacity: 1;
+    }
+  }
+
+  @keyframes loading-text-pulse {
+    0%,
+    100% {
+      opacity: 1;
+    }
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: more) {
+  .loading-spinner {
+    filter: none;
+
+    --indicator-color: var(--cs-text-primary);
+    --track-color: var(--cs-border-color-medium);
+  }
+}
