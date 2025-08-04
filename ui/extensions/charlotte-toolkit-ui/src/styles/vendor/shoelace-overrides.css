@@ -1,0 +1,237 @@
+/* Shoelace Component Overrides for Charlotte Toolkit */
+
+/*
+ * Essential Shoelace component customizations that require direct overrides
+ * Use sparingly - prefer CrowdStrike design tokens when possible
+ * Updated to use design token system for consistent spacing
+ */
+
+/* ===== DROPDOWN & SELECT OVERRIDES ===== */
+
+/* Context entity dropdown grouping */
+.context-group-header {
+  display: flex;
+  align-items: center;
+  padding: var(--spacing-base) var(--spacing-lg); /* 8px 12px */
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-base); /* 14px - Reduced by 1 size for better visual density */
+  color: var(--cs-text-secondary);
+  background-color: var(--cs-background-lighter);
+  border-bottom: 1px solid var(--cs-border-color-light);
+}
+
+.context-entity-badge {
+  font-size: var(--font-size-xs); /* 11px - Reduced by 1 size for better visual density */
+  padding: var(--spacing-xs) var(--spacing-md); /* 2px 6px */
+}
+
+/* Child option indentation and styling */
+sl-option.child-option {
+  padding-left: var(--spacing-4xl) !important; /* 32px */
+  font-size: var(--font-size-xs) !important; /* 11px - Reduced by 1 size for better visual density */
+}
+
+/* Specific selector for broader coverage */
+sl-select sl-option.child-option {
+  padding-left: var(--spacing-4xl) !important; /* 32px */
+  font-size: var(--font-size-xs) !important; /* 11px - Reduced by 1 size for better visual density */
+}
+
+/* Prevent text wrapping in dropdown options */
+sl-option::part(label) {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Icon spacing in dropdown options */
+sl-option::part(base) {
+  gap: var(--spacing-base); /* 8px */
+}
+
+sl-option sl-icon[slot="prefix"] {
+  margin-right: var(--spacing-base); /* 8px */
+}
+
+/* Context and model dropdown icon spacing - consolidated */
+sl-select sl-icon[slot="prefix"] {
+  margin-right: var(--spacing-base); /* 8px */
+}
+
+/* Standardized dropdown font styling - all options use normal fonts for consistency */
+sl-option {
+  font-family: var(--font-family-sans) !important;
+}
+
+/* ===== TAB GROUP OVERRIDES ===== */
+
+/* Ensure proper tab styling consistency */
+sl-tab-group::part(nav) {
+  border-bottom: 1px solid var(--cs-border-color-light);
+}
+
+sl-tab::part(base) {
+  padding: var(--spacing-lg) var(--spacing-xl); /* 12px 16px */
+  font-size: var(--font-size-lg); /* 16px - moderately larger tab text */
+  font-weight: var(--font-weight-semibold);
+}
+
+sl-tab[active]::part(base) {
+  color: var(--cs-text-primary);
+  border-bottom-color: var(--cs-primary);
+}
+
+/* ===== CARD OVERRIDES ===== */
+
+/* Full width card styling */
+.full-width-card {
+  width: 100%;
+  max-width: none;
+}
+
+.full-width-card::part(base) {
+  width: 100%;
+}
+
+/* ===== DETAILS OVERRIDES ===== */
+
+/* Advanced options styling */
+.advanced-options::part(summary) {
+  font-weight: var(--font-weight-semibold);
+  padding: var(--spacing-lg) 0; /* 12px 0 */
+}
+
+.advanced-options::part(content) {
+  padding-top: 0;
+}
+
+/* Subtle advanced options styling */
+.advanced-options-subtle::part(summary) {
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-base); /* 14px */
+  padding: var(--spacing-base) 0; /* 8px 0 */
+  color: var(--cs-text-secondary);
+}
+
+.advanced-options-subtle::part(content) {
+  padding-top: 0;
+}
+
+/* ===== FORM CONTROL OVERRIDES ===== */
+
+/* Use Shoelace's native CSS custom property system for proper focus behavior */
+sl-input,
+sl-textarea,
+sl-select {
+  --sl-input-border-color: var(--cs-border-color-medium);
+  --sl-input-border-color-focus: var(--cs-primary);
+  --sl-input-background-color: var(--cs-background-lightest);
+  --sl-input-background-color-focus: var(--cs-background-lightest);
+  --sl-focus-ring-color: var(--cs-primary);
+  --sl-focus-ring-width: 1px;
+}
+
+
+/* ===== BADGE VARIANT STYLING ===== */
+
+/* Security Analysis Badge Colors - Using CrowdStrike Design Tokens */
+sl-badge[variant="danger"] {
+  --sl-color-danger-50: var(--cs-background-light);
+  --sl-color-danger-600: var(--cs-color-danger, #dc2626);
+  --sl-color-danger-900: var(--cs-color-danger-dark, #7f1d1d);
+
+  background-color: var(--cs-color-danger, #dc2626);
+  color: white;
+  border: none;
+}
+
+sl-badge[variant="warning"] {
+  --sl-color-warning-50: var(--cs-background-light);
+  --sl-color-warning-600: var(--cs-color-warning, #f59e0b);
+  --sl-color-warning-900: var(--cs-color-warning-dark, #78350f);
+
+  background-color: var(--cs-color-warning, #f59e0b);
+  color: white;
+  border: none;
+}
+
+sl-badge[variant="success"] {
+  --sl-color-success-50: var(--cs-background-light);
+  --sl-color-success-600: var(--cs-color-success, #10b981);
+  --sl-color-success-900: var(--cs-color-success-dark, #064e3b);
+
+  background-color: var(--cs-color-success, #10b981);
+  color: white;
+  border: none;
+}
+
+sl-badge[variant="neutral"] {
+  --sl-color-neutral-50: var(--cs-background-light);
+  --sl-color-neutral-600: var(--cs-color-neutral, #6b7280);
+  --sl-color-neutral-900: var(--cs-color-neutral-dark, #374151);
+
+  background-color: var(--cs-color-neutral, #6b7280);
+  color: white;
+  border: none;
+}
+
+sl-badge[variant="primary"] {
+  --sl-color-primary-50: var(--cs-background-light);
+  --sl-color-primary-600: var(--cs-primary, #2563eb);
+  --sl-color-primary-900: var(--cs-primary-dark, #1e3a8a);
+
+  background-color: var(--cs-primary, #2563eb);
+  color: white;
+  border: none;
+}
+
+/* Ensure badges have proper typography and spacing */
+sl-badge {
+  font-family: var(--font-family-sans);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-xs);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--spacing-sm);
+  text-transform: none;
+  letter-spacing: normal;
+}
+
+/* MITRE technique tactic badges - specific styling */
+.tactic-badge {
+  font-size: var(--font-size-xs) !important;
+  font-weight: var(--font-weight-medium) !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.025em !important;
+}
+
+/* ===== RESPONSIVE OVERRIDES ===== */
+
+@media (max-width: var(--breakpoint-lg)) {
+  sl-tab::part(base) {
+    padding: var(--spacing-base) var(--spacing-lg); /* 8px 12px */
+    font-size: var(--font-size-base);
+  }
+
+  .context-group-header {
+    padding: var(--spacing-md) var(--spacing-base); /* 6px 8px */
+    font-size: var(--font-size-sm); /* 12px - Reduced to maintain proportional scaling */
+  }
+
+  /* Responsive badge sizing */
+  sl-badge {
+    font-size: var(--font-size-xs);
+    padding: var(--spacing-xs);
+  }
+}
+
+@media (max-width: var(--breakpoint-sm)) {
+  /* Even smaller badge sizing for mobile */
+  sl-badge {
+    font-size: var(--font-size-2xs);
+    padding: var(--spacing-xs) var(--spacing-sm);
+  }
+  
+  .tactic-badge {
+    font-size: var(--font-size-micro) !important;
+  }
+}

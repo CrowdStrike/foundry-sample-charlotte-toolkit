@@ -1,0 +1,120 @@
+/* Card Components - Consolidated card system with base classes */
+
+/* Base Security Card Styling - Consolidated shared classes */
+.base-security-card::part(base),
+.security-card::part(base),
+.executive-summary-card::part(base),
+.immediate-actions-card::part(base),
+.iocs-card::part(base),
+.malware-analysis-card::part(base),
+.attack-intelligence-card::part(base),
+.incident-context-card::part(base),
+.threat-context-card::part(base),
+.response-actions-card::part(base),
+.confidence-assessment-card::part(base),
+.analysis-methodology-card::part(base) {
+  background-color: var(--cs-background-lightest, #fefefe);
+  border: 1px solid var(--cs-border-color-medium, #cbd5e0);
+  border-radius: var(--spacing-base);
+  box-shadow: var(--cs-drop-shadow-s, 0 1px 3px rgb(0 0 0 / 0.1));
+  margin-bottom: var(--spacing-xl);
+}
+
+.base-security-card::part(body),
+.security-card::part(body),
+.executive-summary-card::part(body),
+.immediate-actions-card::part(body),
+.iocs-card::part(body),
+.malware-analysis-card::part(body),
+.attack-intelligence-card::part(body),
+.incident-context-card::part(body),
+.threat-context-card::part(body),
+.response-actions-card::part(body),
+.confidence-assessment-card::part(body),
+.analysis-methodology-card::part(body) {
+  padding: var(--spacing-lg);
+}
+
+/* Compact Card Styling - For smaller elements like MITRE techniques */
+.compact-card::part(base),
+.mitre-technique-card::part(base) {
+  border: 1px solid var(--cs-border-color-medium, #cbd5e0);
+  border-radius: var(--spacing-md);
+  padding: var(--spacing-lg);
+  margin-bottom: var(--spacing-base);
+  background-color: var(--cs-background-lightest, #fefefe);
+}
+
+.compact-card::part(body),
+.mitre-technique-card::part(body) {
+  padding: 0;
+}
+
+/* Details Card Styling - For expandable/collapsible content */
+.details-card::part(base),
+.mitre-details::part(base),
+.technical-details::part(base),
+.recommendations-details::part(base),
+.reasoning-assessment-card::part(base) {
+  border: 1px solid var(--cs-border-color-medium);
+  border-radius: var(--spacing-base);
+  margin-bottom: var(--spacing-xl);
+  box-shadow: var(--cs-drop-shadow-s);
+}
+
+.details-card::part(header),
+.mitre-details::part(header),
+.technical-details::part(header),
+.recommendations-details::part(header) {
+  background-color: var(--cs-background-light);
+  padding: var(--spacing-lg) var(--spacing-xl);
+  border-radius: var(--spacing-base) var(--spacing-base) 0 0;
+  font-weight: var(--font-weight-semibold);
+}
+
+.details-card::part(body),
+.mitre-details::part(body),
+.technical-details::part(body),
+.recommendations-details::part(body),
+.reasoning-assessment-card::part(body) {
+  padding: var(--spacing-xl);
+}
+
+/* Executive Summary cards - normal word wrapping for readability */
+.executive-summary-card {
+  word-break: normal;
+  overflow-wrap: break-word;
+}
+
+.executive-summary-card p {
+  /* Normal word wrapping - only break long strings when absolutely necessary */
+  word-break: normal;
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+
+/* Standardized responsive adjustments */
+@media (max-width: var(--breakpoint-md)) {
+  .base-security-card::part(body),
+  .security-card::part(body),
+  .executive-summary-card::part(body),
+  .immediate-actions-card::part(body),
+  .iocs-card::part(body) {
+    padding: var(--spacing-lg);
+  }
+
+  .mitre-technique-card::part(base),
+  .compact-card::part(base) {
+    padding: var(--spacing-base);
+  }
+}
+
+@media (max-width: var(--breakpoint-sm)) {
+  .base-security-card::part(body),
+  .security-card::part(body),
+  .executive-summary-card::part(body),
+  .immediate-actions-card::part(body),
+  .iocs-card::part(body) {
+    padding: var(--spacing-md);
+  }
+}
