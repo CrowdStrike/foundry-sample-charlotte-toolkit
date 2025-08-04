@@ -17,5 +17,5 @@ jobs:
         run: npm ci
         working-directory: ui/extensions/charlotte-toolkit-ui
       - name: Build React app
-        run: npm run build:ci
+        run: npm run build
         working-directory: ui/extensions/charlotte-toolkit-ui
