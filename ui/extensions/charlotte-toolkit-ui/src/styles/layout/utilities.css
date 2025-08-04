@@ -1,0 +1,31 @@
+/* Utility Classes and Simplified Animations */
+
+/* Loading spinner animation */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin {
+  animation: spin var(--duration-slow) linear infinite;
+}
+
+/* Simplified content fade-in - Single animation, better performance */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.structured-analysis {
+  animation: fade-in var(--duration-slow) var(--easing-ease-out);
+}

@@ -1,0 +1,94 @@
+/* Code Blocks and Code Display Features */
+
+/* Enhanced code block styling */
+.enhanced-code-block {
+  background-color: var(--cs-background-light);
+  color: var(--cs-text-primary);
+  padding: var(--spacing-lg);
+  border-radius: var(--spacing-md);
+  margin-bottom: var(--spacing-xl);
+  overflow-x: auto;
+  font-size: var(--font-size-base);
+  border: 1px solid var(--cs-border-color-light);
+}
+
+.enhanced-code-block code {
+  background-color: transparent;
+  padding: 0;
+  font-family: var(--font-family-mono);
+}
+
+/* Response content code styling */
+.response-content code {
+  color: var(--cs-text-primary);
+  background-color: var(--cs-background-light);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--spacing-sm);
+  font-size: var(--font-size-base);
+  font-family: var(--font-family-mono);
+}
+
+.response-content pre {
+  background-color: var(--cs-background-light);
+  color: var(--cs-text-primary);
+  padding: var(--spacing-lg);
+  border-radius: var(--spacing-md);
+  margin-bottom: var(--spacing-xl);
+  overflow-x: auto;
+  font-size: var(--font-size-base);
+}
+
+/* Technical Details Prose Code Styling */
+.prose code {
+  background-color: var(--cs-background-light);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--spacing-sm);
+  font-size: var(--font-size-base);
+}
+
+.response-content pre code {
+  background-color: transparent;
+  padding: 0;
+}
+
+.prose pre {
+  background-color: var(--cs-background-light);
+  padding: var(--spacing-lg);
+  border-radius: var(--spacing-md);
+  overflow-x: auto;
+  margin-bottom: var(--spacing-xl);
+}
+
+/* Hover effects for interactive code elements */
+.ioc-hover-bg:hover {
+  background-color: var(--cs-status-info-background) !important;
+}
+
+.ioc-hover-text:hover {
+  color: var(--cs-status-info) !important;
+}
+
+/* Standardized responsive adjustments */
+@media (max-width: var(--breakpoint-md)) {
+  .ioc-container {
+    flex-wrap: wrap;
+    gap: var(--spacing-xs);
+  }
+
+  .enhanced-code-block {
+    font-size: var(--font-size-sm);
+    padding: var(--spacing-base);
+  }
+
+  .ioc-display-item code {
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-tight);
+  }
+}
+
+@media (max-width: var(--breakpoint-sm)) {
+  .ioc-display-item code {
+    font-size: var(--font-size-xs);
+    word-break: break-all;
+  }
+}

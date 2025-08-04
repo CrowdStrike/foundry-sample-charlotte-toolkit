@@ -1,0 +1,165 @@
+/* Standardized scrollbar patterns using design tokens */
+
+/* Base scrollbar styling - consolidated standard pattern */
+.scrollbar-base,
+.scrollbar-response-container {
+  scrollbar-width: thin;
+  scrollbar-color: var(--cs-border-color-medium) transparent;
+}
+
+.scrollbar-base::-webkit-scrollbar,
+.scrollbar-response-container::-webkit-scrollbar {
+  width: var(--scrollbar-width-thick);
+}
+
+.scrollbar-base::-webkit-scrollbar-track,
+.scrollbar-response-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar-base::-webkit-scrollbar-thumb,
+.scrollbar-response-container::-webkit-scrollbar-thumb {
+  background-color: var(--cs-border-color-medium);
+  border-radius: var(--spacing-sm);
+  min-height: var(--scrollbar-thumb-min-height-lg);
+}
+
+.scrollbar-base::-webkit-scrollbar-thumb:hover,
+.scrollbar-response-container::-webkit-scrollbar-thumb:hover {
+  background-color: var(--cs-text-secondary);
+}
+
+/* Thin scrollbar variant */
+.scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: var(--cs-border-color-light) transparent;
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  width: var(--scrollbar-width-normal);
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: var(--spacing-xs);
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background-color: var(--cs-border-color-light);
+  border-radius: var(--spacing-xs);
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background-color: var(--cs-text-secondary);
+}
+
+/* Minimal scrollbar for containers */
+.scrollbar-minimal {
+  scrollbar-width: thin;
+  scrollbar-color: var(--cs-border-color-medium) transparent;
+}
+
+.scrollbar-minimal::-webkit-scrollbar {
+  width: var(--scrollbar-width-thick);
+}
+
+.scrollbar-minimal::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: var(--spacing-xs);
+}
+
+.scrollbar-minimal::-webkit-scrollbar-thumb {
+  background-color: var(--cs-border-color-light);
+  border-radius: var(--spacing-xs);
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+.scrollbar-minimal::-webkit-scrollbar-thumb:hover {
+  background-color: var(--cs-text-secondary);
+}
+
+/* Response container scrollbar with fade - using consolidated base styling */
+.scrollbar-response-container {
+  overflow: hidden auto;
+}
+
+/* Scroll fade effect for response containers */
+.scroll-fade-bottom {
+  position: relative;
+}
+
+.scroll-fade-bottom::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: var(--scrollbar-width-thick);
+  height: var(--spacing-3xl); /* 24px using design token */
+  background: linear-gradient(to bottom, transparent 0%, var(--cs-background) 100%);
+  pointer-events: none;
+  z-index: var(--z-index-overlay);
+}
+
+/* Responsive scrollbar adjustments - consolidated */
+@media (max-width: var(--breakpoint-sm)) {
+  .scrollbar-base::-webkit-scrollbar,
+  .scrollbar-response-container::-webkit-scrollbar,
+  .responsive-scrollbar-standard::-webkit-scrollbar {
+    width: var(--scrollbar-width-normal);
+  }
+
+  .scrollbar-base::-webkit-scrollbar-thumb,
+  .scrollbar-response-container::-webkit-scrollbar-thumb {
+    min-height: var(--scrollbar-thumb-min-height);
+  }
+
+  .scrollbar-thin::-webkit-scrollbar,
+  .responsive-scrollbar-thin::-webkit-scrollbar {
+    width: var(--scrollbar-width-thin);
+  }
+
+  .scroll-fade-bottom::after {
+    height: var(--spacing-2xl); /* 20px using design token */
+    right: var(--scrollbar-width-normal);
+  }
+}
+
+/* Container scroll patterns - commonly used combinations */
+.container-scroll-standard {
+  max-height: var(--container-height-lg);
+  overflow: hidden auto;
+}
+
+.container-scroll-standard.scrollbar-base {
+  /* Inherits scrollbar styling from .scrollbar-base */
+}
+
+.container-scroll-compact {
+  max-height: var(--container-height-md);
+  overflow: hidden auto;
+}
+
+.container-scroll-compact.scrollbar-thin {
+  /* Inherits scrollbar styling from .scrollbar-thin */
+}
+
+/* Structured analysis scrollbar */
+.scrollbar-structured::-webkit-scrollbar {
+  width: var(--scrollbar-width-normal);
+}
+
+.scrollbar-structured::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar-structured::-webkit-scrollbar-thumb {
+  border-radius: var(--spacing-xs);
+  background-color: var(--cs-border-color-light);
+}
+
+.scrollbar-structured::-webkit-scrollbar-thumb:hover {
+  background-color: var(--cs-border-color-medium);
+}

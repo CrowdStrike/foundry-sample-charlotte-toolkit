@@ -1,0 +1,116 @@
+/* Responsive breakpoint mixins and common patterns */
+
+/* Standard breakpoint utilities using design tokens */
+:root {
+  /* These are already defined in global.css but referenced here for clarity */
+  --breakpoint-sm: 480px;
+  --breakpoint-md: 640px;
+  --breakpoint-lg: 768px;
+}
+
+/* Common responsive patterns that can be applied via utility classes */
+
+/* Responsive padding patterns */
+.responsive-padding-standard {
+  padding: var(--spacing-xl);
+}
+
+@media (max-width: var(--breakpoint-md)) {
+  .responsive-padding-standard {
+    padding: var(--spacing-lg);
+  }
+}
+
+@media (max-width: var(--breakpoint-sm)) {
+  .responsive-padding-standard {
+    padding: var(--spacing-base);
+  }
+}
+
+/* Responsive padding for compact elements */
+.responsive-padding-compact {
+  padding: var(--spacing-lg);
+}
+
+@media (max-width: var(--breakpoint-md)) {
+  .responsive-padding-compact {
+    padding: var(--spacing-base);
+  }
+}
+
+@media (max-width: var(--breakpoint-sm)) {
+  .responsive-padding-compact {
+    padding: var(--spacing-sm);
+  }
+}
+
+/* Responsive font size patterns */
+.responsive-font-standard {
+  font-size: var(--font-size-base);
+}
+
+@media (max-width: var(--breakpoint-md)) {
+  .responsive-font-standard {
+    font-size: var(--font-size-sm);
+  }
+}
+
+@media (max-width: var(--breakpoint-sm)) {
+  .responsive-font-standard {
+    font-size: var(--font-size-xs);
+  }
+}
+
+/* Responsive container heights */
+.responsive-container-height {
+  max-height: var(--container-height-lg);
+}
+
+@media (max-width: var(--breakpoint-md)) {
+  .responsive-container-height {
+    max-height: var(--container-height-md);
+  }
+}
+
+@media (max-width: var(--breakpoint-sm)) {
+  .responsive-container-height {
+    max-height: var(--container-height-sm);
+  }
+}
+
+/* Common spacing adjustments for mobile */
+.responsive-spacing-tight {
+  gap: var(--spacing-lg);
+}
+
+@media (max-width: var(--breakpoint-md)) {
+  .responsive-spacing-tight {
+    gap: var(--spacing-base);
+  }
+}
+
+@media (max-width: var(--breakpoint-sm)) {
+  .responsive-spacing-tight {
+    gap: var(--spacing-sm);
+  }
+}
+
+/* Badge container responsive pattern */
+.responsive-badge-container {
+  display: flex;
+  gap: var(--spacing-base);
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+@media (max-width: var(--breakpoint-md)) {
+  .responsive-badge-container {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-sm);
+  }
+}
+
+/* Responsive scrollbar widths - consolidated with scrollbar-patterns.css */
+
+/* These patterns are now handled by scrollbar-patterns.css to avoid duplication */

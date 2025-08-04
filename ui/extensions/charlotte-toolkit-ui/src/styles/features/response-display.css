@@ -1,0 +1,359 @@
+/* Response Display and Markdown Content */
+
+/* Height-constrained response container - purely functional, no card styling */
+.response-scroll-container {
+  position: relative;
+  max-height: var(--container-height-standardized);
+  overflow: hidden;
+
+  /* Remove all card-like visual styling - let SlCard components handle it */
+}
+
+/* Scrollable content area with minimal styling - using scrollbar utility */
+.response-scroll-content {
+  max-height: var(--container-height-standardized);
+  overflow: hidden auto; /* Show scrollbar only when needed */
+  padding: var(--spacing-sm); /* Minimal padding - let SlCard components handle spacing */
+}
+
+/* Technical Details Prose Styling - must come before more specific selectors */
+.prose {
+  color: var(--cs-text-primary);
+  line-height: var(--line-height-normal);
+}
+
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4,
+.prose h5,
+.prose h6 {
+  color: var(--cs-text-primary);
+  font-weight: var(--font-weight-semibold);
+  margin-top: var(--spacing-xl);
+  margin-bottom: var(--spacing-base);
+}
+
+.prose p {
+  margin-bottom: var(--spacing-lg);
+}
+
+.prose ul,
+.prose ol {
+  padding-left: var(--spacing-3xl);
+  margin-bottom: var(--spacing-lg);
+}
+
+.prose li {
+  margin-bottom: var(--spacing-sm);
+}
+
+/* Prevent nested scrolling within response content */
+.response-scroll-content sl-card,
+.response-scroll-content .structured-analysis {
+  overflow: visible !important;
+  max-height: none !important;
+}
+
+.response-scroll-content .prose {
+  overflow: visible !important;
+  max-height: none !important;
+}
+
+/* Ensure SlCard parts don't create scroll areas */
+.response-scroll-content sl-card::part(base),
+.response-scroll-content sl-card::part(body) {
+  overflow: visible !important;
+  max-height: none !important;
+}
+
+
+/* Simplified scroll fade indicator - no longer needs to account for borders */
+.response-scroll-fade {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: var(--scrollbar-width-thick);
+  height: var(--spacing-3xl); /* 24px using design token */
+  background: linear-gradient(to bottom, transparent 0%, var(--cs-background) 100%);
+  pointer-events: none;
+  z-index: var(--z-index-overlay);
+}
+
+/* Legacy response content container - scrollbar handled by global pattern */
+.response-content {
+  padding: var(--spacing-base);
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-normal);
+  letter-spacing: var(--letter-spacing-tight);
+  word-break: normal;
+  overflow-wrap: break-word;
+}
+
+/* Enhanced heading styling with icons - general selectors first */
+.response-content h1,
+.response-content h2,
+.response-content h3,
+.response-content h4,
+.response-content h5,
+.response-content h6 {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-base);
+  color: var(--cs-text-primary);
+  font-weight: var(--font-weight-bold);
+  margin-top: var(--spacing-3xl);
+  margin-bottom: var(--spacing-lg);
+  line-height: var(--line-height-tight);
+}
+
+/* Specific heading sizes */
+.response-content h1 {
+  font-size: var(--font-size-2xl);
+}
+
+.response-content h2 {
+  font-size: var(--font-size-xl);
+}
+
+.response-content h3 {
+  font-size: var(--font-size-lg);
+}
+
+/* First child overrides - more specific selectors last */
+.response-content h1:first-child,
+.response-content h2:first-child,
+.response-content h3:first-child {
+  margin-top: 0;
+}
+
+.response-content p {
+  color: var(--cs-text-primary);
+  margin-bottom: var(--spacing-xl);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-normal);
+  word-break: normal;
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+
+.response-content span {
+  word-break: normal;
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+
+.response-content strong {
+  color: var(--cs-text-primary);
+  font-weight: var(--font-weight-bold);
+}
+
+/* Enhanced Formatted Paragraph Styling for Better Readability */
+.formatted-paragraph {
+  color: var(--cs-text-primary);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-relaxed);
+  margin-bottom: var(--spacing-2xl);
+  padding-bottom: var(--spacing-sm);
+  word-break: normal;
+  overflow-wrap: break-word;
+  hyphens: auto;
+  position: relative;
+}
+
+/* Add subtle visual separator between paragraphs */
+.formatted-paragraph:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: var(--border-width-thin);
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    var(--cs-border-color-light) 20%,
+    var(--cs-border-color-light) 80%,
+    transparent 100%
+  );
+  opacity: var(--opacity-medium);
+}
+
+/* Reasoning Assessment specific formatting - aggressive paragraph separation */
+.reasoning-assessment-card .formatted-paragraph {
+  margin-bottom: var(--spacing-2xl); /* Increased spacing for analytical content */
+  padding: var(--spacing-lg);
+  background-color: rgb(var(--cs-color-primary-rgb), var(--opacity-light));
+  border-left: var(--border-width-thick) solid rgb(var(--cs-color-primary-rgb), var(--opacity-light));
+  border-radius: 0 var(--spacing-xs) var(--spacing-xs) 0;
+  line-height: var(--line-height-relaxed);
+  max-width: none;
+}
+
+/* Remove separator line for reasoning assessment cards since they have background */
+.reasoning-assessment-card .formatted-paragraph::after {
+  display: none;
+}
+
+/* Technical Details formatted paragraphs */
+.technical-details .formatted-paragraph {
+  margin-bottom: var(--spacing-xl);
+  line-height: var(--line-height-normal);
+}
+
+/* Executive Summary formatted paragraphs */
+.executive-summary-card .formatted-paragraph {
+  margin-bottom: var(--spacing-lg);
+  line-height: var(--line-height-relaxed);
+  font-weight: var(--font-weight-normal);
+}
+
+/* Technical paragraph containers for ReactMarkdown content */
+.technical-paragraph {
+  margin-bottom: var(--spacing-lg);
+}
+
+.technical-paragraph p {
+  margin-bottom: var(--spacing-base);
+  line-height: var(--line-height-normal);
+}
+
+.technical-details-formatted {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+/* Markdown recommendations wrapper */
+.markdown-recommendations {
+  background-color: var(--cs-background-light);
+  border: 1px solid var(--cs-border-color-light);
+  border-radius: var(--spacing-base);
+  padding: var(--spacing-lg);
+  margin: var(--spacing-xl) 0;
+}
+
+.markdown-recommendations h1,
+.markdown-recommendations h2,
+.markdown-recommendations h3,
+.markdown-recommendations h4,
+.markdown-recommendations h5,
+.markdown-recommendations h6 {
+  color: var(--cs-text-primary);
+  margin-top: var(--spacing-base);
+  margin-bottom: var(--spacing-base);
+}
+
+.markdown-recommendations p {
+  margin-bottom: var(--spacing-base);
+  line-height: var(--line-height-normal);
+}
+
+.markdown-recommendations ul {
+  margin-bottom: var(--spacing-base);
+}
+
+/* Enhanced list styling with check icons */
+.response-content ul {
+  color: var(--cs-text-primary);
+  margin-bottom: var(--spacing-xl);
+  list-style: none;
+  padding-left: 0;
+}
+
+.response-content ol {
+  color: var(--cs-text-primary);
+  margin-bottom: var(--spacing-xl);
+  padding-left: var(--spacing-3xl);
+}
+
+.response-content li {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-base);
+  margin-bottom: var(--spacing-base);
+  line-height: var(--line-height-normal);
+  color: var(--cs-text-primary);
+}
+
+.response-content ol li {
+  display: list-item;
+  list-style: decimal;
+}
+
+.response-content blockquote {
+  border-left: var(--spacing-sm) solid var(--cs-border-color-light);
+  padding-left: var(--spacing-xl);
+  margin: var(--spacing-xl) 0;
+  color: var(--cs-text-secondary);
+  font-style: italic;
+}
+
+/* Ensure proper spacing for the first and last elements */
+.response-content > *:first-child {
+  margin-top: 0;
+}
+
+.response-content > *:last-child {
+  margin-bottom: var(--spacing-base);
+}
+
+/* Better word breaking for long technical content (excludes IOC display) */
+.break-all {
+  word-break: break-all;
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+
+/* IOC-specific text handling - truncate with ellipsis (higher specificity) */
+.ioc-display-item code.break-all,
+.ioc-display-item .break-all {
+  word-break: normal !important;
+  overflow-wrap: normal !important;
+  white-space: nowrap !important;
+  text-overflow: ellipsis !important;
+  overflow: hidden !important;
+  hyphens: none !important;
+}
+
+/* Standardized responsive adjustments */
+@media (max-width: var(--breakpoint-md)) {
+  .response-scroll-container {
+    max-height: var(--container-height-md);
+  }
+
+  .response-scroll-content {
+    max-height: var(--container-height-md);
+    padding: var(--spacing-base);
+  }
+
+  .response-content {
+    font-size: var(--font-size-sm);
+    padding: var(--spacing-base);
+  }
+}
+
+@media (max-width: var(--breakpoint-sm)) {
+  .response-scroll-container {
+    max-height: var(--container-height-sm);
+  }
+
+  .response-scroll-content {
+    max-height: var(--container-height-sm);
+    padding: var(--spacing-xs); /* Even more minimal padding on mobile */
+  }
+
+  .response-scroll-content::-webkit-scrollbar {
+    width: var(--scrollbar-width-normal);
+  }
+
+  .response-scroll-content::-webkit-scrollbar-thumb {
+    min-height: var(--scrollbar-thumb-min-height);
+  }
+
+  .response-scroll-fade {
+    height: var(--spacing-2xl); /* Smaller fade on mobile using design token */
+    right: var(--scrollbar-width-normal);
+  }
+}

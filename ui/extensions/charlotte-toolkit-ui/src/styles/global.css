@@ -1,0 +1,242 @@
+/* File: src/styles/global.css */
+
+/* Import Tailwind CSS for utility classes */
+@import "tailwindcss";
+
+/* Import CrowdStrike Falcon Shoelace CSS for design tokens */
+@import "@crowdstrike/falcon-shoelace/dist/style.css";
+
+/* 
+ * Modular CSS Architecture for Charlotte Toolkit
+ * Organized by concern for maintainability and scalability
+ */
+
+/* === VENDOR OVERRIDES === */
+
+/* Note: Vendor overrides removed - styles consolidated into component files */
+
+/* === MIXINS & PATTERNS === */
+@import "./mixins/responsive-patterns.css";
+@import "./mixins/scrollbar-patterns.css";
+
+/* === COMPONENT STYLES === */
+@import "./components/tooltips.css";
+@import "./components/buttons.css";
+@import "./components/cards.css";
+
+/* === VENDOR OVERRIDES === */
+@import "./vendor/shoelace-overrides.css";
+
+/* === FEATURE STYLES === */
+@import "./features/loading.css";
+@import "./features/code-blocks.css";
+@import "./features/security-analysis.css";
+@import "./features/response-display.css";
+@import "./features/json-display.css";
+
+/* === LAYOUT & UTILITIES === */
+@import "./layout/utilities.css";
+
+/* 
+ * Minimal global styles - Falcon Shoelace handles all theming automatically
+ * Only include essential base styles that don't fit into modular categories
+ */
+
+/* Enhanced Design System - Base CSS Custom Properties */
+:root {
+  /* Font families */
+  --font-family-mono: "Monaco", "Inconsolata", "Roboto Mono", monospace;
+  --font-family-sans:
+    -apple-system, blinkmacsystemfont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell",
+    sans-serif;
+
+  /* Typography hierarchy */
+  --font-size-xs: 0.6875rem; /* 11px */
+  --font-size-sm: 0.75rem; /* 12px */
+  --font-size-base: 0.875rem; /* 14px */
+  --font-size-lg: 1rem; /* 16px */
+  --font-size-xl: 1.125rem; /* 18px */
+  --font-size-2xl: 1.25rem; /* 20px */
+  --font-size-3xl: 1.375rem; /* 22px */
+
+  /* Font weights */
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* Line heights */
+  --line-height-tight: 1.4;
+  --line-height-normal: 1.6;
+  --line-height-relaxed: 1.8;
+
+  /* Spacing system */
+  --spacing-xs: 0.125rem; /* 2px */
+  --spacing-sm: 0.25rem; /* 4px */
+  --spacing-md: 0.375rem; /* 6px */
+  --spacing-base: 0.5rem; /* 8px */
+  --spacing-lg: 0.75rem; /* 12px */
+  --spacing-xl: 1rem; /* 16px */
+  --spacing-2xl: 1.25rem; /* 20px */
+  --spacing-3xl: 1.5rem; /* 24px */
+  --spacing-4xl: 2rem; /* 32px */
+
+  /* Animation system */
+  --duration-fast: 0.15s;
+  --duration-normal: 0.2s;
+  --duration-slow: 0.3s;
+  --easing-ease-out: ease-out;
+  --easing-ease: ease;
+  --easing-ease-in-out: ease-in-out;
+
+  /* Consistent transition values */
+  --transition-fast: var(--duration-fast) var(--easing-ease-out);
+  --transition-normal: var(--duration-normal) var(--easing-ease);
+  --transition-colors: var(--duration-fast) var(--easing-ease-out);
+
+  /* Standardized responsive breakpoints */
+  --breakpoint-sm: 480px;
+  --breakpoint-md: 640px;
+  --breakpoint-lg: 768px;
+
+  /* Letter spacing system */
+  --letter-spacing-tight: 0.01em;
+  --letter-spacing-normal: 0.02em;
+  --letter-spacing-wide: 0.025em;
+  --letter-spacing-wider: 0.04em;
+
+  /* Container height system */
+  --container-height-sm: 380px;
+  --container-height-md: 450px;
+  --container-height-lg: 500px;
+  --container-height-standardized: 520px;
+  --container-height-xl: 600px;
+
+  /* Scrollbar dimension system */
+  --scrollbar-width-thin: 4px;
+  --scrollbar-width-normal: 6px;
+  --scrollbar-width-thick: 8px;
+  --scrollbar-thumb-min-height: 20px;
+  --scrollbar-thumb-min-height-lg: 30px;
+
+  /* Border width system */
+  --border-width-thin: 1px;
+  --border-width-normal: 2px;
+  --border-width-thick: 3px;
+
+  /* Z-index scale system */
+  --z-index-overlay: 1;
+  --z-index-dropdown: 1000;
+  --z-index-tooltip: 9999;
+
+  /* Extended animation timing system */
+  --duration-tooltip-delay: 2000ms;
+  --duration-loading-cycle: 2.5s;
+
+  /* Animation scale system */
+  --scale-hover: 1.05;
+  --scale-active: 0.95;
+
+  /* Opacity scale system */
+  --opacity-light: 0.1;
+  --opacity-medium: 0.3;
+  --opacity-heavy: 0.6;
+
+  /* Extended font sizing for responsive badges */
+  --font-size-2xs: 0.625rem; /* 10px */
+  --font-size-micro: 0.5rem; /* 8px */
+  
+  /* Large display elements */
+  --font-size-4xl: 3rem; /* 48px - for loading spinners, large icons */
+
+  /* Component sizing system */
+  --component-size-sm: 2.25rem;   /* 36px */
+  --component-size-md: 2.5rem;    /* 40px */  
+  --component-size-lg: 3rem;      /* 48px */
+
+  /* Container height system (extend existing) */
+  --container-height-2xl: 24rem;  /* 384px */
+  --container-height-3xl: 20rem;  /* 320px */
+}
+
+/* Typography consistency rules */
+.structured-analysis h1,
+.structured-analysis h2,
+.structured-analysis h3,
+.structured-analysis h4,
+.structured-analysis h5,
+.structured-analysis h6 {
+  font-family: var(--font-family-sans) !important;
+  font-weight: var(--font-weight-semibold) !important;
+  line-height: var(--line-height-tight) !important;
+  color: var(--cs-text-primary) !important;
+}
+
+/* Ensure consistent font sizing for key sections */
+.structured-analysis h3 {
+  font-size: var(--font-size-xl) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  gap: var(--spacing-base) !important; /* 8px - consistent with design tokens */
+  text-align: left !important;
+}
+
+.structured-analysis p,
+.structured-analysis li {
+  font-family: var(--font-family-sans) !important;
+  font-size: var(--font-size-base) !important;
+  line-height: var(--line-height-normal) !important;
+  color: var(--cs-text-primary) !important;
+}
+
+/* Executive Summary and Confidence Assessment consistency */
+.response-content h1,
+.response-content h2,
+.response-content h3 {
+  font-family: var(--font-family-sans) !important;
+  font-weight: var(--font-weight-semibold) !important;
+  line-height: var(--line-height-tight) !important;
+}
+
+.response-content h3 {
+  font-size: var(--font-size-xl) !important;
+}
+
+/* === CONTENT AREA ICON SPACING === */
+
+/* 
+ * Targeted rules for content icon spacing (non-dropdown areas)
+ * Note: Dropdown spacing is now handled by vendor/shoelace-overrides.css
+ */
+
+/* Base icon styling - ensures consistent alignment */
+sl-icon {
+  display: inline-flex;
+  align-items: center;
+  vertical-align: middle;
+}
+
+/* Security analysis structured content - for list items that don't use slots */
+.structured-analysis li sl-icon:not([slot]) {
+  margin-right: var(--spacing-sm); /* 4px */
+}
+
+/* Compact bullet lists - specific targeting for dot icons */
+.compact-bullet-list li sl-icon[name="dot"] {
+  margin-right: var(--spacing-xs); /* 2px - tighter for dot icons */
+}
+
+/* Responsive adjustments for content areas */
+@media (max-width: var(--breakpoint-sm)) {
+  .structured-analysis li sl-icon:not([slot]) {
+    margin-right: var(--spacing-xs); /* 2px on small screens */
+  }
+}
+
+/* Global resets and base styles - if needed */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
