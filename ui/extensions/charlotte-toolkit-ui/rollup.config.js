@@ -60,7 +60,7 @@ export default defineConfig({
     json({
       compact: isProd
     }),
-    
+
     // Replace environment variables
     replace({
       preventAssignment: true,
@@ -70,13 +70,13 @@ export default defineConfig({
       'IS_PRODUCTION': JSON.stringify(isProd),
       '__DEV__': JSON.stringify(!isProd)
     }),
-    
+
     // Optimize images in production
     ...(isProd ? [image({
       include: ['**/*.png', '**/*.jpg', '**/*.jpeg', '**/*.gif', '**/*.svg'],
       dom: true
     })] : []),
-    
+
     // Transpile code with Babel
     babel({
       presets: [
@@ -94,14 +94,14 @@ export default defineConfig({
       exclude: 'node_modules/**',
       compact: isProd
     }),
-    
+
     // Convert CommonJS modules to ES modules
     commonjs({
       transformMixedEsModules: true,
       extensions: ['.js', '.jsx', '.ts', '.tsx'],
       include: 'node_modules/**'
     }),
-    
+
     // Resolve modules
     nodeResolve({
       browser: true,
@@ -109,7 +109,7 @@ export default defineConfig({
       extensions: ['.js', '.jsx', '.ts', '.tsx'],
       preferBuiltins: false
     }),
-    
+
     // Process CSS with PostCSS - simplified
     postcss({
       extract: `styles-${hash}.css`,
@@ -120,7 +120,7 @@ export default defineConfig({
       plugins: postcssPlugins,
       inject: false
     }),
-    
+
     // Process HTML files
     html({
       minify: isProd,
@@ -132,7 +132,7 @@ export default defineConfig({
         );
       }
     }),
-    
+
     // Modern terser minification - much simpler
     ...(isProd ? [terser({
       format: {
@@ -143,7 +143,7 @@ export default defineConfig({
         drop_debugger: true
       }
     })] : []),
-    
+
     // Brotli compression only (better than gzip)
     ...(isProd ? [brotli({
       filter: (file) => file.endsWith('.js') || file.endsWith('.css') || file.endsWith('.html'),
@@ -151,7 +151,7 @@ export default defineConfig({
         quality: 11
       }
     })] : []),
-    
+
     // Bundle analysis when requested
     ...(shouldAnalyze ? [visualizer({
       filename: 'dist/stats.html',
@@ -162,7 +162,10 @@ export default defineConfig({
       brotliSize: true
     })] : [])
   ].filter(Boolean),
-  
+  watch: {
+    exclude: ['dist/**', 'node_modules/**']
+  },
+
   // Simplified warning handling
   onwarn: (msg, warn) => {
     // Ignore common warnings that don't affect functionality
@@ -175,7 +178,7 @@ export default defineConfig({
     }
     warn(msg);
   },
-  
+
   // Enable tree shaking with modern settings
   treeshake: {
     moduleSideEffects: 'no-external',
