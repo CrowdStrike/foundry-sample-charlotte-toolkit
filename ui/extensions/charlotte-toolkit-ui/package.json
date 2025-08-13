@@ -84,7 +84,7 @@
     "security:fix": "npm audit fix",
     "deps:check": "depcheck",
     "deps:unused": "depcheck --ignores=\"@types/*,eslint-*,@typescript-eslint/*,@rollup/*\"",
-    "test": "node --max-old-space-size=4096 --expose-gc ./node_modules/.bin/jest --coverage --watchAll=false",
+    "test": "node --max-old-space-size=4096 --expose-gc ./node_modules/.bin/jest --watchAll=false",
     "test:watch": "node --max-old-space-size=4096 --expose-gc ./node_modules/.bin/jest --watch",
     "test:coverage": "node --max-old-space-size=4096 --expose-gc ./node_modules/.bin/jest --coverage --watchAll=false",
     "quality": "npm run lint:all && npm run format:check && npm run security && npm run deps:check",
