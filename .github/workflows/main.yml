@@ -17,7 +17,7 @@ jobs:
         run: npm ci
         working-directory: ui/extensions/charlotte-toolkit-ui
       - name: Run unit tests
-        run: npm test -- --coverage --watchAll=false
+        run: npm run test:ci
         working-directory: ui/extensions/charlotte-toolkit-ui
       - name: Build React app
         run: npm run build
