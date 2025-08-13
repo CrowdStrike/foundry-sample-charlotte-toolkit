@@ -19,7 +19,7 @@ import { detectCurrentSocket } from '../../utils/socketDetection';
 const mockUseCopyToClipboard = useCopyToClipboard as jest.MockedFunction<typeof useCopyToClipboard>;
 const mockDetectCurrentSocket = detectCurrentSocket as jest.MockedFunction<typeof detectCurrentSocket>;
 
-describe.skip('useJsonDataManager', () => {
+describe('useJsonDataManager', () => {
   const mockCopyToClipboard = jest.fn();
   const mockSocketInfo = {
     socket_type: 'incident' as const,
@@ -63,6 +63,15 @@ describe.skip('useJsonDataManager', () => {
     });
 
     mockDetectCurrentSocket.mockReturnValue(mockSocketInfo);
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
+    jest.resetAllMocks();
+    // Force garbage collection if available
+    if (global.gc) {
+      global.gc();
+    }
   });
 
   describe('Initialization', () => {

@@ -273,26 +273,121 @@ const code = "block";
       expect(result).toContain('3. Action 3');
     });
 
-    it('should handle complex nested structures', () => {
+    it('should convert incident context with associated filenames and related IOCs', () => {
       const jsonData = {
-        executive_summary: 'Test summary',
-        threat_level: 'High',
-        iocs: {
-          hashes: ['test-hash']
-        },
-        mitre_techniques: [
-          {
-            technique_id: 'T1234',
-            technique_name: 'Test Technique'
+        incident_context: {
+          investigation_relevance: 'High priority incident',
+          associated_filenames: ['malware.exe', 'config.dat'],
+          related_iocs: {
+            domains: ['malicious.com', 'bad-actor.net'],
+            ips: ['1.2.3.4', '5.6.7.8'],
+            registry_keys: ['HKEY_LOCAL_MACHINE\\Software\\Malware'],
+            hashes: ['abc123', 'def456']
           }
-        ]
+        }
       };
       
       const result = convertJsonToMarkdown(jsonData);
-      expect(result).toContain('# Executive Summary');
-      expect(result).toContain('## Assessment');
-      expect(result).toContain('## Indicators of Compromise');
-      expect(result).toContain('## MITRE ATT&CK Techniques');
+      expect(result).toContain('## Incident Context');
+      expect(result).toContain('**Investigation Relevance:** High priority incident');
+      expect(result).toContain('### Associated Filenames');
+      expect(result).toContain('- `malware.exe`');
+      expect(result).toContain('- `config.dat`');
+      expect(result).toContain('### Related IOCs for Hunting');
+      expect(result).toContain('**Domains:**');
+      expect(result).toContain('- `malicious.com`');
+      expect(result).toContain('**IPs:**');
+      expect(result).toContain('- `1.2.3.4`');
+      expect(result).toContain('**Registry Keys:**');
+      expect(result).toContain('- `HKEY_LOCAL_MACHINE\\Software\\Malware`');
+      expect(result).toContain('**Hashes:**');
+      expect(result).toContain('- `abc123`');
+    });
+
+    it('should convert response actions with all sub-categories', () => {
+      const jsonData = {
+        response_actions: {
+          immediate_containment: ['Isolate affected systems', 'Block malicious IPs'],
+          detection_rules: ['Create YARA rules', 'Update SIEM signatures'],
+          remediation_guidance: ['Remove malware', 'Patch vulnerabilities']
+        }
+      };
+      
+      const result = convertJsonToMarkdown(jsonData);
+      expect(result).toContain('## Immediate Containment');
+      expect(result).toContain('1. Isolate affected systems');
+      expect(result).toContain('2. Block malicious IPs');
+      expect(result).toContain('## Detection Rules');
+      expect(result).toContain('1. Create YARA rules');
+      expect(result).toContain('2. Update SIEM signatures');
+      expect(result).toContain('## Remediation Guidance');
+      expect(result).toContain('1. Remove malware');
+      expect(result).toContain('2. Patch vulnerabilities');
+    });
+
+    it('should convert MITRE techniques from attack intelligence', () => {
+      const jsonData = {
+        attack_intelligence: {
+          mitre_techniques: [
+            {
+              technique_id: 'T1055',
+              technique_name: 'Process Injection',
+              tactic: 'Defense Evasion',
+              description: 'Injecting code into legitimate processes'
+            }
+          ]
+        }
+      };
+      
+      const result = convertJsonToMarkdown(jsonData);
+      expect(result).toContain('## MITRE ATT&CK Techniques (Attack Intelligence)');
+      expect(result).toContain('### T1055: Process Injection');
+      expect(result).toContain('**Tactic:** Defense Evasion');
+      expect(result).toContain('Injecting code into legitimate processes');
+    });
+
+    it('should convert confidence assessment with validation recommendations', () => {
+      const jsonData = {
+        confidence_assessment: {
+          analysis_confidence: 'High',
+          source_reliability: 'Verified',
+          validation_recommendations: ['Cross-reference with TI feeds', 'Validate with sandbox analysis']
+        },
+        reasoning_assessment: 'Analysis based on multiple indicators and historical patterns'
+      };
+      
+      const result = convertJsonToMarkdown(jsonData);
+      expect(result).toContain('## Confidence & Reasoning Assessment');
+      expect(result).toContain('### Confidence Metrics');
+      expect(result).toContain('**Analysis Confidence:** High');
+      expect(result).toContain('**Source Reliability:** Verified');
+      expect(result).toContain('**Validation Recommendations:**');
+      expect(result).toContain('- Cross-reference with TI feeds');
+      expect(result).toContain('- Validate with sandbox analysis');
+      expect(result).toContain("### Charlotte's Analytical Methodology");
+      expect(result).toContain('Analysis based on multiple indicators and historical patterns');
+    });
+
+    it('should convert recommendations list', () => {
+      const jsonData = {
+        recommendations: ['Implement network segmentation', 'Update security policies', 'Conduct security training']
+      };
+      
+      const result = convertJsonToMarkdown(jsonData);
+      expect(result).toContain('## Recommendations');
+      expect(result).toContain('1. Implement network segmentation');
+      expect(result).toContain('2. Update security policies');
+      expect(result).toContain('3. Conduct security training');
+    });
+
+    it('should convert technical details', () => {
+      const jsonData = {
+        technical_details: 'Binary analysis reveals packed executable with anti-debugging techniques'
+      };
+      
+      const result = convertJsonToMarkdown(jsonData);
+      expect(result).toContain('## Technical Details');
+      expect(result).toContain('Binary analysis reveals packed executable with anti-debugging techniques');
     });
   });
 
@@ -363,6 +458,137 @@ const code = "block";
       expect(result).toContain('T1027: Test Technique');
       expect(result).toContain('Test description');
       expect(result).not.toContain('#');
+    });
+
+    it('should convert all incident context fields to plain text', () => {
+      const jsonData = {
+        incident_context: {
+          investigation_relevance: 'Critical incident',
+          associated_filenames: ['malware.exe'],
+          related_iocs: {
+            domains: ['bad.com'],
+            ips: ['1.2.3.4'],
+            registry_keys: ['HKEY_TEST'],
+            hashes: ['abc123']
+          }
+        }
+      };
+      
+      const result = convertJsonToPlainText(jsonData);
+      expect(result).toContain('INCIDENT CONTEXT');
+      expect(result).toContain('Investigation Relevance: Critical incident');
+      expect(result).toContain('Associated Filenames:');
+      expect(result).toContain('- malware.exe');
+      expect(result).toContain('Related IOCs for Hunting:');
+      expect(result).toContain('Domains:');
+      expect(result).toContain('- bad.com');
+      expect(result).toContain('IPs:');
+      expect(result).toContain('- 1.2.3.4');
+      expect(result).toContain('Registry Keys:');
+      expect(result).toContain('- HKEY_TEST');
+      expect(result).toContain('Hashes:');
+      expect(result).toContain('- abc123');
+    });
+
+    it('should convert all response actions to plain text', () => {
+      const jsonData = {
+        response_actions: {
+          immediate_containment: ['Isolate systems'],
+          detection_rules: ['Create rules'],
+          remediation_guidance: ['Remove threats']
+        }
+      };
+      
+      const result = convertJsonToPlainText(jsonData);
+      expect(result).toContain('IMMEDIATE CONTAINMENT');
+      expect(result).toContain('1. Isolate systems');
+      expect(result).toContain('DETECTION RULES');
+      expect(result).toContain('1. Create rules');
+      expect(result).toContain('REMEDIATION GUIDANCE');
+      expect(result).toContain('1. Remove threats');
+    });
+
+    it('should convert confidence assessment to plain text', () => {
+      const jsonData = {
+        confidence_assessment: {
+          analysis_confidence: 'High',
+          source_reliability: 'Good',
+          validation_recommendations: ['Validate source']
+        },
+        reasoning_assessment: 'Solid analysis methodology'
+      };
+      
+      const result = convertJsonToPlainText(jsonData);
+      expect(result).toContain('CONFIDENCE & REASONING ASSESSMENT');
+      expect(result).toContain('Confidence Metrics:');
+      expect(result).toContain('Analysis Confidence: High');
+      expect(result).toContain('Source Reliability: Good');
+      expect(result).toContain('Validation Recommendations:');
+      expect(result).toContain('- Validate source');
+      expect(result).toContain("Charlotte's Analytical Methodology:");
+      expect(result).toContain('Solid analysis methodology');
+    });
+
+    it('should convert all attack intelligence to plain text', () => {
+      const jsonData = {
+        attack_intelligence: {
+          primary_functions: ['Function 1'],
+          persistence_mechanisms: ['Mechanism 1'],
+          behavior_patterns: ['Pattern 1']
+        }
+      };
+      
+      const result = convertJsonToPlainText(jsonData);
+      expect(result).toContain('ATTACK INTELLIGENCE');
+      expect(result).toContain('Primary Functions:');
+      expect(result).toContain('- Function 1');
+      expect(result).toContain('Persistence Mechanisms:');
+      expect(result).toContain('- Mechanism 1');
+      expect(result).toContain('Behavior Patterns:');
+      expect(result).toContain('- Pattern 1');
+    });
+
+    it('should convert malware analysis to plain text', () => {
+      const jsonData = {
+        malware_analysis: {
+          malware_family: 'TestFamily',
+          variant_identification: 'TestVariant',
+          threat_classification: 'Malicious',
+          risk_level: 'High'
+        }
+      };
+      
+      const result = convertJsonToPlainText(jsonData);
+      expect(result).toContain('MALWARE ANALYSIS');
+      expect(result).toContain('Family: TestFamily');
+      expect(result).toContain('Variant: TestVariant');
+      expect(result).toContain('Classification: Malicious');
+      expect(result).toContain('Risk Level: High');
+    });
+
+    it('should convert immediate actions to plain text', () => {
+      const jsonData = {
+        immediate_actions: ['Action 1', 'Action 2']
+      };
+      
+      const result = convertJsonToPlainText(jsonData);
+      expect(result).toContain('IMMEDIATE ACTIONS');
+      expect(result).toContain('1. Action 1');
+      expect(result).toContain('2. Action 2');
+    });
+
+    it('should convert technical details and recommendations to plain text', () => {
+      const jsonData = {
+        technical_details: 'Technical analysis details',
+        recommendations: ['Rec 1', 'Rec 2']
+      };
+      
+      const result = convertJsonToPlainText(jsonData);
+      expect(result).toContain('TECHNICAL DETAILS');
+      expect(result).toContain('Technical analysis details');
+      expect(result).toContain('RECOMMENDATIONS');
+      expect(result).toContain('1. Rec 1');
+      expect(result).toContain('2. Rec 2');
     });
   });
 
