@@ -7,10 +7,19 @@ import { ContextOption } from '../../../types';
 
 // Mock utilities
 jest.mock('../../../utils/context', () => ({
-  formatDisplayName: jest.fn((option: ContextOption) => ({
-    displayText: option.displayName,
-    originalText: option.displayName,
-  })),
+  formatDisplayName: jest.fn((option: ContextOption) => {
+    // Defensive check to ensure we always return the expected structure
+    if (!option || typeof option.displayName !== 'string') {
+      return {
+        displayText: 'Unknown',
+        originalText: 'Unknown',
+      };
+    }
+    return {
+      displayText: option.displayName,
+      originalText: option.displayName,
+    };
+  }),
 }));
 
 // Mock TruncatedText component
