@@ -113,7 +113,7 @@ describe('AdvancedOptionsPanel', () => {
       expect(screen.getByText('Advanced Options')).toBeInTheDocument();
     });
 
-    it.skip('should render all main sections', () => {
+    it('should render all main sections', () => {
       render(<AdvancedOptionsPanel {...defaultProps} />);
       
       expect(screen.getByText('Show JSON objects')).toBeInTheDocument();

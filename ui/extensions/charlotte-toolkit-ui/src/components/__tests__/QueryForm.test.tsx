@@ -153,7 +153,7 @@ describe('QueryForm Component', () => {
       expect(screen.getByTestId('advanced-options-panel')).toBeInTheDocument();
     });
 
-    it.skip('should render model selection with correct label and value', () => {
+    it('should render model selection with correct label and value', () => {
       render(<QueryForm {...mockProps} />);
 
       expect(screen.getByText('Model')).toBeInTheDocument();

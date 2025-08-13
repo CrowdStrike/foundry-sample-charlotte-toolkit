@@ -270,7 +270,7 @@ describe('ResponseDisplay Component', () => {
       expect(markdown).toHaveAttribute('data-components', JSON.stringify(mockRenderers));
     });
 
-    it.skip('should wrap markdown in scroll container with warning', () => {
+    it('should wrap markdown in scroll container with warning', () => {
       mockParseStructuredResponse.mockReturnValue(null);
 
       const { container } = render(<ResponseDisplay {...defaultProps} responseText="test" />);
