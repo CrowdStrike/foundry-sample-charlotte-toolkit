@@ -131,7 +131,7 @@ describe('SubmitSection Component', () => {
     });
 
     it('should disable button when query is only whitespace', () => {
-      render(<SubmitSection {...defaultProps} query="   \n\t  " quotaAcknowledged={true} />);
+      render(<SubmitSection {...defaultProps} query={"   \n\t  "} quotaAcknowledged={true} />);
 
       expect(screen.getByTestId('sl-button')).toBeDisabled();
     });

@@ -10,6 +10,10 @@ import { extractTopLevelDomain, truncateDomain, isExternalFQDN } from './EntityH
  * Filters out internal/non-routable domains
  */
 export const processDomains = (entityValues: any): ContextOption[] => {
+  if (!entityValues) {
+    return [];
+  }
+  
   const domainMap = new Map<string, { count: number; sources: string[] }>();
 
   // Add domains from direct domain_names array
