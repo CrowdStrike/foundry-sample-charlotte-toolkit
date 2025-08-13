@@ -157,7 +157,8 @@ describe('QueryForm Component', () => {
       render(<QueryForm {...mockProps} />);
 
       expect(screen.getByText('Model')).toBeInTheDocument();
-      expect(screen.getByDisplayValue('claude-latest')).toBeInTheDocument();
+      // Check for the selected option text instead of displayValue with Shoelace components
+      expect(screen.getByText('Claude Latest')).toBeInTheDocument();
     });
 
     it('should render all model options', () => {
