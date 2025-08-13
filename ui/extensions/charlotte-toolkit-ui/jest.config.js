@@ -39,4 +39,18 @@ export default {
       statements: 80
     }
   },
+  // Memory optimization settings
+  maxWorkers: '50%',
+  workerIdleMemoryLimit: '1GB',
+  logHeapUsage: true,
+  // Reduce memory usage during coverage collection
+  coverageReporters: ['text', 'lcov'],
+  // Optimize test environment
+  testEnvironmentOptions: {
+    url: 'http://localhost'
+  },
+  // Performance optimizations
+  clearMocks: true,
+  restoreMocks: true,
+  resetMocks: true,
 };

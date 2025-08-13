@@ -1,7 +1,8 @@
 // src/setupTests.ts
 import '@testing-library/jest-dom';
+import { cleanup } from '@testing-library/react';
 
-// Global test utilities
+// Global test utilities with proper cleanup
 global.ResizeObserver = jest.fn().mockImplementation(() => ({
   observe: jest.fn(),
   unobserve: jest.fn(),
@@ -23,12 +24,18 @@ Object.defineProperty(window, 'matchMedia', {
   })),
 });
 
-// Mock console.warn to avoid noisy test output
+// Store original console methods
 const originalWarn = console.warn;
 const originalError = console.error;
+const originalLog = console.log;
+
+// Memory management: Track DOM elements for cleanup
+let domCleanupQueue: (() => void)[] = [];
 
 beforeEach(() => {
+  // Reset console mocks
   console.warn = jest.fn();
+  console.log = jest.fn();
   
   // Suppress React warnings while preserving other errors
   console.error = jest.fn().mockImplementation((...args) => {
@@ -56,6 +63,38 @@ beforeEach(() => {
 });
 
 afterEach(() => {
+  // Restore console methods
   console.warn = originalWarn;
   console.error = originalError;
+  console.log = originalLog;
+  
+  // Clear all mocks
+  jest.clearAllMocks();
+  jest.clearAllTimers();
+  
+  // Clean up React Testing Library
+  cleanup();
+  
+  // Run any custom cleanup functions
+  domCleanupQueue.forEach(cleanupFn => {
+    try {
+      cleanupFn();
+    } catch (error) {
+      // Ignore cleanup errors
+    }
+  });
+  domCleanupQueue = [];
+  
+  // Force garbage collection if available (enabled with --expose-gc)
+  if (global.gc) {
+    global.gc();
+  }
 });
+
+// Global cleanup helper
+(global as any).addCleanup = (cleanupFn: () => void) => {
+  domCleanupQueue.push(cleanupFn);
+};
+
+// Add global timeout for tests to prevent hanging
+jest.setTimeout(30000);
