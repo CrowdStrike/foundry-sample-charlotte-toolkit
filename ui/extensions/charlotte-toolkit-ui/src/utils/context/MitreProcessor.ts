@@ -181,6 +181,10 @@ export const extractTechniqueId = (mitreData: any): string | null => {
  * Process MITRE techniques from incident data (for legacy support)
  */
 export const processMITRETechniques = (entityValues: any): ContextOption[] => {
+  if (!entityValues) {
+    return [];
+  }
+  
   const options: ContextOption[] = [];
 
   if (entityValues.mitre_techniques && Array.isArray(entityValues.mitre_techniques)) {

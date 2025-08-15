@@ -10,6 +10,10 @@ import { truncateHash } from './EntityHelpers';
  * Filename as parent, hashes as children. MD5 only shown if no SHA256 available.
  */
 export const processFiles = (entityValues: any, entities: any): ContextOption[] => {
+  if (!entityValues || !entities) {
+    return [];
+  }
+  
   const options: ContextOption[] = [];
 
   // Create a comprehensive file-to-hash mapping
