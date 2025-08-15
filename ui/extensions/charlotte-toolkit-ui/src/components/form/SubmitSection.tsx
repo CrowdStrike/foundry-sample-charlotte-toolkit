@@ -18,6 +18,10 @@ const SubmitSection: React.FC<SubmitSectionProps> = ({
   query,
   handleSubmit,
 }) => {
+  // More explicit disabled check
+  const isQueryEmpty = !query || query.trim() === '';
+  const isDisabled = loading || isQueryEmpty || !quotaAcknowledged;
+
   return (
     <div className='flex flex-col gap-3 mt-3'>
       {/* Inline Quota Acknowledgment and Submit */}
@@ -35,7 +39,7 @@ const SubmitSection: React.FC<SubmitSectionProps> = ({
         <SlButton
           variant='primary'
           size='medium'
-          disabled={loading || !query.trim() || !quotaAcknowledged}
+          disabled={isDisabled}
           onClick={handleSubmit}
         >
           <SlIcon slot='prefix' name={loading ? 'hourglass-split' : 'send'} />

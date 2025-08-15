@@ -55,6 +55,11 @@ export class LRUResponseCache implements ResponseCache {
    * @param ttl - Time-to-live in milliseconds (default: instance default TTL)
    */
   set(key: string, value: LLMResponse, ttl: number = this.defaultTtl): void {
+    // Don't store anything if max size is 0 or negative
+    if (this.maxSize <= 0) {
+      return;
+    }
+
     // Remove oldest entries if at capacity
     if (this.cache.size >= this.maxSize && !this.cache.has(key)) {
       const firstKey = this.cache.keys().next().value;

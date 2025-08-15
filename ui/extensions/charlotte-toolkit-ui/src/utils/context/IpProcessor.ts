@@ -9,6 +9,10 @@ import { isPublicIP } from './EntityHelpers';
  * Process IP addresses and filter out private/internal ones
  */
 export const processIPs = (entityValues: any): ContextOption[] => {
+  if (!entityValues) {
+    return [];
+  }
+  
   const options: ContextOption[] = [];
 
   if (entityValues.ipv4s && Array.isArray(entityValues.ipv4s)) {
