@@ -7,6 +7,8 @@ use_case: Security Analysis
 manifest_version: '2023-05-09'
 ignored:
 - ui/(extensions|pages)/[^\/]*?/node_modules
+- ui/(extensions|pages)/.*/__tests__/.*
+- ui/(extensions|pages)/.*/.*\.test\..*
 ui:
   homepage: ''
   extensions:
