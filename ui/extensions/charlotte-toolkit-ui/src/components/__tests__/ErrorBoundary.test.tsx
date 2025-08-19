@@ -156,12 +156,9 @@ describe('ErrorBoundary Component', () => {
 
     it('should reload page when "Refresh Page" is clicked', () => {
       const mockReload = jest.fn();
+      const originalLocation = window.location;
       delete (window as any).location;
-      Object.defineProperty(window, 'location', {
-        value: { reload: mockReload },
-        writable: true,
-        configurable: true,
-      });
+      (window as any).location = { ...originalLocation, reload: mockReload };
 
       render(
         <ErrorBoundary>

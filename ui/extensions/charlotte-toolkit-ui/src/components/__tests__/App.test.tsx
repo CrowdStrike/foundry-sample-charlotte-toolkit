@@ -80,12 +80,9 @@ describe('App Component', () => {
   describe('Error State Interactions', () => {
     it('should reload page when retry button is clicked', () => {
       const mockReload = jest.fn();
+      const originalLocation = window.location;
       delete (window as any).location;
-      Object.defineProperty(window, 'location', {
-        value: { reload: mockReload },
-        writable: true,
-        configurable: true,
-      });
+      (window as any).location = { ...originalLocation, reload: mockReload };
 
       mockUseFalconApi.mockReturnValue({
         isInitialized: false,
