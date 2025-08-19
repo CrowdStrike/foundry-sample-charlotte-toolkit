@@ -154,20 +154,11 @@ describe('ErrorBoundary Component', () => {
       expect(() => fireEvent.click(tryAgainButton)).not.toThrow();
     });
 
-    // Note: Skipping window.location.reload test due to Jest 30 + JSDOM limitations
-    // The reload functionality is tested through integration tests
-    it.skip('should reload page when "Refresh Page" is clicked', () => {
-      const mockReload = jest.fn();
-      // Delete the reload property first, then redefine it
-      delete (window.location as any).reload;
-      Object.defineProperty(window.location, 'reload', {
-        value: mockReload,
-        writable: true,
-        configurable: true,
-      });
+    it('should call onAppReset when "Refresh Page" is clicked', () => {
+      const mockAppReset = jest.fn();
 
       render(
-        <ErrorBoundary>
+        <ErrorBoundary onAppReset={mockAppReset}>
           <ThrowError shouldThrow={true} />
         </ErrorBoundary>
       );
@@ -175,7 +166,27 @@ describe('ErrorBoundary Component', () => {
       const refreshButton = screen.getByRole('button', { name: 'Refresh Page' });
       fireEvent.click(refreshButton);
 
-      expect(mockReload).toHaveBeenCalledTimes(1);
+      expect(mockAppReset).toHaveBeenCalledTimes(1);
+    });
+
+    it('should reset error boundary and call onAppReset when refresh is clicked', () => {
+      const mockAppReset = jest.fn();
+
+      const { rerender } = render(
+        <ErrorBoundary onAppReset={mockAppReset}>
+          <ThrowError shouldThrow={true} />
+        </ErrorBoundary>
+      );
+
+      // Verify error state is shown
+      expect(screen.getByText('Something went wrong')).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: 'Refresh Page' })).toBeInTheDocument();
+
+      const refreshButton = screen.getByRole('button', { name: 'Refresh Page' });
+      fireEvent.click(refreshButton);
+
+      // Verify onAppReset was called
+      expect(mockAppReset).toHaveBeenCalledTimes(1);
     });
   });
 
