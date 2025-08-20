@@ -36,6 +36,7 @@ describe('App Component', () => {
         isInitialized: false,
         falcon: null,
         error: null,
+        retry: jest.fn(),
       });
 
       const { container } = render(<App />);
@@ -52,6 +53,7 @@ describe('App Component', () => {
         isInitialized: false,
         falcon: null,
         error: errorMessage,
+        retry: jest.fn(),
       });
 
       render(<App />);
@@ -67,6 +69,7 @@ describe('App Component', () => {
         isInitialized: true,
         falcon: mockFalcon,
         error: null,
+        retry: jest.fn(),
       });
 
       render(<App />);
@@ -78,25 +81,26 @@ describe('App Component', () => {
   });
 
   describe('Error State Interactions', () => {
-    it('should reset app when retry button is clicked', () => {
+    const mockRetry = jest.fn();
+    
+    beforeEach(() => {
+      mockRetry.mockClear();
+    });
+
+    it('should call retry function when retry button is clicked', () => {
       mockUseFalconApi.mockReturnValue({
         isInitialized: false,
         falcon: null,
         error: 'Connection failed',
+        retry: mockRetry,
       });
 
-      const { rerender } = render(<App />);
+      render(<App />);
 
       const retryButton = screen.getByRole('button', { name: 'Retry' });
-      
-      // Click the retry button
       fireEvent.click(retryButton);
 
-      // The app should attempt to reinitialize by triggering a remount
-      // We can verify this by checking that the component structure is still correct
-      expect(screen.getByText('Failed to Initialize')).toBeInTheDocument();
-      expect(screen.getByText('Unable to connect to the Falcon API: Connection failed')).toBeInTheDocument();
-      expect(screen.getByRole('button', { name: 'Retry' })).toBeInTheDocument();
+      expect(mockRetry).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -107,6 +111,7 @@ describe('App Component', () => {
         isInitialized: true,
         falcon: mockFalcon,
         error: null,
+        retry: jest.fn(),
       });
 
       const { container } = render(<App />);
@@ -120,6 +125,7 @@ describe('App Component', () => {
         isInitialized: false,
         falcon: null,
         error: 'Test error',
+        retry: jest.fn(),
       });
 
       const { container } = render(<App />);
@@ -133,6 +139,7 @@ describe('App Component', () => {
         isInitialized: false,
         falcon: null,
         error: null,
+        retry: jest.fn(),
       });
 
       const { container } = render(<App />);
@@ -158,6 +165,7 @@ describe('App Component', () => {
         isInitialized: true,
         falcon: mockFalcon,
         error: null,
+        retry: jest.fn(),
       });
 
       render(<App />);
@@ -173,6 +181,7 @@ describe('App Component', () => {
         isInitialized: true,
         falcon: null,
         error: null,
+        retry: jest.fn(),
       });
 
       expect(() => render(<App />)).not.toThrow();
@@ -184,6 +193,7 @@ describe('App Component', () => {
         isInitialized: false,
         falcon: null,
         error: '',
+        retry: jest.fn(),
       });
 
       render(<App />);
@@ -198,6 +208,7 @@ describe('App Component', () => {
         isInitialized: false,
         falcon: null,
         error: longError,
+        retry: jest.fn(),
       });
 
       render(<App />);
@@ -214,6 +225,7 @@ describe('App Component', () => {
         isInitialized: true,
         falcon: mockFalcon,
         error: null,
+        retry: jest.fn(),
       });
 
       // StrictMode doesn't add any DOM elements, but we can test that the component renders correctly

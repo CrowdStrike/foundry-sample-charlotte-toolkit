@@ -8,7 +8,7 @@ interface ErrorBoundaryProperties {
   children: ReactNode;
   fallback?: ReactNode;
   onError?: (error: Error, errorInfo: ErrorInfo) => void;
-  onAppReset?: () => void;
+  onRetry?: () => void;
 }
 
 /**
@@ -51,15 +51,6 @@ export class ErrorBoundary extends Component<ErrorBoundaryProperties, ErrorBound
       error: null,
       errorInfo: null,
     });
-  };
-
-  handleAppReset = (): void => {
-    // First reset the error boundary state
-    this.handleReset();
-    // Then trigger the app-level reset if available
-    if (this.props.onAppReset) {
-      this.props.onAppReset();
-    }
   };
 
   render(): ReactNode {
@@ -166,7 +157,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProperties, ErrorBound
             </button>
             <button
               type='button'
-              onClick={this.handleAppReset}
+              onClick={this.props.onRetry}
               className='inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md hover:opacity-80 focus:outline-none focus:ring-2 focus:ring-offset-2'
               style={{
                 color: 'white',

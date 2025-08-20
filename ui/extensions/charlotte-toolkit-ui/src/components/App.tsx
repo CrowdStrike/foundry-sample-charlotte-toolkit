@@ -1,6 +1,6 @@
 // src/components/App.tsx
 
-import React, { useState, useCallback } from 'react';
+import React from 'react';
 
 import { ErrorBoundary } from './ErrorBoundary';
 import Home from './Home';
@@ -10,13 +10,7 @@ import { useFalconApi } from '../hooks/useFalconApi';
  * Main App component with error boundary
  */
 function App(): React.ReactNode {
-  const [appKey, setAppKey] = useState(0);
-  const { isInitialized, falcon, error } = useFalconApi();
-
-  // Function to reset the entire app by forcing a remount
-  const handleAppReset = useCallback(() => {
-    setAppKey(prev => prev + 1);
-  }, []);
+  const { isInitialized, falcon, error, retry } = useFalconApi();
 
   // Show error state if Falcon API failed to initialize
   if (error) {
@@ -36,7 +30,7 @@ function App(): React.ReactNode {
           Unable to connect to the Falcon API: {error}
         </p>
         <button
-          onClick={handleAppReset}
+          onClick={retry}
           className='px-4 py-2 rounded hover:opacity-80 focus:outline-none focus:ring-2'
           style={{
             backgroundColor: 'var(--cs-status-error)',
@@ -65,10 +59,9 @@ function App(): React.ReactNode {
   }
 
   return (
-    <ErrorBoundary onAppReset={handleAppReset}>
+    <ErrorBoundary onRetry={retry}>
       <React.StrictMode>
         <div
-          key={appKey} // Force remount when appKey changes
           className='font-sans min-h-screen p-4'
           style={{
             fontFamily: 'var(--font-family-sans)',

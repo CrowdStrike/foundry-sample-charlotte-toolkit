@@ -154,11 +154,11 @@ describe('ErrorBoundary Component', () => {
       expect(() => fireEvent.click(tryAgainButton)).not.toThrow();
     });
 
-    it('should call onAppReset when "Refresh Page" is clicked', () => {
-      const mockAppReset = jest.fn();
+    it('should call onRetry when "Refresh Page" is clicked', () => {
+      const mockRetry = jest.fn();
 
       render(
-        <ErrorBoundary onAppReset={mockAppReset}>
+        <ErrorBoundary onRetry={mockRetry}>
           <ThrowError shouldThrow={true} />
         </ErrorBoundary>
       );
@@ -166,27 +166,7 @@ describe('ErrorBoundary Component', () => {
       const refreshButton = screen.getByRole('button', { name: 'Refresh Page' });
       fireEvent.click(refreshButton);
 
-      expect(mockAppReset).toHaveBeenCalledTimes(1);
-    });
-
-    it('should reset error boundary and call onAppReset when refresh is clicked', () => {
-      const mockAppReset = jest.fn();
-
-      const { rerender } = render(
-        <ErrorBoundary onAppReset={mockAppReset}>
-          <ThrowError shouldThrow={true} />
-        </ErrorBoundary>
-      );
-
-      // Verify error state is shown
-      expect(screen.getByText('Something went wrong')).toBeInTheDocument();
-      expect(screen.getByRole('button', { name: 'Refresh Page' })).toBeInTheDocument();
-
-      const refreshButton = screen.getByRole('button', { name: 'Refresh Page' });
-      fireEvent.click(refreshButton);
-
-      // Verify onAppReset was called
-      expect(mockAppReset).toHaveBeenCalledTimes(1);
+      expect(mockRetry).toHaveBeenCalledTimes(1);
     });
   });
 
