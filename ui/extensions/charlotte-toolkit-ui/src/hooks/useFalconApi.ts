@@ -20,7 +20,7 @@ export function useFalconApi() {
       setIsInitialized(true);
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to initialize Falcon API';
-      // console.error('Failed to initialize Falcon API:', err);
+      console.error('Failed to initialize Falcon API:', err);
       setError(errorMessage);
       setIsInitialized(false);
     }
