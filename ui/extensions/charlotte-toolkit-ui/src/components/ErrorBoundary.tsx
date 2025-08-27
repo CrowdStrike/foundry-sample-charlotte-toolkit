@@ -8,6 +8,7 @@ interface ErrorBoundaryProperties {
   children: ReactNode;
   fallback?: ReactNode;
   onError?: (error: Error, errorInfo: ErrorInfo) => void;
+  onRetry?: () => void;
 }
 
 /**
@@ -156,7 +157,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProperties, ErrorBound
             </button>
             <button
               type='button'
-              onClick={() => window.location.reload()}
+              onClick={this.props.onRetry}
               className='inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md hover:opacity-80 focus:outline-none focus:ring-2 focus:ring-offset-2'
               style={{
                 color: 'white',

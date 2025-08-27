@@ -154,20 +154,11 @@ describe('ErrorBoundary Component', () => {
       expect(() => fireEvent.click(tryAgainButton)).not.toThrow();
     });
 
-    // Note: Skipping window.location.reload test due to Jest 30 + JSDOM limitations
-    // The reload functionality is tested through integration tests
-    it.skip('should reload page when "Refresh Page" is clicked', () => {
-      const mockReload = jest.fn();
-      // Delete the reload property first, then redefine it
-      delete (window.location as any).reload;
-      Object.defineProperty(window.location, 'reload', {
-        value: mockReload,
-        writable: true,
-        configurable: true,
-      });
+    it('should call onRetry when "Refresh Page" is clicked', () => {
+      const mockRetry = jest.fn();
 
       render(
-        <ErrorBoundary>
+        <ErrorBoundary onRetry={mockRetry}>
           <ThrowError shouldThrow={true} />
         </ErrorBoundary>
       );
@@ -175,7 +166,7 @@ describe('ErrorBoundary Component', () => {
       const refreshButton = screen.getByRole('button', { name: 'Refresh Page' });
       fireEvent.click(refreshButton);
 
-      expect(mockReload).toHaveBeenCalledTimes(1);
+      expect(mockRetry).toHaveBeenCalledTimes(1);
     });
   });
 
