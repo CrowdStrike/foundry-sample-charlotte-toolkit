@@ -296,6 +296,7 @@ describe('useFalconApi', () => {
         falcon: expect.any(Object),
         isInitialized: false,
         error: null,
+        retry: expect.any(Function),
       });
 
       // Wait for initialization
@@ -308,6 +309,7 @@ describe('useFalconApi', () => {
         falcon: mockFalconInstance,
         isInitialized: true,
         error: null,
+        retry: expect.any(Function),
       });
     });
 
@@ -371,6 +373,86 @@ describe('useFalconApi', () => {
       expect(result.current.error === null || typeof result.current.error === 'string').toBe(true);
       expect(typeof result.current.falcon).toBe('object');
       expect(result.current.falcon).not.toBe(null);
+      expect(typeof result.current.retry).toBe('function');
+    });
+  });
+
+  describe('Retry Functionality', () => {
+    it('should provide retry function that resets state and re-attempts connection', async () => {
+      // Initially fail
+      mockFalconInstance.connect.mockRejectedValueOnce(new Error('Initial failure'));
+      
+      const { result } = renderHook(() => useFalconApi());
+
+      // Wait for initial error
+      await waitFor(() => {
+        expect(result.current.error).toBe('Initial failure');
+      });
+
+      expect(result.current.isInitialized).toBe(false);
+
+      // Mock subsequent successful connection
+      mockFalconInstance.connect.mockResolvedValueOnce(undefined);
+
+      // Call retry
+      result.current.retry();
+
+      // Wait for successful retry
+      await waitFor(() => {
+        expect(result.current.isInitialized).toBe(true);
+      });
+
+      expect(result.current.error).toBe(null);
+      expect(mockFalconInstance.connect).toHaveBeenCalledTimes(2);
+    });
+
+    it('should handle retry when already initialized', async () => {
+      // Initially succeed
+      mockFalconInstance.connect.mockResolvedValue(undefined);
+      
+      const { result } = renderHook(() => useFalconApi());
+
+      // Wait for initial success
+      await waitFor(() => {
+        expect(result.current.isInitialized).toBe(true);
+      });
+
+      // Call retry when already initialized
+      result.current.retry();
+
+      // Wait for retry to complete
+      await waitFor(() => {
+        expect(result.current.isInitialized).toBe(true);
+      });
+
+      expect(result.current.error).toBe(null);
+      expect(mockFalconInstance.connect).toHaveBeenCalledTimes(2);
+    });
+
+    it('should handle retry failure', async () => {
+      // Initially succeed
+      mockFalconInstance.connect.mockResolvedValueOnce(undefined);
+      
+      const { result } = renderHook(() => useFalconApi());
+
+      // Wait for initial success
+      await waitFor(() => {
+        expect(result.current.isInitialized).toBe(true);
+      });
+
+      // Mock retry failure
+      mockFalconInstance.connect.mockRejectedValueOnce(new Error('Retry failed'));
+
+      // Call retry
+      result.current.retry();
+
+      // Wait for retry error
+      await waitFor(() => {
+        expect(result.current.error).toBe('Retry failed');
+      });
+
+      expect(result.current.isInitialized).toBe(false);
+      expect(mockFalconInstance.connect).toHaveBeenCalledTimes(2);
     });
   });
 

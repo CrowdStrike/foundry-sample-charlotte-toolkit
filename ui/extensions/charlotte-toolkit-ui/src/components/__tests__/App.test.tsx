@@ -36,6 +36,7 @@ describe('App Component', () => {
         isInitialized: false,
         falcon: null,
         error: null,
+        retry: jest.fn(),
       });
 
       const { container } = render(<App />);
@@ -52,6 +53,7 @@ describe('App Component', () => {
         isInitialized: false,
         falcon: null,
         error: errorMessage,
+        retry: jest.fn(),
       });
 
       render(<App />);
@@ -67,6 +69,7 @@ describe('App Component', () => {
         isInitialized: true,
         falcon: mockFalcon,
         error: null,
+        retry: jest.fn(),
       });
 
       render(<App />);
@@ -78,22 +81,18 @@ describe('App Component', () => {
   });
 
   describe('Error State Interactions', () => {
-    // Note: Skipping window.location.reload test due to Jest 30 + JSDOM limitations
-    // The reload functionality is tested through integration tests
-    it.skip('should reload page when retry button is clicked', () => {
-      const mockReload = jest.fn();
-      // Delete the reload property first, then redefine it
-      delete (window.location as any).reload;
-      Object.defineProperty(window.location, 'reload', {
-        value: mockReload,
-        writable: true,
-        configurable: true,
-      });
+    const mockRetry = jest.fn();
+    
+    beforeEach(() => {
+      mockRetry.mockClear();
+    });
 
+    it('should call retry function when retry button is clicked', () => {
       mockUseFalconApi.mockReturnValue({
         isInitialized: false,
         falcon: null,
         error: 'Connection failed',
+        retry: mockRetry,
       });
 
       render(<App />);
@@ -101,7 +100,7 @@ describe('App Component', () => {
       const retryButton = screen.getByRole('button', { name: 'Retry' });
       fireEvent.click(retryButton);
 
-      expect(mockReload).toHaveBeenCalledTimes(1);
+      expect(mockRetry).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -112,6 +111,7 @@ describe('App Component', () => {
         isInitialized: true,
         falcon: mockFalcon,
         error: null,
+        retry: jest.fn(),
       });
 
       const { container } = render(<App />);
@@ -125,6 +125,7 @@ describe('App Component', () => {
         isInitialized: false,
         falcon: null,
         error: 'Test error',
+        retry: jest.fn(),
       });
 
       const { container } = render(<App />);
@@ -138,6 +139,7 @@ describe('App Component', () => {
         isInitialized: false,
         falcon: null,
         error: null,
+        retry: jest.fn(),
       });
 
       const { container } = render(<App />);
@@ -163,6 +165,7 @@ describe('App Component', () => {
         isInitialized: true,
         falcon: mockFalcon,
         error: null,
+        retry: jest.fn(),
       });
 
       render(<App />);
@@ -178,6 +181,7 @@ describe('App Component', () => {
         isInitialized: true,
         falcon: null,
         error: null,
+        retry: jest.fn(),
       });
 
       expect(() => render(<App />)).not.toThrow();
@@ -189,6 +193,7 @@ describe('App Component', () => {
         isInitialized: false,
         falcon: null,
         error: '',
+        retry: jest.fn(),
       });
 
       render(<App />);
@@ -203,6 +208,7 @@ describe('App Component', () => {
         isInitialized: false,
         falcon: null,
         error: longError,
+        retry: jest.fn(),
       });
 
       render(<App />);
@@ -219,6 +225,7 @@ describe('App Component', () => {
         isInitialized: true,
         falcon: mockFalcon,
         error: null,
+        retry: jest.fn(),
       });
 
       // StrictMode doesn't add any DOM elements, but we can test that the component renders correctly
