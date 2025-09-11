@@ -1,5 +1,5 @@
 name: Charlotte Toolkit
-description: Charlotte Toolkit for chat completions
+description: AI-powered security analysis toolkit that leverages Charlotte AI to provide expert-level threat intelligence, automatic indicator extraction, and comprehensive security assessments directly within CrowdStrike incidents
 logo: images/charlotte-logo.png
 vendor: CrowdStrike
 vendor_products: []
