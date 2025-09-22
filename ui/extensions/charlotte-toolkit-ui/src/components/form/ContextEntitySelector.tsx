@@ -163,7 +163,7 @@ const ContextEntitySelector: React.FC<ContextEntitySelectorProps> = ({
                         {displayText}
                       </TruncatedText>
                     );
-                  } catch {
+                  } catch (error) {
                     // Fallback for any errors, including coverage instrumentation issues
                     return (
                       <TruncatedText originalText={option.displayName} displayText={option.displayName}>
