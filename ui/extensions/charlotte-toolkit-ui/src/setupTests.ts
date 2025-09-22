@@ -79,7 +79,7 @@ afterEach(() => {
   domCleanupQueue.forEach(cleanupFn => {
     try {
       cleanupFn();
-    } catch (error) {
+    } catch {
       // Ignore cleanup errors
     }
   });
