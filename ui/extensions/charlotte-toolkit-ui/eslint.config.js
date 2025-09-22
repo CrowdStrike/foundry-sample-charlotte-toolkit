@@ -203,6 +203,11 @@ export default [
   {
     name: 'charlotte-toolkit/tests',
     files: ['**/*.test.{ts,tsx,js,jsx}', '**/*.spec.{ts,tsx,js,jsx}'],
+    languageOptions: {
+      globals: {
+        ...globals.jest
+      }
+    },
     rules: {
       'no-console': 'off',
       '@typescript-eslint/no-explicit-any': 'off'
