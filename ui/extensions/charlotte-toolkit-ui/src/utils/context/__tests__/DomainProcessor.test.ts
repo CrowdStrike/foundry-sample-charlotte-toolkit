@@ -237,7 +237,7 @@ describe('DomainProcessor', () => {
       };
 
       mockExtractTopLevelDomain.mockImplementation(domain => {
-        if (domain.includes('google.com')) return 'google.com';  // lgtm[js/incomplete-url-substring-sanitization]
+        if (domain.includes('google.com')) return 'google.com';  // codeql[js/incomplete-url-substring-sanitization]
         return 'example.org';
       });
 
