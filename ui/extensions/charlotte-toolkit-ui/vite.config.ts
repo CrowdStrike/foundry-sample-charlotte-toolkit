@@ -52,7 +52,6 @@ export default defineConfig({
 
   // CSS configuration
   css: {
-    postcss: './postcss.config.js',
     devSourcemap: !isProd,
   },
 

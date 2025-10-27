@@ -1,8 +1,5 @@
 /* File: src/styles/global.css */
 
-/* Import Tailwind CSS for utility classes */
-@import "tailwindcss";
-
 /* Import CrowdStrike Falcon Shoelace CSS for design tokens */
 @import "@crowdstrike/falcon-shoelace/dist/style.css";
 
@@ -23,9 +20,6 @@
 @import "./components/tooltips.css";
 @import "./components/buttons.css";
 @import "./components/cards.css";
-
-/* === VENDOR OVERRIDES === */
-@import "./vendor/shoelace-overrides.css";
 
 /* === FEATURE STYLES === */
 @import "./features/loading.css";
