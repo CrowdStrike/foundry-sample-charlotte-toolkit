@@ -1,18 +1,17 @@
 // Context entity selection component
 
 import {
-  SlSelect,
-  SlOption,
-  SlIcon,
-  SlTooltip,
-  SlDivider,
   SlBadge,
+  SlDivider,
+  SlIcon,
+  SlOption,
+  SlSelect,
+  SlTooltip,
 } from '@shoelace-style/shoelace/dist/react';
 import React from 'react';
 
-import { ContextOption } from '../../types';
+import type { ContextOption } from '../../types';
 import { formatDisplayName } from '../../utils/context';
-import TruncatedText from '../TruncatedText';
 
 interface ContextEntitySelectorProps {
   selectedContextEntity: string | null;
@@ -32,10 +31,12 @@ const ContextEntitySelector: React.FC<ContextEntitySelectorProps> = ({
   // Get entity counts for badge display
   const getEntityCounts = () => {
     const counts = {
-      domain: availableContextOptions.filter(opt => opt.type === 'domain').length,
-      file: availableContextOptions.filter(opt => opt.type === 'file').length,
-      ip: availableContextOptions.filter(opt => opt.type === 'ip').length,
-      mitre: availableContextOptions.filter(opt => opt.type === 'mitre').length,
+      domain: availableContextOptions.filter((opt) => opt.type === 'domain')
+        .length,
+      file: availableContextOptions.filter((opt) => opt.type === 'file').length,
+      ip: availableContextOptions.filter((opt) => opt.type === 'ip').length,
+      mitre: availableContextOptions.filter((opt) => opt.type === 'mitre')
+        .length,
     };
     return counts;
   };
@@ -54,7 +55,9 @@ const ContextEntitySelector: React.FC<ContextEntitySelectorProps> = ({
     const selectedValue = target.value;
 
     if (selectedValue) {
-      const selectedOption = availableContextOptions.find(option => option.value === selectedValue);
+      const selectedOption = availableContextOptions.find(
+        (option) => option.value === selectedValue,
+      );
       if (selectedOption) {
         setSelectedContextEntity(selectedValue);
         setQuery(selectedOption.queryTemplate);
@@ -66,11 +69,11 @@ const ContextEntitySelector: React.FC<ContextEntitySelectorProps> = ({
 
   if (isContextDisabled) {
     return (
-      <SlTooltip content='No context detected for this incident'>
-        <div className='opacity-60 cursor-not-allowed'>
-          <SlSelect label='Incident Context' value='' disabled={true}>
-            <SlIcon slot='prefix' name='layers' />
-            <SlOption value='' disabled>
+      <SlTooltip content="No context detected for this incident">
+        <div className="disabled-wrapper">
+          <SlSelect label="Incident Context" value="" disabled={true}>
+            <SlIcon slot="prefix" name="layers" />
+            <SlOption value="" disabled>
               No entities available
             </SlOption>
           </SlSelect>
@@ -83,17 +86,19 @@ const ContextEntitySelector: React.FC<ContextEntitySelectorProps> = ({
 
   return (
     <SlSelect
-      label='Incident Context'
+      label="Incident Context"
       value={selectedContextEntity ?? ''}
       onSlChange={handleContextEntityChange}
     >
-      <SlIcon slot='prefix' name='layers' />
+      <SlIcon slot="prefix" name="layers" />
 
-      <SlOption value=''>None Selected</SlOption>
+      <SlOption value="">None Selected</SlOption>
 
       {/* Group by entity type using proper Shoelace grouping */}
       {['domain', 'file', 'ip', 'mitre'].map((type, index) => {
-        const optionsOfType = availableContextOptions.filter(option => option.type === type);
+        const optionsOfType = availableContextOptions.filter(
+          (option) => option.type === type,
+        );
         if (optionsOfType.length === 0) return null;
 
         const groupConfig = {
@@ -112,14 +117,16 @@ const ContextEntitySelector: React.FC<ContextEntitySelectorProps> = ({
             {index > 0 && <SlDivider />}
 
             {/* Group header using <small> as recommended by Shoelace */}
-            <small className='context-group-header'>
-              <SlIcon name={groupConfig.icon} className='mr-2' />
+            <small className="context-group-header">
+              <SlIcon name={groupConfig.icon} />
               {groupConfig.name}
-              <SlBadge className='ml-2 context-entity-badge'>{count}</SlBadge>
+              <SlBadge className="context-entity-badge badge-with-margin">
+                {count}
+              </SlBadge>
             </small>
 
             {/* Group options */}
-            {optionsOfType.map(option => (
+            {optionsOfType.map((option) => (
               <SlOption
                 key={option.value}
                 value={option.value}
@@ -127,49 +134,53 @@ const ContextEntitySelector: React.FC<ContextEntitySelectorProps> = ({
               >
                 {/* Icons for ALL child entries */}
                 {(option.subType === 'md5' || option.subType === 'sha256') && (
-                  <SlIcon slot='prefix' name='fingerprint' />
+                  <SlIcon slot="prefix" name="fingerprint" />
                 )}
-                {option.subType === 'fqdn' && <SlIcon slot='prefix' name='globe' />}
-                {option.subType === 'tld' && <SlIcon slot='prefix' name='shield-exclamation' />}
-                {option.subType === 'filename' && <SlIcon slot='prefix' name='file-earmark' />}
-                {option.subType === 'technique' && <SlIcon slot='prefix' name='shield-exclamation' />}
+                {option.subType === 'fqdn' && (
+                  <SlIcon slot="prefix" name="globe" />
+                )}
+                {option.subType === 'tld' && (
+                  <SlIcon slot="prefix" name="shield-exclamation" />
+                )}
+                {option.subType === 'filename' && (
+                  <SlIcon slot="prefix" name="file-earmark" />
+                )}
+                {option.subType === 'technique' && (
+                  <SlIcon slot="prefix" name="shield-exclamation" />
+                )}
 
                 {/* Icons for individual entries without subtypes */}
-                {option.type === 'ip' && !option.subType && <SlIcon slot='prefix' name='router' />}
+                {option.type === 'ip' && !option.subType && (
+                  <SlIcon slot="prefix" name="router" />
+                )}
                 {option.type === 'domain' && !option.subType && (
-                  <SlIcon slot='prefix' name='shield-exclamation' />
+                  <SlIcon slot="prefix" name="shield-exclamation" />
                 )}
                 {option.type === 'mitre' && !option.subType && (
-                  <SlIcon slot='prefix' name='shield-exclamation' />
+                  <SlIcon slot="prefix" name="shield-exclamation" />
                 )}
                 {option.type === 'file' && !option.subType && (
-                  <SlIcon slot='prefix' name='file-lock' />
+                  <SlIcon slot="prefix" name="file-lock" />
                 )}
 
                 {(() => {
                   try {
                     const result = formatDisplayName(option);
                     if (!result || typeof result !== 'object') {
-                      // Fallback for testing or unexpected scenarios
-                      return (
-                        <TruncatedText originalText={option.displayName} displayText={option.displayName}>
-                          {option.displayName}
-                        </TruncatedText>
-                      );
+                      return option.displayName;
                     }
                     const { displayText, originalText } = result;
-                    return (
-                      <TruncatedText originalText={originalText} displayText={displayText}>
-                        {displayText}
-                      </TruncatedText>
-                    );
-                  } catch (error) {
-                    // Fallback for any errors, including coverage instrumentation issues
-                    return (
-                      <TruncatedText originalText={option.displayName} displayText={option.displayName}>
-                        {option.displayName}
-                      </TruncatedText>
-                    );
+                    // Only show tooltip if text is truncated
+                    if (originalText !== displayText) {
+                      return (
+                        <SlTooltip content={originalText} placement="top" hoist>
+                          {displayText}
+                        </SlTooltip>
+                      );
+                    }
+                    return displayText;
+                  } catch (_error) {
+                    return option.displayName;
                   }
                 })()}
               </SlOption>

@@ -1,7 +1,8 @@
 // Auto-resizing prompt textarea component
 
-import { SlTextarea, SlIcon } from '@shoelace-style/shoelace/dist/react';
-import React, { useEffect, useRef } from 'react';
+import { SlIcon, SlTextarea } from '@shoelace-style/shoelace/dist/react';
+import type React from 'react';
+import { useEffect, useRef } from 'react';
 
 interface PromptTextareaProps {
   query: string;
@@ -9,7 +10,7 @@ interface PromptTextareaProps {
 }
 
 const PromptTextarea: React.FC<PromptTextareaProps> = ({ query, setQuery }) => {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // biome-ignore lint/suspicious/noExplicitAny: Shoelace web component ref requires any to access HTMLElement properties
   const textareaRef = useRef<any>(null);
 
   // Set initial textarea dimensions on mount with delayed calculation and no transitions
@@ -58,17 +59,17 @@ const PromptTextarea: React.FC<PromptTextareaProps> = ({ query, setQuery }) => {
   };
 
   return (
-    <div className='relative min-h-[120px] z-10'>
+    <div className="prompt-textarea-wrapper">
       <SlTextarea
         ref={textareaRef}
-        label='Prompt'
+        label="Prompt"
         value={query}
         rows={5}
         resize="none"
-        placeholder='Enter your security analysis question...'
+        placeholder="Enter your security analysis question..."
         onSlInput={handleTextareaInput}
       >
-        <SlIcon slot='prefix' name='chat-quote' />
+        <SlIcon slot="prefix" name="chat-quote" />
       </SlTextarea>
     </div>
   );
