@@ -17,7 +17,9 @@ import { setBasePath } from '@shoelace-style/shoelace/dist/utilities/base-path.j
 import './styles/global.css';
 
 // Set the base path for Shoelace icons to CDN
-setBasePath('https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.20.1/cdn/');
+setBasePath(
+  'https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.20.1/cdn/',
+);
 
 // Theme switching utility - system preferences only (no localStorage in sandbox)
 const initializeTheme = () => {
@@ -31,13 +33,15 @@ const initializeTheme = () => {
   }
 
   // Listen for system theme changes and update automatically
-  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
-    if (e.matches) {
-      document.documentElement.classList.add('theme-dark');
-    } else {
-      document.documentElement.classList.remove('theme-dark');
-    }
-  });
+  window
+    .matchMedia('(prefers-color-scheme: dark)')
+    .addEventListener('change', (e) => {
+      if (e.matches) {
+        document.documentElement.classList.add('theme-dark');
+      } else {
+        document.documentElement.classList.remove('theme-dark');
+      }
+    });
 };
 
 // Initialize theme before rendering
