@@ -127,6 +127,7 @@ const AdvancedOptionsPanel: React.FC<AdvancedOptionsPanelProps> = ({
         {/* Stop Words */}
         <div className="flex items-start gap-2">
           <div className="flex-1">
+            {/* biome-ignore lint/a11y/noLabelWithoutControl: This is a section header, not a form label - actual input is below */}
             <label className="block text-sm font-medium mb-2">Stop Sequences</label>
             {stopWords.length > 0 ? (
               <div
@@ -136,26 +137,29 @@ const AdvancedOptionsPanel: React.FC<AdvancedOptionsPanelProps> = ({
                   backgroundColor: `var(--cs-background-light)`,
                 }}
               >
-                {stopWords.map((word, index) => (
-                  <div
-                    key={index}
-                    className="flex items-center gap-1 px-2 py-1 rounded text-sm"
-                    style={{
-                      backgroundColor: 'var(--cs-background-light)',
-                      color: `var(--cs-text-primary)`,
-                    }}
-                  >
-                    <span>{word}</span>
-                    <button
-                      type="button"
-                      onClick={() => handleRemoveStopWord(index)}
-                      className="hover:opacity-80 transition-opacity"
-                      style={{ color: `var(--cs-status-info)` }}
+                {stopWords.map((word, index) => {
+                  // biome-ignore lint/suspicious/noArrayIndexKey: Stop words array is stable and doesn't reorder, index is safe as key
+                  return (
+                    <div
+                      key={index}
+                      className="flex items-center gap-1 px-2 py-1 rounded text-sm"
+                      style={{
+                        backgroundColor: 'var(--cs-background-light)',
+                        color: `var(--cs-text-primary)`,
+                      }}
                     >
-                      <SlIcon name="x" style={{ fontSize: 'var(--font-size-sm)' }} />
-                    </button>
-                  </div>
-                ))}
+                      <span>{word}</span>
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveStopWord(index)}
+                        className="hover:opacity-80 transition-opacity"
+                        style={{ color: `var(--cs-status-info)` }}
+                      >
+                        <SlIcon name="x" style={{ fontSize: 'var(--font-size-sm)' }} />
+                      </button>
+                    </div>
+                  );
+                })}
               </div>
             ) : (
               <p className="text-sm mb-2 italic" style={{ color: `var(--cs-text-secondary)` }}>
@@ -226,6 +230,7 @@ const AdvancedOptionsPanel: React.FC<AdvancedOptionsPanelProps> = ({
         {/* Data to Include */}
         <div className="flex items-start gap-2">
           <div className="flex-1">
+            {/* biome-ignore lint/a11y/noLabelWithoutControl: This is a section header, not a form label - actual input is below */}
             <label className="block text-sm font-medium mb-2">Data to Include</label>
             {dataToInclude.length > 0 ? (
               <div
@@ -235,26 +240,29 @@ const AdvancedOptionsPanel: React.FC<AdvancedOptionsPanelProps> = ({
                   backgroundColor: `var(--cs-background-light)`,
                 }}
               >
-                {dataToInclude.map((data, index) => (
-                  <div
-                    key={index}
-                    className="flex items-center gap-1 px-2 py-1 rounded text-sm"
-                    style={{
-                      backgroundColor: `var(--cs-background-light)`,
-                      color: `var(--cs-text-primary)`,
-                    }}
-                  >
-                    <span>{data}</span>
-                    <button
-                      type="button"
-                      onClick={() => handleRemoveDataToInclude(index)}
-                      className="hover:opacity-80 transition-opacity"
-                      style={{ color: `var(--cs-status-warning)` }}
+                {dataToInclude.map((data, index) => {
+                  // biome-ignore lint/suspicious/noArrayIndexKey: Data to include array is stable and doesn't reorder, index is safe as key
+                  return (
+                    <div
+                      key={index}
+                      className="flex items-center gap-1 px-2 py-1 rounded text-sm"
+                      style={{
+                        backgroundColor: `var(--cs-background-light)`,
+                        color: `var(--cs-text-primary)`,
+                      }}
                     >
-                      <SlIcon name="x" style={{ fontSize: 'var(--font-size-sm)' }} />
-                    </button>
-                  </div>
-                ))}
+                      <span>{data}</span>
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveDataToInclude(index)}
+                        className="hover:opacity-80 transition-opacity"
+                        style={{ color: `var(--cs-status-warning)` }}
+                      >
+                        <SlIcon name="x" style={{ fontSize: 'var(--font-size-sm)' }} />
+                      </button>
+                    </div>
+                  );
+                })}
               </div>
             ) : (
               <p className="text-sm mb-2 italic" style={{ color: `var(--cs-text-secondary)` }}>

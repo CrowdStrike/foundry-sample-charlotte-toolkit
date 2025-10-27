@@ -42,6 +42,7 @@ export const IOCDisplay: React.FC<IOCDisplayProps> = ({ iocs }) => {
             const defangedItem = IOCCore.defang(item);
 
             return (
+              // biome-ignore lint/suspicious/noArrayIndexKey: IOC items are unique identifiers that don't reorder during display
               <div key={index} className="ioc-value-item">
                 <div className="flex items-center gap-1 p-0">
                   <code className="flex-1 text-xs font-mono min-w-0 break-all">{defangedItem}</code>

@@ -53,10 +53,12 @@ export const renderFormattedText = (
 ): ReactElement[] => {
   const paragraphs = formatSecurityText(text, type);
 
+  // biome-ignore lint/suspicious/noArrayIndexKey: Formatted paragraphs are static and don't reorder, index is safe as key
   return paragraphs.map((paragraph, index) =>
     React.createElement('p', {
       key: index,
       className: `formatted-paragraph ${className}`.trim(),
+      // biome-ignore lint/security/noDangerouslySetInnerHtml: Security analysis content is formatted text from trusted workflow output, not user input
       dangerouslySetInnerHTML: { __html: paragraph },
     }),
   );

@@ -1,6 +1,6 @@
 // src/hooks/useFalconApi.ts
 import FalconApi from '@crowdstrike/foundry-js';
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 /**
  * Hook to initialize and provide access to the Falcon API
@@ -12,7 +12,7 @@ export function useFalconApi() {
 
   const falcon = useMemo(() => new FalconApi(), []);
 
-  const initializeFalcon = async () => {
+  const initializeFalcon = useCallback(async () => {
     try {
       setError(null);
       setIsInitialized(false);
@@ -24,7 +24,7 @@ export function useFalconApi() {
       setError(errorMessage);
       setIsInitialized(false);
     }
-  };
+  }, [falcon]);
 
   useEffect(() => {
     initializeFalcon();
