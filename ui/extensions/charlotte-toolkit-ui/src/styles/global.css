@@ -145,18 +145,18 @@
   /* Extended font sizing for responsive badges */
   --font-size-2xs: 0.625rem; /* 10px */
   --font-size-micro: 0.5rem; /* 8px */
-  
+
   /* Large display elements */
   --font-size-4xl: 3rem; /* 48px - for loading spinners, large icons */
 
   /* Component sizing system */
-  --component-size-sm: 2.25rem;   /* 36px */
-  --component-size-md: 2.5rem;    /* 40px */  
-  --component-size-lg: 3rem;      /* 48px */
+  --component-size-sm: 2.25rem; /* 36px */
+  --component-size-md: 2.5rem; /* 40px */
+  --component-size-lg: 3rem; /* 48px */
 
   /* Container height system (extend existing) */
-  --container-height-2xl: 24rem;  /* 384px */
-  --container-height-3xl: 20rem;  /* 320px */
+  --container-height-2xl: 24rem; /* 384px */
+  --container-height-3xl: 20rem; /* 320px */
 }
 
 /* Typography consistency rules */
@@ -166,41 +166,41 @@
 .structured-analysis h4,
 .structured-analysis h5,
 .structured-analysis h6 {
-  font-family: var(--font-family-sans) !important;
-  font-weight: var(--font-weight-semibold) !important;
-  line-height: var(--line-height-tight) !important;
-  color: var(--cs-text-primary) !important;
+  font-family: var(--font-family-sans);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-tight);
+  color: var(--cs-text-primary);
 }
 
 /* Ensure consistent font sizing for key sections */
 .structured-analysis h3 {
-  font-size: var(--font-size-xl) !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: flex-start !important;
-  gap: var(--spacing-base) !important; /* 8px - consistent with design tokens */
-  text-align: left !important;
+  font-size: var(--font-size-xl);
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--spacing-base); /* 8px - consistent with design tokens */
+  text-align: left;
 }
 
 .structured-analysis p,
 .structured-analysis li {
-  font-family: var(--font-family-sans) !important;
-  font-size: var(--font-size-base) !important;
-  line-height: var(--line-height-normal) !important;
-  color: var(--cs-text-primary) !important;
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-normal);
+  color: var(--cs-text-primary);
 }
 
 /* Executive Summary and Confidence Assessment consistency */
 .response-content h1,
 .response-content h2,
 .response-content h3 {
-  font-family: var(--font-family-sans) !important;
-  font-weight: var(--font-weight-semibold) !important;
-  line-height: var(--line-height-tight) !important;
+  font-family: var(--font-family-sans);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-tight);
 }
 
 .response-content h3 {
-  font-size: var(--font-size-xl) !important;
+  font-size: var(--font-size-xl);
 }
 
 /* === CONTENT AREA ICON SPACING === */

@@ -1,10 +1,10 @@
 // src/services/workflow/WorkflowPolling.ts
 
-import FalconApi from '@crowdstrike/foundry-js';
+import type FalconApi from '@crowdstrike/foundry-js';
 
 import { wait } from '../../utils/helpers';
 
-import { WorkflowStatus, WORKFLOW_CONFIG, type WorkflowPollResult } from './types';
+import { WORKFLOW_CONFIG, type WorkflowPollResult, WorkflowStatus } from './types';
 
 /**
  * Poll workflow for completion with simple 1-second intervals
@@ -19,7 +19,7 @@ export const pollWorkflowCompletion = async (
   workflowId: string,
   options: {
     maxAttempts?: number;
-  } = {}
+  } = {},
 ): Promise<WorkflowPollResult> => {
   const { maxAttempts = WORKFLOW_CONFIG.MAX_POLL_ATTEMPTS } = options;
 
@@ -101,7 +101,7 @@ export const pollWorkflowCompletion = async (
  */
 export const getWorkflowStatus = async (
   falcon: FalconApi,
-  workflowId: string
+  workflowId: string,
 ): Promise<{
   status: WorkflowStatus;
   output_data?: Record<string, unknown>;

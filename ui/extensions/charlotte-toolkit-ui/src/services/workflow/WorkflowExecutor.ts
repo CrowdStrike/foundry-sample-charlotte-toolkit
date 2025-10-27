@@ -1,11 +1,16 @@
 // src/services/workflow/WorkflowExecutor.ts
 
-import FalconApi from '@crowdstrike/foundry-js';
+import type FalconApi from '@crowdstrike/foundry-js';
 
 import type { LLMResponse } from '../../types';
 import { responseCache } from '../../utils/cache';
-import { generateCacheKey, formatErrorMessage } from '../../utils/helpers';
-import { WorkflowStatus, WORKFLOW_CONFIG, type WorkflowExecutionParams, type WorkflowExecutionResult } from './types';
+import { formatErrorMessage, generateCacheKey } from '../../utils/helpers';
+import {
+  WORKFLOW_CONFIG,
+  type WorkflowExecutionParams,
+  type WorkflowExecutionResult,
+  WorkflowStatus,
+} from './types';
 import { extractWorkflowContent, validateExtractedContent } from './WorkflowContentExtractor';
 import { buildWorkflowPayload, logPayloadInfo } from './WorkflowPayloadBuilder';
 import { pollWorkflowCompletion } from './WorkflowPolling';
@@ -55,7 +60,7 @@ const checkCache = (params: WorkflowExecutionParams): string | null => {
       params.temperature,
       params.stopWords,
       params.jsonSchema,
-      params.dataToInclude
+      params.dataToInclude,
     );
 
     const cachedResponse = responseCache.get(cacheKey);
@@ -83,7 +88,7 @@ const saveResponseToCache = (params: WorkflowExecutionParams, content: string): 
       params.temperature,
       params.stopWords,
       params.jsonSchema,
-      params.dataToInclude
+      params.dataToInclude,
     );
 
     const llmResponse: LLMResponse = {
@@ -107,7 +112,7 @@ const saveResponseToCache = (params: WorkflowExecutionParams, content: string): 
  */
 export const executeWorkflowWithCache = async (
   falcon: FalconApi,
-  params: WorkflowExecutionParams
+  params: WorkflowExecutionParams,
 ): Promise<WorkflowExecutionResult> => {
   let workflowId: string | undefined;
   let payload: Record<string, any> | undefined;
@@ -203,7 +208,7 @@ export const executeWorkflowWithCache = async (
  */
 export const cancelWorkflowExecution = async (
   _falcon: FalconApi,
-  _workflowId: string
+  _workflowId: string,
 ): Promise<{ success: boolean; error?: string }> => {
   // Note: This depends on the Falcon API supporting workflow cancellation
   // Implementation may vary based on available API endpoints
@@ -223,7 +228,7 @@ export const cancelWorkflowExecution = async (
  */
 export const getWorkflowStatus = async (
   falcon: FalconApi,
-  workflowId: string
+  workflowId: string,
 ): Promise<{ status: string; error?: string }> => {
   try {
     const result = await falcon.api.workflows.getEntitiesExecutionResultsV1({

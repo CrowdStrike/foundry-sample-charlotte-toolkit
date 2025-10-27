@@ -29,7 +29,7 @@
 .ioc-display-item code,
 .ioc-container code,
 .ioc-code {
-  background-color: transparent !important;
+  background-color: transparent;
   color: var(--cs-text-primary);
   font-family: var(--font-family-mono);
   font-size: var(--font-size-sm);
@@ -43,7 +43,7 @@
 }
 
 .ioc-code:hover {
-  background-color: var(--cs-background-lighter) !important;
+  background-color: var(--cs-background-lighter);
 }
 
 /* Unified Recommendation Styling - Plain text styling like Executive Summary and Technical Analysis */
@@ -110,7 +110,7 @@
 
 /* Code elements within threat context items */
 .threat-context-item code {
-  background-color: transparent !important;
+  background-color: transparent;
   color: var(--cs-text-primary);
   font-family: var(--font-family-mono);
   font-size: var(--font-size-sm);
@@ -168,7 +168,7 @@
 
 /* IOC Code Elements Enhancement */
 .ioc-value-item code {
-  background-color: transparent !important;
+  background-color: transparent;
   color: var(--cs-text-primary, #1f2937);
   font-family: var(--font-family-mono);
   font-size: var(--font-size-sm);
@@ -221,21 +221,20 @@
 .threat-context-card code,
 .iocs-card code {
   /* Force word breaking for long monospace text */
-  word-break: break-all !important;
-  overflow-wrap: break-word !important;
-  white-space: pre-wrap !important;
-  max-width: 100% !important;
-  display: inline-block !important;
+  word-break: break-all;
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
+  max-width: 100%;
+  display: inline-block;
 }
-
 
 /* Generic break-words utility for monospace text */
 .text-xs.font-mono.break-words,
 .font-mono.break-words {
-  word-break: break-all !important;
-  overflow-wrap: break-word !important;
-  white-space: pre-wrap !important;
-  max-width: 100% !important;
+  word-break: break-all;
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
+  max-width: 100%;
 }
 
 /* MITRE Techniques Enhanced Styling */
@@ -335,24 +334,24 @@
   .mitre-techniques-container {
     gap: var(--spacing-base);
   }
-  
+
   .mitre-technique-card.enhanced-card {
     padding: var(--spacing-base);
   }
-  
+
   .technique-id {
     font-size: var(--font-size-xs);
     padding: var(--spacing-xs);
   }
-  
+
   .technique-name {
     font-size: var(--font-size-sm);
   }
-  
+
   .technique-paragraph {
     font-size: var(--font-size-sm);
   }
-  
+
   .tactic-badge {
     font-size: var(--font-size-2xs);
   }
@@ -362,20 +361,20 @@
   .mitre-techniques-container {
     gap: var(--spacing-sm);
   }
-  
+
   .mitre-technique-card.enhanced-card {
     padding: var(--spacing-sm);
   }
-  
+
   .technique-description {
     gap: var(--spacing-sm);
   }
-  
+
   .technique-paragraph {
     font-size: var(--font-size-xs);
     line-height: 1.5;
   }
-  
+
   .technique-name {
     font-size: var(--font-size-sm);
   }
@@ -478,11 +477,11 @@
     font-size: var(--font-size-sm);
     margin-bottom: var(--spacing-sm);
   }
-  
+
   .technical-details-formatted {
     gap: var(--spacing-sm);
   }
-  
+
   .technical-paragraph {
     margin-bottom: var(--spacing-sm);
   }
@@ -494,7 +493,7 @@
     line-height: 1.5;
     margin-bottom: var(--spacing-xs);
   }
-  
+
   .technical-details-formatted {
     gap: var(--spacing-xs);
   }
@@ -502,17 +501,16 @@
 
 /* Theme-aware utility classes for structured analysis */
 .secondary-text {
-  color: var(--cs-text-secondary) !important;
+  color: var(--cs-text-secondary);
 }
 
 .threat-error-icon {
-  color: var(--cs-text-secondary) !important;
+  color: var(--cs-text-secondary);
 }
 
 .recommendation-icon {
-  color: var(--cs-color-alert-primary) !important;
+  color: var(--cs-color-alert-primary);
 }
-
 
 /* Validation item styling */
 .validation-item {
@@ -545,7 +543,7 @@
   }
 
   .structured-analysis h3 {
-    font-size: var(--font-size-lg) !important;
+    font-size: var(--font-size-lg);
     gap: var(--spacing-md);
     display: flex;
     align-items: center;
@@ -564,7 +562,7 @@
   }
 
   .structured-analysis h3 {
-    font-size: var(--font-size-base) !important;
+    font-size: var(--font-size-base);
     line-height: var(--line-height-tight);
     display: flex;
     align-items: center;

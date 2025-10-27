@@ -1,9 +1,9 @@
 // Domain processing utilities
 
-import { ContextOption } from '../../types';
+import type { ContextOption } from '../../types';
 import { createQueryTemplate } from '../queryTemplates';
 
-import { extractTopLevelDomain, truncateDomain, isExternalFQDN } from './EntityHelpers';
+import { extractTopLevelDomain, isExternalFQDN, truncateDomain } from './EntityHelpers';
 
 /**
  * Process domains with hierarchical structure: TLD as parent, full domains as children
@@ -13,7 +13,7 @@ export const processDomains = (entityValues: any): ContextOption[] => {
   if (!entityValues) {
     return [];
   }
-  
+
   const domainMap = new Map<string, { count: number; sources: string[] }>();
 
   // Add domains from direct domain_names array
@@ -86,7 +86,7 @@ export const processDomains = (entityValues: any): ContextOption[] => {
     group.totalCount += count;
 
     // Add unique sources
-    sources.forEach(source => {
+    sources.forEach((source) => {
       if (!group.allSources.includes(source)) {
         group.allSources.push(source);
       }
@@ -116,7 +116,7 @@ export const processDomains = (entityValues: any): ContextOption[] => {
     });
 
     // Create full domains as children under each TLD
-    domains.forEach(fullDomain => {
+    domains.forEach((fullDomain) => {
       const domainData = domainMap.get(fullDomain)!;
       const truncatedDomain = truncateDomain(fullDomain);
 
@@ -173,7 +173,7 @@ export const extractDomainsFromDetection = (detection: any, options: ContextOpti
       const truncatedDomain = truncateDomain(domain);
 
       // Avoid duplicates
-      const domainExists = options.some(opt => opt.value === `domain:${domain}`);
+      const domainExists = options.some((opt) => opt.value === `domain:${domain}`);
       if (!domainExists) {
         options.push({
           value: `domain:${domain}`,
@@ -202,7 +202,7 @@ export const extractDomainsFromDetection = (detection: any, options: ContextOpti
       const truncatedDomain = truncateDomain(domain);
 
       // Avoid duplicates
-      const domainExists = options.some(opt => opt.value === `domain:${domain}`);
+      const domainExists = options.some((opt) => opt.value === `domain:${domain}`);
       if (!domainExists) {
         options.push({
           value: `domain:${domain}`,

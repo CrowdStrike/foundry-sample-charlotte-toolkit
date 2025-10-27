@@ -35,7 +35,7 @@ export const HeadingWithAnchor = ({ level, children, ...props }: any) => {
       name: iconName,
       className: 'text-sm flex-shrink-0',
     }),
-    children
+    children,
   );
 };
 
@@ -47,7 +47,7 @@ export const ListItem = ({ children, ...props }: any) => {
       name: 'dot',
       className: 'secondary-text text-sm mt-0.5 flex-shrink-0',
     }),
-    React.createElement('span', null, children)
+    React.createElement('span', null, children),
   );
 };
 

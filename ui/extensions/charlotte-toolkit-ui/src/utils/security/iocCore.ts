@@ -16,7 +16,7 @@ export const detectIOCType = (text: string): IOCType | null => {
   // IP patterns (including defanged)
   const isIP =
     /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)[.[\].]){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(
-      text
+      text,
     );
   if (isIP) return 'ip';
 
@@ -39,19 +39,12 @@ export const detectIOCType = (text: string): IOCType | null => {
   return null;
 };
 
-
-
-
-
 /**
  * Defang an IOC for safe display (prevents accidental clicks/navigation)
  */
 export const defangIOC = (ioc: string): string => {
   if (!ioc || typeof ioc !== 'string') return ioc;
-  return ioc
-    .replace(/\./g, '[.]')
-    .replace(/http/g, 'hxxp')
-    .replace(/ftp/g, 'fxp');
+  return ioc.replace(/\./g, '[.]').replace(/http/g, 'hxxp').replace(/ftp/g, 'fxp');
 };
 
 /**
@@ -75,7 +68,7 @@ export const normalizeIOC = (ioc: string): string => {
  */
 export const getIOCDisplayClasses = (
   _type: IOCType,
-  variant: 'list' | 'pill' | 'inline' = 'list'
+  variant: 'list' | 'pill' | 'inline' = 'list',
 ): string => {
   const baseClasses = 'font-mono text-xs break-words';
 
@@ -84,7 +77,6 @@ export const getIOCDisplayClasses = (
       return `${baseClasses} inline-block px-2 py-1 rounded border bg-opacity-50`;
     case 'inline':
       return `${baseClasses} inline`;
-    case 'list':
     default:
       return `${baseClasses}`;
   }
@@ -94,7 +86,7 @@ export const getIOCDisplayClasses = (
  * Get badge variant for IOC type (for Shoelace badges)
  */
 export const getIOCBadgeVariant = (
-  type: IOCType
+  type: IOCType,
 ): 'warning' | 'primary' | 'neutral' | 'success' => {
   switch (type) {
     case 'hash':
@@ -122,8 +114,8 @@ export const IOCCore = {
   detectType: detectIOCType,
 
   // Defanging operations
-  defang: defangIOC,        // For safe display
-  removeFanging,            // For copying original values
+  defang: defangIOC, // For safe display
+  removeFanging, // For copying original values
 
   // Normalization and comparison
   normalize: normalizeIOC,

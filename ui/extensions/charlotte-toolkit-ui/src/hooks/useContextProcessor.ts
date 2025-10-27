@@ -2,8 +2,8 @@
 
 import { useMemo } from 'react';
 
-import { UseContextProcessorProps, UseContextProcessorResult } from '../types';
-import { processAllEntities, calculateEntityCounts } from '../utils/context';
+import type { UseContextProcessorProps, UseContextProcessorResult } from '../types';
+import { calculateEntityCounts, processAllEntities } from '../utils/context';
 
 /**
  * Custom hook to process Falcon context data and extract available entities

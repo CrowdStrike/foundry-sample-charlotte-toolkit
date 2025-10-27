@@ -143,11 +143,11 @@ export const createUserQueryTemplate = (user: string): string => {
     .replace(/{analysisType}/g, 'USER ACCOUNT')
     .replace(
       /{contextSpecific}/g,
-      'Account privileges, activity patterns, and authentication details'
+      'Account privileges, activity patterns, and authentication details',
     )
     .replace(
       /{responseActions}/g,
-      'Login history, privilege escalation attempts, and associated processes'
+      'Login history, privilege escalation attempts, and associated processes',
     );
 };
 
@@ -212,7 +212,7 @@ Provide specific, actionable guidance for security analysts, SOC teams, and inci
 export const createQueryTemplate = (
   entityType: 'domain' | 'file' | 'ip' | 'fqdn' | 'hostname' | 'user' | 'mitre',
   entityValue: string,
-  entityData?: any
+  entityData?: any,
 ): string => {
   switch (entityType) {
     case 'domain':
@@ -254,7 +254,7 @@ export const createQueryTemplate = (
 export const createGroupedFileTemplate = (
   filename: string,
   hash: string,
-  hashType: string = 'SHA256'
+  hashType: string = 'SHA256',
 ): string => {
   return `Conduct a comprehensive security analysis of file "${filename}" (${hashType}: ${hash}) and provide a structured assessment including:
 

@@ -30,11 +30,11 @@ export interface FalconContext {
     workflows: {
       postEntitiesExecuteV1: (
         payload: WorkflowPayload,
-        config?: any
+        config?: any,
       ) => Promise<WorkflowPendingResponse>;
       getEntitiesExecutionResultsV1: (
         ids: string[],
-        config?: any
+        config?: any,
       ) => Promise<WorkflowResultResponse>;
     };
   };
@@ -161,5 +161,3 @@ export interface EntityCounts {
   file: number;
   ip: number;
 }
-
-

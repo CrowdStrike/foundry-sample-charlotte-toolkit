@@ -144,7 +144,7 @@ export const validateJsonSchema = (jsonSchema: string): ValidationResult => {
  * @returns Detailed validation result
  */
 export const validateWorkflowParamsDetailed = (
-  params: WorkflowExecutionParams
+  params: WorkflowExecutionParams,
 ): ValidationResult & {
   warnings?: string[];
 } => {

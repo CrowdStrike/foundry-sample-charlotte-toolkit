@@ -156,12 +156,12 @@
     align-items: flex-start;
     gap: var(--spacing-base); /* 8px */
   }
-  
+
   .json-content-container,
   .raw-response-container {
     max-height: var(--container-height-md); /* 450px */
   }
-  
+
   .socket-info-row {
     flex-direction: column;
     align-items: flex-start;
@@ -172,13 +172,13 @@
   .json-tab-section {
     gap: var(--spacing-xl); /* 16px */
   }
-  
+
   .json-content-container,
   .raw-response-container {
     max-height: var(--container-height-sm); /* 380px */
     padding: var(--spacing-base); /* 8px */
   }
-  
+
   .json-content-pre,
   .raw-response-pre {
     font-size: var(--font-size-2xs); /* 10px */

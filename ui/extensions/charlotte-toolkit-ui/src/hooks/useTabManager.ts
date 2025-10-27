@@ -1,7 +1,7 @@
 // src/hooks/useTabManager.ts
 
 import { SlIcon } from '@shoelace-style/shoelace/dist/react';
-import React, { useState, useCallback, useRef, useEffect } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 type TabType = 'request' | 'response' | 'json';
 

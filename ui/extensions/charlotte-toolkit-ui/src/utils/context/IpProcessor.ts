@@ -1,6 +1,6 @@
 // IP address processing utilities
 
-import { ContextOption } from '../../types';
+import type { ContextOption } from '../../types';
 import { createQueryTemplate } from '../queryTemplates';
 
 import { isPublicIP } from './EntityHelpers';
@@ -12,7 +12,7 @@ export const processIPs = (entityValues: any): ContextOption[] => {
   if (!entityValues) {
     return [];
   }
-  
+
   const options: ContextOption[] = [];
 
   if (entityValues.ipv4s && Array.isArray(entityValues.ipv4s)) {

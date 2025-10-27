@@ -2,11 +2,7 @@
 
 import { useCallback } from 'react';
 
-import {
-  COPY_OPTIONS,
-  formatForCopy,
-  type CopyFormat,
-} from '../utils/copyUtils';
+import { COPY_OPTIONS, type CopyFormat, formatForCopy } from '../utils/copyUtils';
 import { parseStructuredResponse } from '../utils/security/iocUtils';
 
 import { useCopyToClipboard } from './useCopyToClipboard';
@@ -45,7 +41,7 @@ export const useCopyManager = ({
       // Use the shared copy hook for consistent visual feedback
       await copyToClipboard(textToCopy);
     },
-    [responseText, jsonContextData, copyToClipboard]
+    [responseText, jsonContextData, copyToClipboard],
   );
 
   return {

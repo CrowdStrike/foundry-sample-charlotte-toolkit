@@ -686,7 +686,7 @@ export const formatForCopy = (
   format: CopyFormat,
   responseText: string,
   jsonData?: any,
-  parsedJsonResponse?: any
+  parsedJsonResponse?: any,
 ): string => {
   switch (format) {
     case 'json':
@@ -705,7 +705,7 @@ export const formatForCopy = (
           timestamp: new Date().toISOString(),
         },
         null,
-        2
+        2,
       );
 
     case 'markdown':

@@ -1,6 +1,6 @@
 // src/utils/cache.ts
 
-import type { LLMResponse, CacheEntry, ResponseCache } from '../types';
+import type { CacheEntry, LLMResponse, ResponseCache } from '../types';
 
 import { CACHE_TTL, MAX_CACHE_SIZE } from './constants';
 

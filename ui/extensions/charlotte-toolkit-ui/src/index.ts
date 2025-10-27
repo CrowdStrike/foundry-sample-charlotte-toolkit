@@ -31,7 +31,7 @@ const initializeTheme = () => {
   }
 
   // Listen for system theme changes and update automatically
-  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
     if (e.matches) {
       document.documentElement.classList.add('theme-dark');
     } else {

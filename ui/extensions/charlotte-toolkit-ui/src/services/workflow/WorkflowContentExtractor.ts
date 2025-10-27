@@ -60,10 +60,10 @@ export const extractWorkflowContent = (outputData: any): string => {
  */
 const findDynamicCompletionField = (outputData: any): string | null => {
   const found = Object.keys(outputData).find(
-    key =>
+    (key) =>
       key.includes('.completion') &&
       !key.includes('.meta') && // Exclude metadata fields
-      key.includes('llminvocator_handler')
+      key.includes('llminvocator_handler'),
   );
   if (found === undefined) {
     return null;
@@ -101,7 +101,7 @@ const extractFromLegacyFormats = (outputData: any): string => {
 
   // Try generic completion field pattern
   const genericCompletionField = Object.keys(outputData).find(
-    key => key.endsWith('.completion') && !key.includes('.meta')
+    (key) => key.endsWith('.completion') && !key.includes('.meta'),
   );
 
   if (genericCompletionField && typeof outputData[genericCompletionField] === 'string') {
@@ -159,16 +159,16 @@ const logExtractionFailure = (outputData: any): void => {
 
   // Log potential completion fields for debugging
   const potentialFields = Object.keys(outputData).filter(
-    key =>
+    (key) =>
       key.includes('completion') ||
       key.includes('content') ||
       key.includes('response') ||
-      key.includes('result')
+      key.includes('result'),
   );
 
   if (potentialFields.length > 0) {
     // console.error('Potential content fields found:', potentialFields);
-    potentialFields.forEach(_field => {
+    potentialFields.forEach((_field) => {
       // console.error(`${field}:`, typeof outputData[field], outputData[field]);
     });
   }
@@ -180,7 +180,7 @@ const logExtractionFailure = (outputData: any): void => {
  * @returns Analysis summary
  */
 export const analyzeWorkflowOutput = (
-  outputData: any
+  outputData: any,
 ): {
   hasContent: boolean;
   contentFields: string[];
@@ -198,17 +198,19 @@ export const analyzeWorkflowOutput = (
 
   const keys = Object.keys(outputData);
   const contentFields = keys.filter(
-    key =>
+    (key) =>
       key.includes('completion') ||
       key.includes('content') ||
       key.includes('response') ||
       key.includes('result') ||
-      key.includes('output')
+      key.includes('output'),
   );
 
   // Determine structure complexity
   let structure: 'simple' | 'nested' | 'complex' = 'simple';
-  const hasNestedObjects = keys.some(key => outputData[key] && typeof outputData[key] === 'object');
+  const hasNestedObjects = keys.some(
+    (key) => outputData[key] && typeof outputData[key] === 'object',
+  );
 
   if (hasNestedObjects) {
     structure = keys.length > 3 ? 'complex' : 'nested';
@@ -242,7 +244,7 @@ export const analyzeWorkflowOutput = (
  * @returns Validation result with quality metrics
  */
 export const validateExtractedContent = (
-  content: string
+  content: string,
 ): {
   isValid: boolean;
   isEmpty: boolean;
@@ -320,7 +322,7 @@ export const extractWorkflowMetadata = (outputData: any): Record<string, any> =>
   const metadata: Record<string, any> = {};
 
   // Look for metadata fields
-  Object.keys(outputData).forEach(key => {
+  Object.keys(outputData).forEach((key) => {
     if (key.includes('.meta') || key.includes('metadata') || key.includes('_meta')) {
       metadata[key] = outputData[key];
     }

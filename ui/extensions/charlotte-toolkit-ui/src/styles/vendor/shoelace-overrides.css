@@ -27,14 +27,14 @@
 
 /* Child option indentation and styling */
 sl-option.child-option {
-  padding-left: var(--spacing-4xl) !important; /* 32px */
-  font-size: var(--font-size-xs) !important; /* 11px - Reduced by 1 size for better visual density */
+  padding-left: var(--spacing-4xl); /* 32px */
+  font-size: var(--font-size-xs); /* 11px - Reduced by 1 size for better visual density */
 }
 
 /* Specific selector for broader coverage */
 sl-select sl-option.child-option {
-  padding-left: var(--spacing-4xl) !important; /* 32px */
-  font-size: var(--font-size-xs) !important; /* 11px - Reduced by 1 size for better visual density */
+  padding-left: var(--spacing-4xl); /* 32px */
+  font-size: var(--font-size-xs); /* 11px - Reduced by 1 size for better visual density */
 }
 
 /* Prevent text wrapping in dropdown options */
@@ -60,7 +60,7 @@ sl-select sl-icon[slot="prefix"] {
 
 /* Standardized dropdown font styling - all options use normal fonts for consistency */
 sl-option {
-  font-family: var(--font-family-sans) !important;
+  font-family: var(--font-family-sans);
 }
 
 /* ===== TAB GROUP OVERRIDES ===== */
@@ -131,7 +131,6 @@ sl-select {
   --sl-focus-ring-width: 1px;
 }
 
-
 /* ===== BADGE VARIANT STYLING ===== */
 
 /* Security Analysis Badge Colors - Using CrowdStrike Design Tokens */
@@ -198,10 +197,10 @@ sl-badge {
 
 /* MITRE technique tactic badges - specific styling */
 .tactic-badge {
-  font-size: var(--font-size-xs) !important;
-  font-weight: var(--font-weight-medium) !important;
-  text-transform: uppercase !important;
-  letter-spacing: 0.025em !important;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
 }
 
 /* ===== RESPONSIVE OVERRIDES ===== */
@@ -230,8 +229,8 @@ sl-badge {
     font-size: var(--font-size-2xs);
     padding: var(--spacing-xs) var(--spacing-sm);
   }
-  
+
   .tactic-badge {
-    font-size: var(--font-size-micro) !important;
+    font-size: var(--font-size-micro);
   }
 }

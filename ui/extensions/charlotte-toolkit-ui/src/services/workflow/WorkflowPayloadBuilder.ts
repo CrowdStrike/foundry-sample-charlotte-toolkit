@@ -1,11 +1,7 @@
 // src/services/workflow/WorkflowPayloadBuilder.ts
 
+import { getModelLabel, VALIDATION_THRESHOLDS } from '../../utils/constants';
 import { createSecurityResponseSchema, detectUseCase } from '../../utils/promptEngineer';
-
-import { 
-  getModelLabel,
-  VALIDATION_THRESHOLDS,
-} from '../../utils/constants';
 import type { WorkflowExecutionParams } from './types';
 
 /**
@@ -79,7 +75,7 @@ const addOptionalParameters = (
   payload: Record<string, any>,
   params: WorkflowExecutionParams,
   enhancedJsonSchema: string,
-  selectedContext: string
+  selectedContext: string,
 ): void => {
   // Add stop words if provided
   if (params.stopWords && params.stopWords.length > 0) {
@@ -112,7 +108,7 @@ const addOptionalParameters = (
  * @returns Validation result
  */
 export const validatePayload = (
-  payload: Record<string, any>
+  payload: Record<string, any>,
 ): {
   isValid: boolean;
   error?: string;
@@ -155,7 +151,10 @@ export const validatePayload = (
     warnings.push('Many stop words may constrain response creativity');
   }
 
-  if (payload.data_to_include && payload.data_to_include.length > VALIDATION_THRESHOLDS.CONTEXT_ITEMS) {
+  if (
+    payload.data_to_include &&
+    payload.data_to_include.length > VALIDATION_THRESHOLDS.CONTEXT_ITEMS
+  ) {
     warnings.push('Large amount of context data may affect response focus');
   }
 
@@ -173,7 +172,7 @@ export const validatePayload = (
  */
 export const createOptimizedPayload = (
   baseParams: WorkflowExecutionParams,
-  useCase: 'security_analysis' | 'threat_hunting' | 'incident_response' | 'general'
+  useCase: 'security_analysis' | 'threat_hunting' | 'incident_response' | 'general',
 ): Record<string, any> => {
   const optimizations = getUseCaseOptimizations(useCase);
 
@@ -237,7 +236,7 @@ const getUseCaseOptimizations = (useCase: string) => {
  * @returns Size estimation and recommendations
  */
 export const analyzePayloadSize = (
-  payload: Record<string, any>
+  payload: Record<string, any>,
 ): {
   estimatedBytes: number;
   characterCount: number;
@@ -265,7 +264,10 @@ export const analyzePayloadSize = (
     recommendations.push('Consider shortening the main prompt');
   }
 
-  if (payload.data_to_include && payload.data_to_include.length > (VALIDATION_THRESHOLDS.CONTEXT_ITEMS - 2)) {
+  if (
+    payload.data_to_include &&
+    payload.data_to_include.length > VALIDATION_THRESHOLDS.CONTEXT_ITEMS - 2
+  ) {
     recommendations.push('Reduce context data for better focus');
   }
 

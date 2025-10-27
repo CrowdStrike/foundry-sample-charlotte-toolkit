@@ -1,9 +1,9 @@
 // Modular QueryForm component using extracted subcomponents
 
-import { SlSelect, SlOption, SlIcon } from '@shoelace-style/shoelace/dist/react';
+import { SlIcon, SlOption, SlSelect } from '@shoelace-style/shoelace/dist/react';
 import React from 'react';
 
-import { ContextOption } from '../types';
+import type { ContextOption } from '../types';
 import { CHARLOTTE_MODEL_OPTIONS } from '../utils/constants';
 
 // Import modular subcomponents
@@ -66,7 +66,7 @@ const QueryForm = React.memo(
     };
 
     return (
-      <div className='flex flex-col gap-4 isolate'>
+      <div className="flex flex-col gap-4 isolate">
         {/* Context Entity Selection */}
         <ContextEntitySelector
           selectedContextEntity={selectedContextEntity}
@@ -80,13 +80,13 @@ const QueryForm = React.memo(
 
         {/* Model Selection */}
         <SlSelect
-          label='Model'
+          label="Model"
           defaultValue={modelName}
           value={modelName}
           onSlChange={handleModelChange}
         >
-          <SlIcon slot='prefix' name='cpu' />
-          {CHARLOTTE_MODEL_OPTIONS.map(option => (
+          <SlIcon slot="prefix" name="cpu" />
+          {CHARLOTTE_MODEL_OPTIONS.map((option) => (
             <SlOption key={option.value} value={option.value}>
               {option.label}
             </SlOption>
@@ -117,7 +117,7 @@ const QueryForm = React.memo(
         />
       </div>
     );
-  }
+  },
 );
 
 QueryForm.displayName = 'QueryForm';
