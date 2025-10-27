@@ -14,7 +14,6 @@ interface UseTabManagerProps {
 
 interface UseTabManagerReturn {
   activeTab: TabType;
-  // biome-ignore lint/suspicious/noExplicitAny: Shoelace TabGroup ref type is not properly exported from the library
   tabGroupRef: React.RefObject<any>;
   handleTabChange: (e: CustomEvent) => void;
   setActiveTab: (tab: TabType) => void;
@@ -32,7 +31,6 @@ export const useTabManager = ({
   responseText,
 }: UseTabManagerProps): UseTabManagerReturn => {
   const [activeTab, setActiveTab] = useState<TabType>('request');
-  // biome-ignore lint/suspicious/noExplicitAny: Shoelace TabGroup ref type is not properly exported from the library
   const tabGroupRef = useRef<any>(null);
 
   // Handle tab change events from Shoelace TabGroup

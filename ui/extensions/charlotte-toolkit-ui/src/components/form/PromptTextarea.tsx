@@ -10,7 +10,6 @@ interface PromptTextareaProps {
 }
 
 const PromptTextarea: React.FC<PromptTextareaProps> = ({ query, setQuery }) => {
-  // biome-ignore lint/suspicious/noExplicitAny: Shoelace SlTextarea ref type is not properly exported, using any for DOM manipulation
   const textareaRef = useRef<any>(null);
 
   // Set initial textarea dimensions on mount with delayed calculation and no transitions

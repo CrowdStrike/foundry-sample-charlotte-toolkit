@@ -10,7 +10,6 @@ export { CodeBlock } from './CodeBlock';
 export { InlineCode } from './InlineCode';
 
 // Simple components that don't need separate files
-// biome-ignore lint/suspicious/noExplicitAny: React markdown component props vary by element type, typing would require complex union types
 export const HeadingWithAnchor = ({ level, children, ...props }: any) => {
   const tagName = `h${level}`;
   const id = String(children)
@@ -40,7 +39,6 @@ export const HeadingWithAnchor = ({ level, children, ...props }: any) => {
   );
 };
 
-// biome-ignore lint/suspicious/noExplicitAny: React markdown component props vary by element type, typing would require complex union types
 export const ListItem = ({ children, ...props }: any) => {
   return React.createElement(
     'li',
@@ -54,15 +52,12 @@ export const ListItem = ({ children, ...props }: any) => {
 };
 
 export const createMarkdownRenderers = () => ({
-  // biome-ignore lint/suspicious/noExplicitAny: React markdown renderer props are dynamically typed by react-markdown library
   code: ({ _node, inline, className, children, ...props }: any) => {
     return inline
       ? React.createElement(InlineCode, { className, ...props }, children)
       : React.createElement(CodeBlock, { className, ...props }, children);
   },
-  // biome-ignore lint/suspicious/noExplicitAny: React markdown renderer props are dynamically typed by react-markdown library
   heading: ({ _node, level, children, ...props }: any) =>
     React.createElement(HeadingWithAnchor, { level, ...props }, children),
-  // biome-ignore lint/suspicious/noExplicitAny: React markdown renderer props are dynamically typed by react-markdown library
   li: ({ _node, children, ...props }: any) => React.createElement(ListItem, { ...props }, children),
 });
