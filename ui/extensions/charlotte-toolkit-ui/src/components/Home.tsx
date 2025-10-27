@@ -37,8 +37,8 @@ import QueryForm from './QueryForm';
 import ResponseDisplay from './ResponseDisplay';
 
 interface HomeProps {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  falcon: any; // Complex Falcon API types - any is appropriate here
+  // biome-ignore lint/suspicious/noExplicitAny: Falcon API has complex dynamic runtime types from @crowdstrike/foundry-js that vary by context
+  falcon: any;
 }
 
 interface HomeState {

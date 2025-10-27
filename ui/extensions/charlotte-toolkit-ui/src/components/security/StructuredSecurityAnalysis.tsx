@@ -47,6 +47,7 @@ export const StructuredSecurityAnalysis: React.FC<StructuredSecurityAnalysisProp
         </div>
         {needsFormatting(data.executive_summary) ? (
           formatSecurityText(data.executive_summary, 'summary').map((paragraph, index) => (
+            // biome-ignore lint/suspicious/noArrayIndexKey: Formatted paragraphs are static and don't reorder, index is safe as key
             <p
               key={index}
               className="text-sm sm:text-base leading-relaxed break-words formatted-paragraph"
@@ -101,6 +102,7 @@ export const StructuredSecurityAnalysis: React.FC<StructuredSecurityAnalysisProp
             {needsFormatting(data.technical_details) ? (
               <div className="technical-details-formatted">
                 {formatSecurityText(data.technical_details, 'technical').map((paragraph, index) => (
+                  // biome-ignore lint/suspicious/noArrayIndexKey: Formatted paragraphs are static and don't reorder, index is safe as key
                   <div key={index} className="technical-paragraph">
                     <ReactMarkdown components={renderers}>{paragraph}</ReactMarkdown>
                   </div>
@@ -122,6 +124,7 @@ export const StructuredSecurityAnalysis: React.FC<StructuredSecurityAnalysisProp
           </h3>
           <ul className="compact-bullet-list">
             {priorityActions.map((action, index) => (
+              // biome-ignore lint/suspicious/noArrayIndexKey: Priority actions are static recommendations that don't reorder, index is safe as key
               <li key={index} className="recommendation-item">
                 <SlIcon name="dot" className="secondary-text mt-0.5 flex-shrink-0" />
                 <span className="text-sm sm:text-base break-words">{action}</span>
@@ -144,6 +147,7 @@ export const StructuredSecurityAnalysis: React.FC<StructuredSecurityAnalysisProp
             </strong>
             {needsFormatting(data.reasoning_assessment) ? (
               formatSecurityText(data.reasoning_assessment, 'reasoning').map((paragraph, index) => (
+                // biome-ignore lint/suspicious/noArrayIndexKey: Formatted paragraphs are static and don't reorder, index is safe as key
                 <p
                   key={index}
                   className="text-sm sm:text-base leading-relaxed break-words formatted-paragraph"

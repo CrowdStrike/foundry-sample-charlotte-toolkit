@@ -29,6 +29,7 @@ function App(): React.ReactNode {
           Unable to connect to the Falcon API: {error}
         </p>
         <button
+          type="button"
           onClick={retry}
           className="px-4 py-2 rounded hover:opacity-80 focus:outline-none focus:ring-2"
           style={{
