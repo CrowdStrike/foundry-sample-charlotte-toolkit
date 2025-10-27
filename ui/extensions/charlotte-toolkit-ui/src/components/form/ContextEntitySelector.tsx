@@ -12,7 +12,6 @@ import React from 'react';
 
 import type { ContextOption } from '../../types';
 import { formatDisplayName } from '../../utils/context';
-import TruncatedText from '../TruncatedText';
 
 interface ContextEntitySelectorProps {
   selectedContextEntity: string | null;
@@ -154,32 +153,16 @@ const ContextEntitySelector: React.FC<ContextEntitySelectorProps> = ({
                   try {
                     const result = formatDisplayName(option);
                     if (!result || typeof result !== 'object') {
-                      // Fallback for testing or unexpected scenarios
-                      return (
-                        <TruncatedText
-                          originalText={option.displayName}
-                          displayText={option.displayName}
-                        >
-                          {option.displayName}
-                        </TruncatedText>
-                      );
+                      return <span>{option.displayName}</span>;
                     }
                     const { displayText, originalText } = result;
                     return (
-                      <TruncatedText originalText={originalText} displayText={displayText}>
-                        {displayText}
-                      </TruncatedText>
+                      <SlTooltip content={originalText} placement="right" distance={8}>
+                        <span>{displayText}</span>
+                      </SlTooltip>
                     );
                   } catch (_error) {
-                    // Fallback for any errors, including coverage instrumentation issues
-                    return (
-                      <TruncatedText
-                        originalText={option.displayName}
-                        displayText={option.displayName}
-                      >
-                        {option.displayName}
-                      </TruncatedText>
-                    );
+                    return <span>{option.displayName}</span>;
                   }
                 })()}
               </SlOption>
