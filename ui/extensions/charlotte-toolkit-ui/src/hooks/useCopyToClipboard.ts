@@ -1,6 +1,6 @@
 // src/hooks/useCopyToClipboard.ts
 
-import { useState, useCallback } from 'react';
+import { useCallback, useState } from 'react';
 
 interface CopyToClipboardState {
   copyState: 'clipboard' | 'check-circle';
@@ -13,20 +13,25 @@ interface CopyToClipboardState {
  * Eliminates duplication across CodeBlock, InlineCode, and IOCDisplay components
  */
 export const useCopyToClipboard = (): CopyToClipboardState => {
-  const [copyState, setCopyState] = useState<'clipboard' | 'check-circle'>('clipboard');
+  const [copyState, setCopyState] = useState<'clipboard' | 'check-circle'>(
+    'clipboard',
+  );
 
-  const copyToClipboard = useCallback(async (text: string, successDuration = 2000) => {
-    try {
-      await navigator.clipboard.writeText(text);
-      setCopyState('check-circle');
-      
-      setTimeout(() => {
-        setCopyState('clipboard');
-      }, successDuration);
-    } catch {
-      // Silent failure for copy operation - matches existing behavior
-    }
-  }, []);
+  const copyToClipboard = useCallback(
+    async (text: string, successDuration = 2000) => {
+      try {
+        await navigator.clipboard.writeText(text);
+        setCopyState('check-circle');
+
+        setTimeout(() => {
+          setCopyState('clipboard');
+        }, successDuration);
+      } catch {
+        // Silent failure for copy operation - matches existing behavior
+      }
+    },
+    [],
+  );
 
   return {
     copyState,

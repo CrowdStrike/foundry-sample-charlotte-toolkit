@@ -1,7 +1,7 @@
 // src/hooks/useTabManager.ts
 
 import { SlIcon } from '@shoelace-style/shoelace/dist/react';
-import React, { useState, useCallback, useRef, useEffect } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 type TabType = 'request' | 'response' | 'json';
 
@@ -14,6 +14,7 @@ interface UseTabManagerProps {
 
 interface UseTabManagerReturn {
   activeTab: TabType;
+  // biome-ignore lint/suspicious/noExplicitAny: Complex Shoelace web component type requires any for ref compatibility
   tabGroupRef: React.RefObject<any>;
   handleTabChange: (e: CustomEvent) => void;
   setActiveTab: (tab: TabType) => void;
@@ -31,6 +32,7 @@ export const useTabManager = ({
   responseText,
 }: UseTabManagerProps): UseTabManagerReturn => {
   const [activeTab, setActiveTab] = useState<TabType>('request');
+  // biome-ignore lint/suspicious/noExplicitAny: Complex Shoelace web component type requires any for ref compatibility
   const tabGroupRef = useRef<any>(null);
 
   // Handle tab change events from Shoelace TabGroup

@@ -1,18 +1,21 @@
 // src/hooks/useJsonDataManager.ts
 
-import { useState, useEffect, useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import type { ContextOption } from '../types';
-import { useCopyToClipboard } from './useCopyToClipboard';
 import { detectCurrentSocket, type SocketInfo } from '../utils/socketDetection';
+import { useCopyToClipboard } from './useCopyToClipboard';
 
 interface JsonContextData {
   falcon_context: {
     socket_info: SocketInfo;
     falcon_object: {
+      // biome-ignore lint/suspicious/noExplicitAny: full_data contains complete Falcon API response with dynamic structure
       full_data: any;
       data_structure: string[];
+      // biome-ignore lint/suspicious/noExplicitAny: incident data structure varies based on incident type
       incident: any;
+      // biome-ignore lint/suspicious/noExplicitAny: detection data structure varies based on detection type
       detection: any;
       available_entities: ContextOption[];
       entity_counts: {
@@ -44,11 +47,13 @@ interface JsonContextData {
     content: string | null;
     content_length: number;
     error: string | null;
+    // biome-ignore lint/suspicious/noExplicitAny: workflow_result contains raw API response with varying structure
     workflow_result: any;
   };
 }
 
 interface UseJsonDataManagerProps {
+  // biome-ignore lint/suspicious/noExplicitAny: falconData accepts any Falcon API response structure
   falconData: any;
   availableContextOptions: ContextOption[];
   contextCounts: {
@@ -62,8 +67,11 @@ interface UseJsonDataManagerProps {
 
 interface UseJsonDataManagerResult {
   jsonContextData: JsonContextData | null;
+  // biome-ignore lint/suspicious/noExplicitAny: requestParams accepts dynamic workflow parameters
   initializeRequestData: (requestParams: any) => JsonContextData;
+  // biome-ignore lint/suspicious/noExplicitAny: requestParams accepts dynamic workflow parameters
   updateRequestData: (requestParams: any) => void;
+  // biome-ignore lint/suspicious/noExplicitAny: responseData accepts dynamic workflow response
   updateResponseData: (responseData: any) => void;
   copyFalconContext: () => Promise<void>;
   copyRequestData: () => Promise<void>;
@@ -85,13 +93,26 @@ export const useJsonDataManager = ({
   availableContextOptions,
   contextCounts,
 }: UseJsonDataManagerProps): UseJsonDataManagerResult => {
-  const [jsonContextData, setJsonContextData] = useState<JsonContextData | null>(null);
-  
+  const [jsonContextData, setJsonContextData] =
+    useState<JsonContextData | null>(null);
+
   // Individual copy hooks for visual feedback
-  const { copyState: contextCopyState, copyToClipboard: copyContextToClipboard } = useCopyToClipboard();
-  const { copyState: requestCopyState, copyToClipboard: copyRequestToClipboard } = useCopyToClipboard();
-  const { copyState: responseCopyState, copyToClipboard: copyResponseToClipboard } = useCopyToClipboard();
-  const { copyState: rawResponseCopyState, copyToClipboard: copyRawResponseToClipboard } = useCopyToClipboard();
+  const {
+    copyState: contextCopyState,
+    copyToClipboard: copyContextToClipboard,
+  } = useCopyToClipboard();
+  const {
+    copyState: requestCopyState,
+    copyToClipboard: copyRequestToClipboard,
+  } = useCopyToClipboard();
+  const {
+    copyState: responseCopyState,
+    copyToClipboard: copyResponseToClipboard,
+  } = useCopyToClipboard();
+  const {
+    copyState: rawResponseCopyState,
+    copyToClipboard: copyRawResponseToClipboard,
+  } = useCopyToClipboard();
 
   // Initialize falcon context data when component mounts
   useEffect(() => {
@@ -140,6 +161,7 @@ export const useJsonDataManager = ({
 
       // Create the updated context directly
       const updatedContext: JsonContextData = {
+        // biome-ignore lint/style/noNonNullAssertion: jsonContextData is guaranteed to exist when this function is called
         ...jsonContextData!,
         request_data: {
           timestamp: executionStartTime,
@@ -149,11 +171,11 @@ export const useJsonDataManager = ({
 
       // Update state with the new context
       setJsonContextData(updatedContext);
-      
+
       // Return the context immediately for synchronous use
       return updatedContext;
     },
-    [jsonContextData]
+    [jsonContextData],
   );
 
   // Update request data in real-time (preserves existing timestamp)
@@ -167,9 +189,9 @@ export const useJsonDataManager = ({
       dataToInclude: string[];
       selectedContext: string;
     }) => {
-      setJsonContextData(prevState => {
+      setJsonContextData((prevState) => {
         if (!prevState) return prevState;
-        
+
         return {
           ...prevState,
           request_data: {
@@ -179,7 +201,7 @@ export const useJsonDataManager = ({
         };
       });
     },
-    []
+    [],
   );
 
   // Update response data
@@ -191,9 +213,10 @@ export const useJsonDataManager = ({
       fromCache?: boolean;
       content?: string;
       error?: string;
+      // biome-ignore lint/suspicious/noExplicitAny: workflowResult contains raw API response
       workflowResult?: any;
     }) => {
-      setJsonContextData(prevState => {
+      setJsonContextData((prevState) => {
         if (!prevState) {
           return prevState;
         }
@@ -211,14 +234,13 @@ export const useJsonDataManager = ({
           workflow_result: responseData.workflowResult,
         };
 
-
         return {
           ...prevState,
           response_data: newResponseData,
         };
       });
     },
-    []
+    [],
   );
 
   // Copy falcon context to clipboard with visual feedback
@@ -239,7 +261,7 @@ export const useJsonDataManager = ({
       await copyResponseToClipboard(JSON.stringify({}, null, 2));
       return;
     }
-    
+
     const responseData = jsonContextData.response_data;
     // Create a copy without the raw content for metadata-only copy
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -270,4 +292,8 @@ export const useJsonDataManager = ({
   };
 };
 
-export type { JsonContextData, UseJsonDataManagerProps, UseJsonDataManagerResult };
+export type {
+  JsonContextData,
+  UseJsonDataManagerProps,
+  UseJsonDataManagerResult,
+};

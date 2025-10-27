@@ -4,8 +4,8 @@ import { useCallback } from 'react';
 
 import {
   COPY_OPTIONS,
-  formatForCopy,
   type CopyFormat,
+  formatForCopy,
 } from '../utils/copyUtils';
 import { parseStructuredResponse } from '../utils/security/iocUtils';
 
@@ -40,12 +40,17 @@ export const useCopyManager = ({
       const parsedJsonResponse = parseStructuredResponse(responseText);
 
       // Format the text for the selected copy format
-      const textToCopy = formatForCopy(format, responseText, jsonContextData, parsedJsonResponse);
+      const textToCopy = formatForCopy(
+        format,
+        responseText,
+        jsonContextData,
+        parsedJsonResponse,
+      );
 
       // Use the shared copy hook for consistent visual feedback
       await copyToClipboard(textToCopy);
     },
-    [responseText, jsonContextData, copyToClipboard]
+    [responseText, jsonContextData, copyToClipboard],
   );
 
   return {
