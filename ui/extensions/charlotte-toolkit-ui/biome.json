@@ -1,53 +1,24 @@
 {
-  "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.2.6/schema.json",
   "vcs": {
     "enabled": true,
     "clientKind": "git",
     "useIgnoreFile": true
   },
   "files": {
-    "ignoreUnknown": false,
-    "ignore": [
-      "node_modules",
-      "dist",
-      "build",
-      ".vite",
-      "*.min.js",
-      "coverage",
-      ".rollup-cache"
-    ]
+    "ignoreUnknown": true
   },
   "formatter": {
     "enabled": true,
-    "formatWithErrors": false,
     "indentStyle": "space",
     "indentWidth": 2,
-    "lineWidth": 80,
+    "lineWidth": 100,
     "lineEnding": "lf"
-  },
-  "organizeImports": {
-    "enabled": true
   },
   "linter": {
     "enabled": true,
     "rules": {
-      "recommended": true,
-      "style": {
-        "noNonNullAssertion": "off",
-        "useConst": "error",
-        "useTemplate": "warn"
-      },
-      "suspicious": {
-        "noExplicitAny": "warn",
-        "noArrayIndexKey": "warn"
-      },
-      "security": {
-        "noDangerouslySetInnerHtml": "error"
-      },
-      "a11y": {
-        "useKeyWithClickEvents": "warn",
-        "noSvgWithoutTitle": "warn"
-      }
+      "recommended": true
     }
   },
   "javascript": {
@@ -57,8 +28,7 @@
       "trailingCommas": "all",
       "semicolons": "always",
       "arrowParentheses": "always",
-      "bracketSpacing": true,
-      "bracketSameLine": false
+      "bracketSpacing": true
     }
   },
   "json": {
