@@ -16,7 +16,10 @@ export interface SocketInfo {
 /**
  * Map of socket identifiers to their display information
  */
-const SOCKET_MAP: Record<string, { socket: string; displayName: string; description: string }> = {
+const SOCKET_MAP: Record<
+  string,
+  { socket: string; displayName: string; description: string }
+> = {
   'activity.detections.details': {
     socket: 'activity.detections.details',
     displayName: 'Activity Detections',
@@ -37,7 +40,10 @@ const SOCKET_MAP: Record<string, { socket: string; displayName: string; descript
 /**
  * Detects the current socket based on various context clues
  */
-export function detectCurrentSocket(falconData?: any): SocketInfo {
+export function detectCurrentSocket(
+  // biome-ignore lint/suspicious/noExplicitAny: falconData accepts any Falcon API structure
+  falconData?: any,
+): SocketInfo {
   // Method 1: Check URL patterns
   const urlSocket = detectSocketFromUrl();
   if (urlSocket && SOCKET_MAP[urlSocket]) {
@@ -125,6 +131,7 @@ function detectSocketFromUrl(): string | null {
 /**
  * Detect socket from Falcon context data structure
  */
+// biome-ignore lint/suspicious/noExplicitAny: falconData accepts any Falcon API structure
 function detectSocketFromContext(falconData?: any): string | null {
   if (!falconData) return null;
 
@@ -139,7 +146,10 @@ function detectSocketFromContext(falconData?: any): string | null {
     // Detection pages: Look for detection data
     if (falconData.detection) {
       // Differentiate between activity and XDR detections
-      if (falconData.detection.source?.includes('activity') || falconData.activity) {
+      if (
+        falconData.detection.source?.includes('activity') ||
+        falconData.activity
+      ) {
         return 'activity.detections.details';
       }
       if (falconData.detection.source?.includes('xdr') || falconData.xdr) {
@@ -184,26 +194,4 @@ function detectSocketFromTitle(): string | null {
   }
 
   return null;
-}
-
-/**
- * Get all available sockets from manifest
- */
-export function getAllAvailableSockets(): SocketInfo[] {
-  return Object.values(SOCKET_MAP).map(socket => ({
-    ...socket,
-    detected: false,
-    detectionMethod: 'Not detected',
-  }));
-}
-
-/**
- * Format socket information for display
- */
-export function formatSocketInfo(socketInfo: SocketInfo): string {
-  if (!socketInfo.detected) {
-    return `Socket: Unknown (${socketInfo.detectionMethod})`;
-  }
-
-  return `Socket: ${socketInfo.displayName} (${socketInfo.socket})`;
 }

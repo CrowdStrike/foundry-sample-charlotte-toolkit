@@ -6,17 +6,7 @@
  * @returns Promise that resolves after the specified time
  */
 export const wait = (ms: number = 1000): Promise<void> =>
-  new Promise(resolve => setTimeout(resolve, ms));
-
-/**
- * Create display name for Charlotte workflow
- * @param modelName - Selected Charlotte model name
- * @returns Display name showing the selected model with proper formatting
- */
-export const getDisplayModelName = (modelName: string): string => {
-  // Normalize model name for display (convert underscores to spaces)
-  return modelName.replace(/_/g, ' ');
-};
+  new Promise((resolve) => setTimeout(resolve, ms));
 
 /**
  * Simple hash function for cache key generation
@@ -27,7 +17,7 @@ const simpleHash = (inputString: string): string => {
   let hash = 0;
   for (let i = 0; i < inputString.length; i++) {
     const char = inputString.codePointAt(i) ?? 0;
-    hash = ((hash << 5) - hash) + char;
+    hash = (hash << 5) - hash + char;
     hash = hash & hash; // Convert to 32bit integer
   }
   return Math.abs(hash).toString(36);
@@ -50,7 +40,7 @@ export const generateCacheKey = (
   temperature: number,
   stopWords: string[],
   jsonSchema: string,
-  dataToInclude: string[]
+  dataToInclude: string[],
 ): string => {
   // Serialize all parameters into single string for consistent hashing
   const cacheParams = {
@@ -59,7 +49,7 @@ export const generateCacheKey = (
     temperature,
     stopWords: stopWords.length > 0 ? stopWords.join('|') : '',
     jsonSchema: jsonSchema.trim().slice(0, 50),
-    dataToInclude: dataToInclude.length > 0 ? dataToInclude.join('|') : ''
+    dataToInclude: dataToInclude.length > 0 ? dataToInclude.join('|') : '',
   };
 
   // Single-pass hash generation - much more efficient than multiple btoa() calls
@@ -74,7 +64,9 @@ export const generateCacheKey = (
  * @param query - Query string to validate
  * @returns Validation result
  */
-export const validateQuery = (query: string): { isValid: boolean; error?: string } => {
+export const validateQuery = (
+  query: string,
+): { isValid: boolean; error?: string } => {
   if (!query || typeof query !== 'string') {
     return { isValid: false, error: 'Query is required' };
   }
@@ -85,7 +77,10 @@ export const validateQuery = (query: string): { isValid: boolean; error?: string
   }
 
   if (trimmed.length > 10000) {
-    return { isValid: false, error: 'Query is too long (max 10,000 characters)' };
+    return {
+      isValid: false,
+      error: 'Query is too long (max 10,000 characters)',
+    };
   }
 
   return { isValid: true };
@@ -119,11 +114,11 @@ export const formatErrorMessage = (error: unknown): string => {
  */
 export const buildMitreUrl = (techniqueId: string): string => {
   const baseUrl = 'https://attack.mitre.org/techniques/';
-  
+
   // Convert dot notation to slash notation for sub-techniques
   // T1566.001 → T1566/001/
   // T1027 → T1027/
   const urlPath = techniqueId.replace('.', '/');
-  
+
   return `${baseUrl}${urlPath}/`;
 };

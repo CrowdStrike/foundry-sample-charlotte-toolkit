@@ -1,6 +1,6 @@
 // src/utils/cache.ts
 
-import type { LLMResponse, CacheEntry, ResponseCache } from '../types';
+import type { CacheEntry, LLMResponse, ResponseCache } from '../types';
 
 import { CACHE_TTL, MAX_CACHE_SIZE } from './constants';
 
@@ -18,7 +18,10 @@ export class LRUResponseCache implements ResponseCache {
    * @param maxSize - Maximum number of entries to store (default: MAX_CACHE_SIZE)
    * @param defaultTtl - Default time-to-live for entries in milliseconds (default: CACHE_TTL)
    */
-  constructor(maxSize: number = MAX_CACHE_SIZE, defaultTtl: number = CACHE_TTL) {
+  constructor(
+    maxSize: number = MAX_CACHE_SIZE,
+    defaultTtl: number = CACHE_TTL,
+  ) {
     this.maxSize = maxSize;
     this.defaultTtl = defaultTtl;
   }

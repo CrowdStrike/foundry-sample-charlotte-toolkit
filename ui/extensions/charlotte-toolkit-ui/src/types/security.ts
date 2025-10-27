@@ -5,7 +5,7 @@ export type ConfidenceLevel = 'Low' | 'Medium' | 'High';
 
 export interface StructuredSecurityResponse {
   executive_summary: string;
-  
+
   // Core fields from universal schema
   threat_level: ThreatLevel;
   confidence_level: ConfidenceLevel;
