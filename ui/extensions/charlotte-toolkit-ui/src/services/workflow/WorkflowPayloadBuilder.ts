@@ -1,11 +1,10 @@
 // src/services/workflow/WorkflowPayloadBuilder.ts
 
-import { createSecurityResponseSchema, detectUseCase } from '../../utils/promptEngineer';
-
-import { 
-  getModelLabel,
-  VALIDATION_THRESHOLDS,
-} from '../../utils/constants';
+import { getModelLabel, VALIDATION_THRESHOLDS } from '../../utils/constants';
+import {
+  createSecurityResponseSchema,
+  detectUseCase,
+} from '../../utils/promptEngineer';
 import type { WorkflowExecutionParams } from './types';
 
 /**
@@ -14,7 +13,10 @@ import type { WorkflowExecutionParams } from './types';
  * @param params - Workflow execution parameters
  * @returns Formatted payload for workflow execution
  */
-export const buildWorkflowPayload = (params: WorkflowExecutionParams): Record<string, any> => {
+export const buildWorkflowPayload = (
+  params: WorkflowExecutionParams,
+  // biome-ignore lint/suspicious/noExplicitAny: workflow payload structure varies based on parameters
+): Record<string, any> => {
   const { query, model, temperature, selectedContext } = params;
 
   // Normalize model name to ensure schema compliance
@@ -47,6 +49,7 @@ export const buildWorkflowPayload = (params: WorkflowExecutionParams): Record<st
   }
 
   // Build base payload
+  // biome-ignore lint/suspicious/noExplicitAny: payload object accepts dynamic workflow parameters
   const payload: Record<string, any> = {
     user_prompt: finalPrompt,
     model_name: normalizedModel,
@@ -76,10 +79,11 @@ export const normalizeModelName = (modelName: string): string => {
  * @param selectedContext - Selected context data
  */
 const addOptionalParameters = (
+  // biome-ignore lint/suspicious/noExplicitAny: payload accepts dynamic optional parameters
   payload: Record<string, any>,
   params: WorkflowExecutionParams,
   enhancedJsonSchema: string,
-  selectedContext: string
+  selectedContext: string,
 ): void => {
   // Add stop words if provided
   if (params.stopWords && params.stopWords.length > 0) {
@@ -107,137 +111,13 @@ const addOptionalParameters = (
 };
 
 /**
- * Validate payload before sending to workflow
- * @param payload - Payload to validate
- * @returns Validation result
- */
-export const validatePayload = (
-  payload: Record<string, any>
-): {
-  isValid: boolean;
-  error?: string;
-  warnings?: string[];
-} => {
-  const warnings: string[] = [];
-
-  // Required field validation
-  if (!payload.user_prompt || typeof payload.user_prompt !== 'string') {
-    return { isValid: false, error: 'user_prompt is required and must be a string' };
-  }
-
-  if (!payload.model_name || typeof payload.model_name !== 'string') {
-    return { isValid: false, error: 'model_name is required and must be a string' };
-  }
-
-  if (typeof payload.temperature !== 'number') {
-    return { isValid: false, error: 'temperature is required and must be a number' };
-  }
-
-  // Optional field validation
-  if (payload.stop_words && !Array.isArray(payload.stop_words)) {
-    return { isValid: false, error: 'stop_words must be an array if provided' };
-  }
-
-  if (payload.json_schema && typeof payload.json_schema !== 'string') {
-    return { isValid: false, error: 'json_schema must be a string if provided' };
-  }
-
-  if (payload.data_to_include && !Array.isArray(payload.data_to_include)) {
-    return { isValid: false, error: 'data_to_include must be an array if provided' };
-  }
-
-  // Generate warnings for optimization
-  if (payload.user_prompt.length > VALIDATION_THRESHOLDS.PROMPT_LENGTH) {
-    warnings.push('Prompt is very long - consider shortening for optimal performance');
-  }
-
-  if (payload.stop_words && payload.stop_words.length > VALIDATION_THRESHOLDS.STOP_WORDS_MAX) {
-    warnings.push('Many stop words may constrain response creativity');
-  }
-
-  if (payload.data_to_include && payload.data_to_include.length > VALIDATION_THRESHOLDS.CONTEXT_ITEMS) {
-    warnings.push('Large amount of context data may affect response focus');
-  }
-
-  return {
-    isValid: true,
-    ...(warnings.length > 0 && { warnings }),
-  };
-};
-
-/**
- * Create payload for different use cases with optimized parameters
- * @param baseParams - Base workflow parameters
- * @param useCase - Specific use case for optimization
- * @returns Optimized payload
- */
-export const createOptimizedPayload = (
-  baseParams: WorkflowExecutionParams,
-  useCase: 'security_analysis' | 'threat_hunting' | 'incident_response' | 'general'
-): Record<string, any> => {
-  const optimizations = getUseCaseOptimizations(useCase);
-
-  // Apply use case specific optimizations
-  const optimizedParams: WorkflowExecutionParams = {
-    ...baseParams,
-    ...optimizations.parameterOverrides,
-    enablePromptEnhancement: optimizations.enablePromptEnhancement,
-  };
-
-  const payload = buildWorkflowPayload(optimizedParams);
-
-  // Add use case specific metadata
-  payload._useCase = useCase;
-  payload._optimization = optimizations.name;
-
-  return payload;
-};
-
-/**
- * Get optimization settings for different use cases
- * @param useCase - Use case to optimize for
- * @returns Optimization configuration
- */
-const getUseCaseOptimizations = (useCase: string) => {
-  const optimizations = {
-    security_analysis: {
-      name: 'Security Analysis Optimized',
-      enablePromptEnhancement: true,
-      parameterOverrides: {
-        temperature: 0.3, // More focused for analysis
-      },
-    },
-    threat_hunting: {
-      name: 'Threat Hunting Optimized',
-      enablePromptEnhancement: true,
-      parameterOverrides: {
-        temperature: 0.5, // Balanced for discovery
-      },
-    },
-    incident_response: {
-      name: 'Incident Response Optimized',
-      enablePromptEnhancement: true,
-      parameterOverrides: {
-        temperature: 0.2, // Very focused for critical decisions
-      },
-    },
-    general: {
-      name: 'General Purpose',
-      enablePromptEnhancement: true,
-      parameterOverrides: {},
-    },
-  };
-
-  return optimizations[useCase as keyof typeof optimizations] ?? optimizations.general;
-};
-
-/**
  * Estimate payload size for performance optimization
  * @param payload - Payload to analyze
  * @returns Size estimation and recommendations
  */
 export const analyzePayloadSize = (
-  payload: Record<string, any>
+  // biome-ignore lint/suspicious/noExplicitAny: analyzes payloads with varying structures
+  payload: Record<string, any>,
 ): {
   estimatedBytes: number;
   characterCount: number;
@@ -254,22 +134,33 @@ export const analyzePayloadSize = (
   // Determine complexity
   if (estimatedBytes > VALIDATION_THRESHOLDS.PAYLOAD_SIZE_HIGH) {
     complexity = 'high';
-    recommendations.push('Consider breaking down the request into smaller chunks');
+    recommendations.push(
+      'Consider breaking down the request into smaller chunks',
+    );
   } else if (estimatedBytes > VALIDATION_THRESHOLDS.PAYLOAD_SIZE_MEDIUM) {
     complexity = 'medium';
     recommendations.push('Monitor response times for potential optimization');
   }
 
   // Specific recommendations
-  if (payload.user_prompt && payload.user_prompt.length > VALIDATION_THRESHOLDS.LONG_PROMPT) {
+  if (
+    payload.user_prompt &&
+    payload.user_prompt.length > VALIDATION_THRESHOLDS.LONG_PROMPT
+  ) {
     recommendations.push('Consider shortening the main prompt');
   }
 
-  if (payload.data_to_include && payload.data_to_include.length > (VALIDATION_THRESHOLDS.CONTEXT_ITEMS - 2)) {
+  if (
+    payload.data_to_include &&
+    payload.data_to_include.length > VALIDATION_THRESHOLDS.CONTEXT_ITEMS - 2
+  ) {
     recommendations.push('Reduce context data for better focus');
   }
 
-  if (payload.json_schema && payload.json_schema.length > VALIDATION_THRESHOLDS.JSON_SCHEMA_SIZE) {
+  if (
+    payload.json_schema &&
+    payload.json_schema.length > VALIDATION_THRESHOLDS.JSON_SCHEMA_SIZE
+  ) {
     recommendations.push('Simplify JSON schema for faster processing');
   }
 
@@ -282,25 +173,15 @@ export const analyzePayloadSize = (
 };
 
 /**
- * Create minimal payload for testing purposes
- * @param query - Test query
- * @param model - Model to use
- * @returns Minimal test payload
- */
-export const createTestPayload = (query: string, model: string): Record<string, any> => {
-  return {
-    user_prompt: query,
-    model_name: normalizeModelName(model),
-    temperature: 0.5,
-  };
-};
-
-/**
  * Log payload information for debugging
  * @param payload - Payload to log
  * @param context - Additional context for logging
  */
-export const logPayloadInfo = (payload: Record<string, any>, _context: string = ''): void => {
+export const logPayloadInfo = (
+  // biome-ignore lint/suspicious/noExplicitAny: logs payloads with varying structures
+  payload: Record<string, any>,
+  _context: string = '',
+): void => {
   // console.log(`=== PAYLOAD INFO ${context ? `(${context})` : ''} ===`);
   // console.log('Model:', payload.model_name);
   // console.log('Temperature:', payload.temperature);

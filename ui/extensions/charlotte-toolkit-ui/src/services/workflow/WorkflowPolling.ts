@@ -1,10 +1,14 @@
 // src/services/workflow/WorkflowPolling.ts
 
-import FalconApi from '@crowdstrike/foundry-js';
+import type FalconApi from '@crowdstrike/foundry-js';
 
 import { wait } from '../../utils/helpers';
 
-import { WorkflowStatus, WORKFLOW_CONFIG, type WorkflowPollResult } from './types';
+import {
+  WORKFLOW_CONFIG,
+  type WorkflowPollResult,
+  WorkflowStatus,
+} from './types';
 
 /**
  * Poll workflow for completion with simple 1-second intervals
@@ -19,12 +23,13 @@ export const pollWorkflowCompletion = async (
   workflowId: string,
   options: {
     maxAttempts?: number;
-  } = {}
+  } = {},
 ): Promise<WorkflowPollResult> => {
   const { maxAttempts = WORKFLOW_CONFIG.MAX_POLL_ATTEMPTS } = options;
 
   let attempts = 0;
   const delay = 1000; // Fixed 1-second delay
+  // biome-ignore lint/suspicious/noExplicitAny: pollResults contains dynamic status snapshots with varying properties
   const pollResults: any[] = [];
 
   while (attempts < maxAttempts) {
@@ -101,7 +106,7 @@ export const pollWorkflowCompletion = async (
  */
 export const getWorkflowStatus = async (
   falcon: FalconApi,
-  workflowId: string
+  workflowId: string,
 ): Promise<{
   status: WorkflowStatus;
   output_data?: Record<string, unknown>;
@@ -112,13 +117,16 @@ export const getWorkflowStatus = async (
   });
 
   if (result.errors && result.errors.length > 0) {
-    throw new Error(result.errors[0]?.message ?? 'Failed to get workflow results');
+    throw new Error(
+      result.errors[0]?.message ?? 'Failed to get workflow results',
+    );
   }
 
   if (!result.resources || result.resources.length === 0) {
     throw new Error('No workflow results found');
   }
 
+  // biome-ignore lint/suspicious/noExplicitAny: Falcon API workflow result has untyped response structure
   const workflowResult = result.resources[0] as any;
 
   return {
@@ -139,15 +147,6 @@ export const isWorkflowRunning = (status: WorkflowStatus): boolean => {
     status === WorkflowStatus.RUNNING ||
     status === WorkflowStatus.PENDING
   );
-};
-
-/**
- * Check if workflow is in a terminal state (completed or failed)
- * @param status - Workflow status to check
- * @returns True if workflow is finished
- */
-export const isWorkflowTerminal = (status: WorkflowStatus): boolean => {
-  return status === WorkflowStatus.COMPLETED || status === WorkflowStatus.FAILED;
 };
 
 /**

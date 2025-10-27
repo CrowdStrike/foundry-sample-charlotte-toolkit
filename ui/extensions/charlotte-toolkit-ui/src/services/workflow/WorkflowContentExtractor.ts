@@ -12,6 +12,7 @@
  * @returns Extracted content string
  * @throws Error if no content can be extracted
  */
+// biome-ignore lint/suspicious/noExplicitAny: workflow output has dynamic structure varying by workflow type
 export const extractWorkflowContent = (outputData: any): string => {
   if (!outputData) {
     throw new Error('No output data received from workflow');
@@ -58,12 +59,13 @@ export const extractWorkflowContent = (outputData: any): string => {
  * @param outputData - Output data to search
  * @returns Field name if found, null otherwise
  */
+// biome-ignore lint/suspicious/noExplicitAny: searches dynamic output structure for completion fields
 const findDynamicCompletionField = (outputData: any): string | null => {
   const found = Object.keys(outputData).find(
-    key =>
+    (key) =>
       key.includes('.completion') &&
       !key.includes('.meta') && // Exclude metadata fields
-      key.includes('llminvocator_handler')
+      key.includes('llminvocator_handler'),
   );
   if (found === undefined) {
     return null;
@@ -76,6 +78,7 @@ const findDynamicCompletionField = (outputData: any): string | null => {
  * @param outputData - Output data to extract from
  * @returns Extracted content or empty string
  */
+// biome-ignore lint/suspicious/noExplicitAny: handles multiple legacy output formats with varying structures
 const extractFromLegacyFormats = (outputData: any): string => {
   // Try standard content fields
   if (outputData.content) {
@@ -101,10 +104,13 @@ const extractFromLegacyFormats = (outputData: any): string => {
 
   // Try generic completion field pattern
   const genericCompletionField = Object.keys(outputData).find(
-    key => key.endsWith('.completion') && !key.includes('.meta')
+    (key) => key.endsWith('.completion') && !key.includes('.meta'),
   );
 
-  if (genericCompletionField && typeof outputData[genericCompletionField] === 'string') {
+  if (
+    genericCompletionField &&
+    typeof outputData[genericCompletionField] === 'string'
+  ) {
     return outputData[genericCompletionField];
   }
 
@@ -117,6 +123,7 @@ const extractFromLegacyFormats = (outputData: any): string => {
  * @param outputData - Output data with nested structure
  * @returns Extracted content or empty string
  */
+// biome-ignore lint/suspicious/noExplicitAny: recursively extracts from unknown nested structures
 const extractFromNestedStructure = (outputData: any): string => {
   const keys = Object.keys(outputData);
   if (keys.length === 0) {
@@ -151,6 +158,7 @@ const extractFromNestedStructure = (outputData: any): string => {
  * Log detailed information about extraction failure for debugging
  * @param outputData - Output data that failed extraction
  */
+// biome-ignore lint/suspicious/noExplicitAny: logs failed extraction attempts for any output structure
 const logExtractionFailure = (outputData: any): void => {
   // console.error('=== CONTENT EXTRACTION FAILURE ===');
   // console.error('Unable to extract content from output data:', outputData);
@@ -159,81 +167,19 @@ const logExtractionFailure = (outputData: any): void => {
 
   // Log potential completion fields for debugging
   const potentialFields = Object.keys(outputData).filter(
-    key =>
+    (key) =>
       key.includes('completion') ||
       key.includes('content') ||
       key.includes('response') ||
-      key.includes('result')
+      key.includes('result'),
   );
 
   if (potentialFields.length > 0) {
     // console.error('Potential content fields found:', potentialFields);
-    potentialFields.forEach(_field => {
+    potentialFields.forEach((_field) => {
       // console.error(`${field}:`, typeof outputData[field], outputData[field]);
     });
   }
-};
-
-/**
- * Analyze workflow output structure for debugging
- * @param outputData - Output data to analyze
- * @returns Analysis summary
- */
-export const analyzeWorkflowOutput = (
-  outputData: any
-): {
-  hasContent: boolean;
-  contentFields: string[];
-  structure: 'simple' | 'nested' | 'complex';
-  recommendedExtraction: string | null;
-} => {
-  if (!outputData || typeof outputData !== 'object') {
-    return {
-      hasContent: false,
-      contentFields: [],
-      structure: 'simple',
-      recommendedExtraction: null,
-    };
-  }
-
-  const keys = Object.keys(outputData);
-  const contentFields = keys.filter(
-    key =>
-      key.includes('completion') ||
-      key.includes('content') ||
-      key.includes('response') ||
-      key.includes('result') ||
-      key.includes('output')
-  );
-
-  // Determine structure complexity
-  let structure: 'simple' | 'nested' | 'complex' = 'simple';
-  const hasNestedObjects = keys.some(key => outputData[key] && typeof outputData[key] === 'object');
-
-  if (hasNestedObjects) {
-    structure = keys.length > 3 ? 'complex' : 'nested';
-  }
-
-  // Find recommended extraction field
-  let recommendedExtraction: string | null = null;
-
-  // Prioritize Charlotte-specific fields
-  const dynamicField = findDynamicCompletionField(outputData);
-  if (dynamicField) {
-    recommendedExtraction = dynamicField;
-  } else if (outputData.completion) {
-    recommendedExtraction = 'completion';
-  } else if (contentFields.length > 0) {
-    const [firstField] = contentFields;
-    recommendedExtraction = firstField ?? null;
-  }
-
-  return {
-    hasContent: contentFields.length > 0,
-    contentFields,
-    structure,
-    recommendedExtraction,
-  };
 };
 
 /**
@@ -242,7 +188,7 @@ export const analyzeWorkflowOutput = (
  * @returns Validation result with quality metrics
  */
 export const validateExtractedContent = (
-  content: string
+  content: string,
 ): {
   isValid: boolean;
   isEmpty: boolean;
@@ -305,42 +251,4 @@ export const validateExtractedContent = (
     estimatedFormat,
     warnings,
   };
-};
-
-/**
- * Extract metadata from workflow output if available
- * @param outputData - Workflow output data
- * @returns Extracted metadata object
- */
-export const extractWorkflowMetadata = (outputData: any): Record<string, any> => {
-  if (!outputData || typeof outputData !== 'object') {
-    return {};
-  }
-
-  const metadata: Record<string, any> = {};
-
-  // Look for metadata fields
-  Object.keys(outputData).forEach(key => {
-    if (key.includes('.meta') || key.includes('metadata') || key.includes('_meta')) {
-      metadata[key] = outputData[key];
-    }
-  });
-
-  // Extract timing information if available
-  if (outputData.execution_time || outputData.processing_time) {
-    metadata.timing = {
-      execution_time: outputData.execution_time,
-      processing_time: outputData.processing_time,
-    };
-  }
-
-  // Extract model information if available
-  if (outputData.model_used || outputData.model_name) {
-    metadata.model = {
-      model_used: outputData.model_used,
-      model_name: outputData.model_name,
-    };
-  }
-
-  return metadata;
 };

@@ -1,12 +1,20 @@
 // src/services/workflow/WorkflowExecutor.ts
 
-import FalconApi from '@crowdstrike/foundry-js';
+import type FalconApi from '@crowdstrike/foundry-js';
 
 import type { LLMResponse } from '../../types';
 import { responseCache } from '../../utils/cache';
-import { generateCacheKey, formatErrorMessage } from '../../utils/helpers';
-import { WorkflowStatus, WORKFLOW_CONFIG, type WorkflowExecutionParams, type WorkflowExecutionResult } from './types';
-import { extractWorkflowContent, validateExtractedContent } from './WorkflowContentExtractor';
+import { formatErrorMessage, generateCacheKey } from '../../utils/helpers';
+import {
+  WORKFLOW_CONFIG,
+  type WorkflowExecutionParams,
+  type WorkflowExecutionResult,
+  WorkflowStatus,
+} from './types';
+import {
+  extractWorkflowContent,
+  validateExtractedContent,
+} from './WorkflowContentExtractor';
 import { buildWorkflowPayload, logPayloadInfo } from './WorkflowPayloadBuilder';
 import { pollWorkflowCompletion } from './WorkflowPolling';
 import { validateWorkflowParams } from './WorkflowValidator';
@@ -18,14 +26,22 @@ import { validateWorkflowParams } from './WorkflowValidator';
  * @param payload - Workflow execution payload
  * @returns Promise with workflow execution response
  */
-const executeWorkflow = async (falcon: FalconApi, payload: Record<string, any>): Promise<any> => {
+const executeWorkflow = async (
+  falcon: FalconApi,
+  // biome-ignore lint/suspicious/noExplicitAny: payload accepts dynamic workflow parameters with varying structures
+  payload: Record<string, any>,
+  // biome-ignore lint/suspicious/noExplicitAny: Falcon API returns untyped workflow execution response
+): Promise<any> => {
   const workflowConfig = {
     name: WORKFLOW_CONFIG.WORKFLOW_NAME,
     depth: WORKFLOW_CONFIG.WORKFLOW_DEPTH,
   };
 
   // console.log(`🚀 Executing workflow: ${workflowConfig.name}`);
-  const response = await falcon.api.workflows.postEntitiesExecuteV1(payload, workflowConfig);
+  const response = await falcon.api.workflows.postEntitiesExecuteV1(
+    payload,
+    workflowConfig,
+  );
 
   if (response.errors && response.errors.length > 0) {
     throw new Error(response.errors[0]?.message ?? 'Workflow execution failed');
@@ -55,7 +71,7 @@ const checkCache = (params: WorkflowExecutionParams): string | null => {
       params.temperature,
       params.stopWords,
       params.jsonSchema,
-      params.dataToInclude
+      params.dataToInclude,
     );
 
     const cachedResponse = responseCache.get(cacheKey);
@@ -71,7 +87,10 @@ const checkCache = (params: WorkflowExecutionParams): string | null => {
  * @param params - Workflow execution parameters
  * @param content - Response content to cache
  */
-const saveResponseToCache = (params: WorkflowExecutionParams, content: string): void => {
+const saveResponseToCache = (
+  params: WorkflowExecutionParams,
+  content: string,
+): void => {
   if (!params.enableCaching) {
     return;
   }
@@ -83,7 +102,7 @@ const saveResponseToCache = (params: WorkflowExecutionParams, content: string): 
       params.temperature,
       params.stopWords,
       params.jsonSchema,
-      params.dataToInclude
+      params.dataToInclude,
     );
 
     const llmResponse: LLMResponse = {
@@ -107,10 +126,12 @@ const saveResponseToCache = (params: WorkflowExecutionParams, content: string): 
  */
 export const executeWorkflowWithCache = async (
   falcon: FalconApi,
-  params: WorkflowExecutionParams
+  params: WorkflowExecutionParams,
 ): Promise<WorkflowExecutionResult> => {
   let workflowId: string | undefined;
+  // biome-ignore lint/suspicious/noExplicitAny: payload contains dynamic workflow parameters
   let payload: Record<string, any> | undefined;
+  // biome-ignore lint/suspicious/noExplicitAny: pollingResult contains untyped API response data
   let pollingResult: any;
 
   try {
@@ -190,60 +211,6 @@ export const executeWorkflowWithCache = async (
 
     return {
       success: false,
-      error: formatErrorMessage(error),
-    };
-  }
-};
-
-/**
- * Cancel workflow execution (if supported)
- * @param falcon - Falcon API instance
- * @param workflowId - Workflow execution ID to cancel
- * @returns Promise with cancellation result
- */
-export const cancelWorkflowExecution = async (
-  _falcon: FalconApi,
-  _workflowId: string
-): Promise<{ success: boolean; error?: string }> => {
-  // Note: This depends on the Falcon API supporting workflow cancellation
-  // Implementation may vary based on available API endpoints
-  // console.log('🛑 Attempting to cancel workflow:', workflowId);
-
-  // If cancellation API is available, use it here
-  // For now, we'll just return success
-
-  return { success: true };
-};
-
-/**
- * Get workflow execution status using modular polling
- * @param falcon - Falcon API instance
- * @param workflowId - Workflow execution ID
- * @returns Promise with workflow status
- */
-export const getWorkflowStatus = async (
-  falcon: FalconApi,
-  workflowId: string
-): Promise<{ status: string; error?: string }> => {
-  try {
-    const result = await falcon.api.workflows.getEntitiesExecutionResultsV1({
-      ids: [workflowId],
-    });
-
-    if (result.errors && result.errors.length > 0) {
-      throw new Error(result.errors[0]?.message ?? 'Failed to get workflow status');
-    }
-
-    if (!result.resources || result.resources.length === 0) {
-      throw new Error('No workflow status found');
-    }
-
-    const workflowResult = result.resources[0] as any;
-    return { status: workflowResult.status ?? 'Unknown' };
-  } catch (error) {
-    // console.error('Get workflow status error:', error);
-    return {
-      status: 'Unknown',
       error: formatErrorMessage(error),
     };
   }
