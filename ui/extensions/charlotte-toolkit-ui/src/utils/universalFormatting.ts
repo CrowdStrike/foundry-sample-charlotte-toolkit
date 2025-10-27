@@ -1,7 +1,6 @@
 // Universal formatting utilities for ALL security output sections
 // Applies consistent paragraph breaks and readability improvements
 
-import React, { type ReactElement } from 'react';
 import { formatMitreDescription, formatTextWithParagraphs, formatters } from './textFormatting';
 
 /**
@@ -40,24 +39,4 @@ export const needsFormatting = (text: string): boolean => {
 
   const sentenceCount = text.split(/[.!?]/).filter((s) => s.trim().length > 0).length;
   return sentenceCount > 2;
-};
-
-/**
- * Format text for display with proper paragraph structure
- * Returns JSX-ready elements
- */
-export const renderFormattedText = (
-  text: string,
-  type: 'summary' | 'technical' | 'reasoning' | 'recommendation' | 'mitre' = 'technical',
-  className = '',
-): ReactElement[] => {
-  const paragraphs = formatSecurityText(text, type);
-
-  return paragraphs.map((paragraph, index) =>
-    React.createElement('p', {
-      key: index,
-      className: `formatted-paragraph ${className}`.trim(),
-      dangerouslySetInnerHTML: { __html: paragraph },
-    }),
-  );
 };

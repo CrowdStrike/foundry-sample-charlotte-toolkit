@@ -1,7 +1,7 @@
 // File and hash processing utilities
 
 import type { ContextOption } from '../../types';
-import { createHashQueryTemplate, createQueryTemplate } from '../queryTemplates';
+import { createQueryTemplate } from '../queryTemplates';
 
 import { truncateHash } from './EntityHelpers';
 
@@ -9,7 +9,7 @@ import { truncateHash } from './EntityHelpers';
  * Process files and hashes with proper parent-child grouping
  * Filename as parent, hashes as children. MD5 only shown if no SHA256 available.
  */
-export const processFiles = (entityValues: any, entities: any): ContextOption[] => {
+export const processFiles = (entityValues: unknown, entities: unknown): ContextOption[] => {
   if (!entityValues || !entities) {
     return [];
   }
@@ -20,9 +20,12 @@ export const processFiles = (entityValues: any, entities: any): ContextOption[] 
   const fileHashMap = new Map<string, { sha256Hashes: Set<string>; md5Hashes: Set<string> }>();
 
   // Collect all SHA256 hashes from various sources
-  const sha256Array = entityValues.sha256s ?? [];
-  const md5Array = entityValues.md5s ?? [];
-  const fileNameArray = entities?.file_name ?? [];
+  const entityValuesRecord = entityValues as Record<string, unknown> | null | undefined;
+  const entitiesRecord = entities as Record<string, unknown> | null | undefined;
+
+  const sha256Array = Array.isArray(entityValuesRecord?.sha256s) ? entityValuesRecord.sha256s : [];
+  const md5Array = Array.isArray(entityValuesRecord?.md5s) ? entityValuesRecord.md5s : [];
+  const fileNameArray = Array.isArray(entitiesRecord?.file_name) ? entitiesRecord.file_name : [];
 
   // Method 1: Positional association (if arrays align)
   const canGroupFiles =
@@ -101,7 +104,7 @@ export const processFiles = (entityValues: any, entities: any): ContextOption[] 
         type: 'file',
         subType: 'sha256',
         parentFile: filename,
-        queryTemplate: createHashQueryTemplate(sha256Hash, 'SHA256'),
+        queryTemplate: createQueryTemplate('file', sha256Hash, { hashType: 'SHA256' }),
         entityData: {
           hash: sha256Hash,
           hashType: 'SHA256',
@@ -121,7 +124,7 @@ export const processFiles = (entityValues: any, entities: any): ContextOption[] 
           type: 'file',
           subType: 'md5',
           parentFile: filename,
-          queryTemplate: createHashQueryTemplate(md5Hash, 'MD5'),
+          queryTemplate: createQueryTemplate('file', md5Hash, { hashType: 'MD5' }),
           entityData: {
             hash: md5Hash,
             hashType: 'MD5',
@@ -143,7 +146,7 @@ export const processFiles = (entityValues: any, entities: any): ContextOption[] 
  * Creates proper parent-child structure: filename as parent, hashes as children
  */
 export const processLegacyFiles = (
-  entitiesFull: any[],
+  entitiesFull: unknown[],
   existingOptions: ContextOption[],
 ): ContextOption[] => {
   const options: ContextOption[] = [];
@@ -152,24 +155,26 @@ export const processLegacyFiles = (
     const fileMap = new Map<string, { sha256Hashes: Set<string>; md5Hashes: Set<string> }>();
 
     // Process entities_full to collect unique filenames and their hashes
-    entitiesFull.forEach((entity: any) => {
-      if (entity?.FileName) {
-        const filename = entity.FileName;
+    entitiesFull.forEach((entity: unknown) => {
+      const entityRecord = entity as Record<string, unknown> | null | undefined;
+      if (entityRecord?.FileName && typeof entityRecord.FileName === 'string') {
+        const filename = entityRecord.FileName;
 
         if (!fileMap.has(filename)) {
           fileMap.set(filename, { sha256Hashes: new Set(), md5Hashes: new Set() });
         }
 
-        const fileData = fileMap.get(filename)!;
+        const fileData = fileMap.get(filename);
+        if (fileData) {
+          // Add SHA256 hashes (automatically deduplicates)
+          if (entityRecord.SHA256HashData && typeof entityRecord.SHA256HashData === 'string') {
+            fileData.sha256Hashes.add(entityRecord.SHA256HashData);
+          }
 
-        // Add SHA256 hashes (automatically deduplicates)
-        if (entity.SHA256HashData && typeof entity.SHA256HashData === 'string') {
-          fileData.sha256Hashes.add(entity.SHA256HashData);
-        }
-
-        // Add MD5 hashes (automatically deduplicates)
-        if (entity.MD5HashData && typeof entity.MD5HashData === 'string') {
-          fileData.md5Hashes.add(entity.MD5HashData);
+          // Add MD5 hashes (automatically deduplicates)
+          if (entityRecord.MD5HashData && typeof entityRecord.MD5HashData === 'string') {
+            fileData.md5Hashes.add(entityRecord.MD5HashData);
+          }
         }
       }
     });
@@ -213,7 +218,7 @@ export const processLegacyFiles = (
               type: 'file',
               subType: 'sha256',
               parentFile: filename,
-              queryTemplate: createHashQueryTemplate(sha256Hash, 'SHA256'),
+              queryTemplate: createQueryTemplate('file', sha256Hash, { hashType: 'SHA256' }),
               entityData: {
                 hash: sha256Hash,
                 hashType: 'SHA256',
@@ -240,7 +245,7 @@ export const processLegacyFiles = (
                 type: 'file',
                 subType: 'md5',
                 parentFile: filename,
-                queryTemplate: createHashQueryTemplate(md5Hash, 'MD5'),
+                queryTemplate: createQueryTemplate('file', md5Hash, { hashType: 'MD5' }),
                 entityData: {
                   hash: md5Hash,
                   hashType: 'MD5',
@@ -262,12 +267,14 @@ export const processLegacyFiles = (
 /**
  * Extract file entities from detection data with hash association
  */
-export const extractFilesFromDetection = (detection: any, options: ContextOption[]): void => {
+export const extractFilesFromDetection = (detection: unknown, options: ContextOption[]): void => {
   if (!detection) return;
 
+  const detectionRecord = detection as Record<string, unknown>;
+
   // Extract file information from main detection
-  if (detection.filename) {
-    const filename = detection.filename.toLowerCase();
+  if (typeof detectionRecord.filename === 'string') {
+    const filename = detectionRecord.filename.toLowerCase();
 
     // Create file entry
     options.push({
@@ -280,8 +287,8 @@ export const extractFilesFromDetection = (detection: any, options: ContextOption
     });
 
     // Add hashes associated with this file
-    if (detection.sha256) {
-      const sha256Hash = detection.sha256.toLowerCase();
+    if (typeof detectionRecord.sha256 === 'string') {
+      const sha256Hash = detectionRecord.sha256.toLowerCase();
       const truncatedHash = truncateHash(sha256Hash);
 
       options.push({
@@ -290,7 +297,7 @@ export const extractFilesFromDetection = (detection: any, options: ContextOption
         type: 'file',
         subType: 'sha256',
         parentFile: filename,
-        queryTemplate: createHashQueryTemplate(sha256Hash, 'SHA256'),
+        queryTemplate: createQueryTemplate('file', sha256Hash, { hashType: 'SHA256' }),
         entityData: {
           hash: sha256Hash,
           hashType: 'SHA256',
@@ -300,8 +307,8 @@ export const extractFilesFromDetection = (detection: any, options: ContextOption
       });
     }
 
-    if (detection.md5) {
-      const md5Hash = detection.md5.toLowerCase();
+    if (typeof detectionRecord.md5 === 'string') {
+      const md5Hash = detectionRecord.md5.toLowerCase();
       const truncatedHash = truncateHash(md5Hash);
 
       // Only add MD5 if no SHA256 exists
@@ -315,7 +322,7 @@ export const extractFilesFromDetection = (detection: any, options: ContextOption
           type: 'file',
           subType: 'md5',
           parentFile: filename,
-          queryTemplate: createHashQueryTemplate(md5Hash, 'MD5'),
+          queryTemplate: createQueryTemplate('file', md5Hash, { hashType: 'MD5' }),
           entityData: {
             hash: md5Hash,
             hashType: 'MD5',
@@ -326,8 +333,8 @@ export const extractFilesFromDetection = (detection: any, options: ContextOption
       }
     }
 
-    if (detection.sha1) {
-      const sha1Hash = detection.sha1.toLowerCase();
+    if (typeof detectionRecord.sha1 === 'string') {
+      const sha1Hash = detectionRecord.sha1.toLowerCase();
       const truncatedHash = truncateHash(sha1Hash);
 
       // Only add SHA1 if no SHA256 exists
@@ -341,7 +348,7 @@ export const extractFilesFromDetection = (detection: any, options: ContextOption
           type: 'file',
           subType: 'sha1',
           parentFile: filename,
-          queryTemplate: createHashQueryTemplate(sha1Hash, 'SHA1'),
+          queryTemplate: createQueryTemplate('file', sha1Hash, { hashType: 'SHA1' }),
           entityData: {
             hash: sha1Hash,
             hashType: 'SHA1',
@@ -354,10 +361,10 @@ export const extractFilesFromDetection = (detection: any, options: ContextOption
   }
 
   // Extract parent process information
-  if (detection.parent_details) {
-    const parent = detection.parent_details;
+  if (detectionRecord.parent_details && typeof detectionRecord.parent_details === 'object') {
+    const parent = detectionRecord.parent_details as Record<string, unknown>;
 
-    if (parent.filename) {
+    if (typeof parent.filename === 'string') {
       const filename = parent.filename.toLowerCase();
 
       // Avoid duplicates
@@ -373,7 +380,7 @@ export const extractFilesFromDetection = (detection: any, options: ContextOption
         });
 
         // Add parent hashes
-        if (parent.sha256) {
+        if (typeof parent.sha256 === 'string') {
           const sha256Hash = parent.sha256.toLowerCase();
           const truncatedHash = truncateHash(sha256Hash);
 
@@ -383,7 +390,7 @@ export const extractFilesFromDetection = (detection: any, options: ContextOption
             type: 'file',
             subType: 'sha256',
             parentFile: filename,
-            queryTemplate: createHashQueryTemplate(sha256Hash, 'SHA256'),
+            queryTemplate: createQueryTemplate('file', sha256Hash, { hashType: 'SHA256' }),
             entityData: {
               hash: sha256Hash,
               hashType: 'SHA256',
@@ -394,7 +401,7 @@ export const extractFilesFromDetection = (detection: any, options: ContextOption
           });
         }
 
-        if (parent.md5) {
+        if (typeof parent.md5 === 'string') {
           const md5Hash = parent.md5.toLowerCase();
           const truncatedHash = truncateHash(md5Hash);
 
@@ -409,7 +416,7 @@ export const extractFilesFromDetection = (detection: any, options: ContextOption
               type: 'file',
               subType: 'md5',
               parentFile: filename,
-              queryTemplate: createHashQueryTemplate(md5Hash, 'MD5'),
+              queryTemplate: createQueryTemplate('file', md5Hash, { hashType: 'MD5' }),
               entityData: {
                 hash: md5Hash,
                 hashType: 'MD5',
@@ -425,10 +432,13 @@ export const extractFilesFromDetection = (detection: any, options: ContextOption
   }
 
   // Extract grandparent process information
-  if (detection.grandparent_details) {
-    const grandparent = detection.grandparent_details;
+  if (
+    detectionRecord.grandparent_details &&
+    typeof detectionRecord.grandparent_details === 'object'
+  ) {
+    const grandparent = detectionRecord.grandparent_details as Record<string, unknown>;
 
-    if (grandparent.filename) {
+    if (typeof grandparent.filename === 'string') {
       const filename = grandparent.filename.toLowerCase();
 
       // Avoid duplicates
@@ -444,7 +454,7 @@ export const extractFilesFromDetection = (detection: any, options: ContextOption
         });
 
         // Add grandparent hashes
-        if (grandparent.sha256) {
+        if (typeof grandparent.sha256 === 'string') {
           const sha256Hash = grandparent.sha256.toLowerCase();
           const truncatedHash = truncateHash(sha256Hash);
 
@@ -454,7 +464,7 @@ export const extractFilesFromDetection = (detection: any, options: ContextOption
             type: 'file',
             subType: 'sha256',
             parentFile: filename,
-            queryTemplate: createHashQueryTemplate(sha256Hash, 'SHA256'),
+            queryTemplate: createQueryTemplate('file', sha256Hash, { hashType: 'SHA256' }),
             entityData: {
               hash: sha256Hash,
               hashType: 'SHA256',
@@ -465,7 +475,7 @@ export const extractFilesFromDetection = (detection: any, options: ContextOption
           });
         }
 
-        if (grandparent.md5) {
+        if (typeof grandparent.md5 === 'string') {
           const md5Hash = grandparent.md5.toLowerCase();
           const truncatedHash = truncateHash(md5Hash);
 
@@ -480,7 +490,7 @@ export const extractFilesFromDetection = (detection: any, options: ContextOption
               type: 'file',
               subType: 'md5',
               parentFile: filename,
-              queryTemplate: createHashQueryTemplate(md5Hash, 'MD5'),
+              queryTemplate: createQueryTemplate('file', md5Hash, { hashType: 'MD5' }),
               entityData: {
                 hash: md5Hash,
                 hashType: 'MD5',

@@ -1,4 +1,5 @@
 // src/utils/copyUtils.ts
+/** biome-ignore-all lint/suspicious/noExplicitAny: Required to handle dynamic JSON structures from LLM API responses with unknown/variable schemas */
 
 /**
  * Copy format options for the enhanced copy functionality
@@ -8,7 +9,7 @@ export type CopyFormat = 'json' | 'markdown' | 'plaintext';
 /**
  * Copy option configuration
  */
-export interface CopyOption {
+interface CopyOption {
   format: CopyFormat;
   label: string;
   icon: string;
@@ -44,7 +45,7 @@ export const COPY_OPTIONS: CopyOption[] = [
  * @param markdown - Markdown text to convert
  * @returns Plain text without markdown formatting
  */
-export const stripMarkdown = (markdown: string): string => {
+const stripMarkdown = (markdown: string): string => {
   if (!markdown) return '';
 
   let text = markdown;
@@ -84,10 +85,11 @@ export const stripMarkdown = (markdown: string): string => {
 
 /**
  * Convert structured JSON data to markdown format
- * @param jsonData - Parsed JSON response
+ * @param jsonData - Parsed JSON response with dynamic structure from LLM
  * @returns Markdown formatted string
+ * @note Uses 'any' type intentionally as this handles variable JSON structures from LLM responses
  */
-export const convertJsonToMarkdown = (jsonData: any): string => {
+const convertJsonToMarkdown = (jsonData: any): string => {
   if (!jsonData) return '';
 
   let markdown = '';
@@ -389,10 +391,11 @@ export const convertJsonToMarkdown = (jsonData: any): string => {
 
 /**
  * Convert structured JSON data to plain text format
- * @param jsonData - Parsed JSON response
+ * @param jsonData - Parsed JSON response with dynamic structure from LLM
  * @returns Plain text formatted string
+ * @note Uses 'any' type intentionally as this handles variable JSON structures from LLM responses
  */
-export const convertJsonToPlainText = (jsonData: any): string => {
+const convertJsonToPlainText = (jsonData: any): string => {
   if (!jsonData) return '';
 
   let text = '';
@@ -678,9 +681,10 @@ export const convertJsonToPlainText = (jsonData: any): string => {
  * Format data for copying based on the selected format
  * @param format - The format to copy as
  * @param responseText - The markdown response text
- * @param jsonData - The complete JSON context data
- * @param parsedJsonResponse - The parsed structured JSON response (if available)
+ * @param jsonData - The complete JSON context data (dynamic structure)
+ * @param parsedJsonResponse - The parsed structured JSON response from LLM (dynamic structure)
  * @returns Formatted string ready for clipboard
+ * @note Parameters use 'any' type intentionally as they handle variable JSON structures from LLM API responses
  */
 export const formatForCopy = (
   format: CopyFormat,
@@ -726,39 +730,5 @@ export const formatForCopy = (
 
     default:
       return responseText;
-  }
-};
-
-/**
- * Copy text to clipboard with error handling
- * @param text - Text to copy
- * @param format - Format being copied (for error messages)
- * @returns Promise that resolves to success boolean
- */
-export const copyToClipboard = async (text: string, _format: CopyFormat): Promise<boolean> => {
-  try {
-    await navigator.clipboard.writeText(text);
-    return true;
-  } catch {
-    // Silently fail - clipboard API might not be available
-    return false;
-  }
-};
-
-/**
- * Get appropriate success message for copy operation
- * @param format - The format that was copied
- * @returns Success message string
- */
-export const getCopySuccessMessage = (format: CopyFormat): string => {
-  switch (format) {
-    case 'json':
-      return 'JSON copied to clipboard!';
-    case 'markdown':
-      return 'Markdown copied to clipboard!';
-    case 'plaintext':
-      return 'Plain text copied to clipboard!';
-    default:
-      return 'Copied to clipboard!';
   }
 };

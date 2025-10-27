@@ -8,7 +8,10 @@ import { formatErrorMessage, generateCacheKey } from '../../utils/helpers';
 import {
   WORKFLOW_CONFIG,
   type WorkflowExecutionParams,
+  type WorkflowExecutionResponse,
   type WorkflowExecutionResult,
+  type WorkflowPayload,
+  type WorkflowPollResult,
   WorkflowStatus,
 } from './types';
 import { extractWorkflowContent, validateExtractedContent } from './WorkflowContentExtractor';
@@ -23,7 +26,10 @@ import { validateWorkflowParams } from './WorkflowValidator';
  * @param payload - Workflow execution payload
  * @returns Promise with workflow execution response
  */
-const executeWorkflow = async (falcon: FalconApi, payload: Record<string, any>): Promise<any> => {
+const executeWorkflow = async (
+  falcon: FalconApi,
+  payload: WorkflowPayload,
+): Promise<WorkflowExecutionResponse> => {
   const workflowConfig = {
     name: WORKFLOW_CONFIG.WORKFLOW_NAME,
     depth: WORKFLOW_CONFIG.WORKFLOW_DEPTH,
@@ -115,8 +121,8 @@ export const executeWorkflowWithCache = async (
   params: WorkflowExecutionParams,
 ): Promise<WorkflowExecutionResult> => {
   let workflowId: string | undefined;
-  let payload: Record<string, any> | undefined;
-  let pollingResult: any;
+  let payload: WorkflowPayload | undefined;
+  let pollingResult: WorkflowPollResult;
 
   try {
     // console.log('🎯 Starting workflow execution with modular architecture...');
@@ -147,7 +153,7 @@ export const executeWorkflowWithCache = async (
 
     // Step 4: Execute workflow
     const executionResponse = await executeWorkflow(falcon, payload);
-    [workflowId] = executionResponse.resources;
+    workflowId = executionResponse.resources?.[0] as string | undefined;
 
     // console.log(`✅ Workflow started successfully: ${workflowId}`);
 
@@ -195,60 +201,6 @@ export const executeWorkflowWithCache = async (
 
     return {
       success: false,
-      error: formatErrorMessage(error),
-    };
-  }
-};
-
-/**
- * Cancel workflow execution (if supported)
- * @param falcon - Falcon API instance
- * @param workflowId - Workflow execution ID to cancel
- * @returns Promise with cancellation result
- */
-export const cancelWorkflowExecution = async (
-  _falcon: FalconApi,
-  _workflowId: string,
-): Promise<{ success: boolean; error?: string }> => {
-  // Note: This depends on the Falcon API supporting workflow cancellation
-  // Implementation may vary based on available API endpoints
-  // console.log('🛑 Attempting to cancel workflow:', workflowId);
-
-  // If cancellation API is available, use it here
-  // For now, we'll just return success
-
-  return { success: true };
-};
-
-/**
- * Get workflow execution status using modular polling
- * @param falcon - Falcon API instance
- * @param workflowId - Workflow execution ID
- * @returns Promise with workflow status
- */
-export const getWorkflowStatus = async (
-  falcon: FalconApi,
-  workflowId: string,
-): Promise<{ status: string; error?: string }> => {
-  try {
-    const result = await falcon.api.workflows.getEntitiesExecutionResultsV1({
-      ids: [workflowId],
-    });
-
-    if (result.errors && result.errors.length > 0) {
-      throw new Error(result.errors[0]?.message ?? 'Failed to get workflow status');
-    }
-
-    if (!result.resources || result.resources.length === 0) {
-      throw new Error('No workflow status found');
-    }
-
-    const workflowResult = result.resources[0] as any;
-    return { status: workflowResult.status ?? 'Unknown' };
-  } catch (error) {
-    // console.error('Get workflow status error:', error);
-    return {
-      status: 'Unknown',
       error: formatErrorMessage(error),
     };
   }

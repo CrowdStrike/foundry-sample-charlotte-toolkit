@@ -7,22 +7,13 @@ import { extractFilesFromDetection, processFiles, processLegacyFiles } from './F
 import { extractIPsFromDetection, processIPs } from './IpProcessor';
 import { extractMITREFromDetection, processMITRETechniques } from './MitreProcessor';
 
-// Re-export helper functions for backward compatibility
-export {
-  calculateEntityCounts,
-  extractTopLevelDomain,
-  formatDisplayName,
-  isDomainTruncated,
-  isExternalFQDN,
-  isPublicIP,
-  truncateDomain,
-  truncateHash,
-} from './EntityHelpers';
+// Re-export only used helper functions
+export { calculateEntityCounts, formatDisplayName } from './EntityHelpers';
 
 /**
  * Extract entities from detection data structure with lowercase normalization
  */
-const extractDetectionEntities = (detection: any): ContextOption[] => {
+const extractDetectionEntities = (detection: unknown): ContextOption[] => {
   const options: ContextOption[] = [];
 
   if (!detection) return options;
@@ -39,22 +30,24 @@ const extractDetectionEntities = (detection: any): ContextOption[] => {
 /**
  * Main processing function that coordinates all entity processing
  */
-export const processAllEntities = (falconData: any): ContextOption[] => {
+export const processAllEntities = (falconData: unknown): ContextOption[] => {
   if (!falconData) return [];
 
   const options: ContextOption[] = [];
+  const falconDataRecord = falconData as Record<string, unknown>;
 
   // Check if we have detection data (activity detections)
-  if (falconData.detection || falconData.detectionId) {
-    const detectionEntities = extractDetectionEntities(falconData.detection);
+  if (falconDataRecord.detection || falconDataRecord.detectionId) {
+    const detectionEntities = extractDetectionEntities(falconDataRecord.detection);
     options.push(...detectionEntities);
   }
 
   // Check for incident data (traditional structure)
-  const entityValues = falconData.incident?.entity_values;
+  const incident = falconDataRecord.incident as Record<string, unknown> | undefined;
+  const entityValues = incident?.entity_values;
   if (entityValues) {
-    const entitiesFull = falconData.incident?.entities_full ?? [];
-    const entities = falconData.incident?.entities;
+    const entitiesFull = Array.isArray(incident?.entities_full) ? incident.entities_full : [];
+    const entities = incident?.entities;
 
     // Process each entity type from incident data using specialized processors
     options.push(...processDomains(entityValues));
@@ -66,13 +59,3 @@ export const processAllEntities = (falconData: any): ContextOption[] => {
 
   return options;
 };
-
-// Export individual processors for advanced usage
-
-// Export the main processing function as default
-export default processAllEntities;
-
-export { extractDomainsFromDetection, processDomains } from './DomainProcessor';
-export { extractFilesFromDetection, processFiles, processLegacyFiles } from './FileProcessor';
-export { extractIPsFromDetection, processIPs } from './IpProcessor';
-export { extractMITREFromDetection, processMITRETechniques } from './MitreProcessor';

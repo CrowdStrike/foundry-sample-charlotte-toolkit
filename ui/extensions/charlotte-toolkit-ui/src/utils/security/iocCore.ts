@@ -1,12 +1,12 @@
 // src/utils/security/iocCore.ts
 // Unified IOC handling system - single source of truth for all IOC operations
 
-export type IOCType = 'ip' | 'domain' | 'hash' | 'url' | 'path' | 'registry';
+type IOCType = 'ip' | 'domain' | 'hash' | 'url' | 'path' | 'registry';
 
 /**
  * Detect the type of an IOC
  */
-export const detectIOCType = (text: string): IOCType | null => {
+const detectIOCType = (text: string): IOCType | null => {
   if (!text || typeof text !== 'string') return null;
 
   // Hash patterns
@@ -42,7 +42,7 @@ export const detectIOCType = (text: string): IOCType | null => {
 /**
  * Defang an IOC for safe display (prevents accidental clicks/navigation)
  */
-export const defangIOC = (ioc: string): string => {
+const defangIOC = (ioc: string): string => {
   if (!ioc || typeof ioc !== 'string') return ioc;
   return ioc.replace(/\./g, '[.]').replace(/http/g, 'hxxp').replace(/ftp/g, 'fxp');
 };
@@ -50,7 +50,7 @@ export const defangIOC = (ioc: string): string => {
 /**
  * Remove defanging from an IOC (for copying original values)
  */
-export const removeFanging = (ioc: string): string => {
+const removeFanging = (ioc: string): string => {
   if (!ioc || typeof ioc !== 'string') return ioc;
   return ioc.replace(/\[\.\]/g, '.');
 };
@@ -58,7 +58,7 @@ export const removeFanging = (ioc: string): string => {
 /**
  * Normalize IOC for comparison (remove defanging, convert to lowercase)
  */
-export const normalizeIOC = (ioc: string): string => {
+const normalizeIOC = (ioc: string): string => {
   if (!ioc || typeof ioc !== 'string') return ioc;
   return removeFanging(ioc).toLowerCase().trim();
 };
@@ -66,7 +66,7 @@ export const normalizeIOC = (ioc: string): string => {
 /**
  * Get appropriate CSS classes for IOC display
  */
-export const getIOCDisplayClasses = (
+const getIOCDisplayClasses = (
   _type: IOCType,
   variant: 'list' | 'pill' | 'inline' = 'list',
 ): string => {
@@ -85,9 +85,7 @@ export const getIOCDisplayClasses = (
 /**
  * Get badge variant for IOC type (for Shoelace badges)
  */
-export const getIOCBadgeVariant = (
-  type: IOCType,
-): 'warning' | 'primary' | 'neutral' | 'success' => {
+const getIOCBadgeVariant = (type: IOCType): 'warning' | 'primary' | 'neutral' | 'success' => {
   switch (type) {
     case 'hash':
       return 'warning';
