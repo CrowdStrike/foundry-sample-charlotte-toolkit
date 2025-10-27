@@ -1,9 +1,13 @@
 // Modular QueryForm component using extracted subcomponents
 
-import { SlSelect, SlOption, SlIcon } from '@shoelace-style/shoelace/dist/react';
+import {
+  SlIcon,
+  SlOption,
+  SlSelect,
+} from '@shoelace-style/shoelace/dist/react';
 import React from 'react';
 
-import { ContextOption } from '../types';
+import type { ContextOption } from '../types';
 import { CHARLOTTE_MODEL_OPTIONS } from '../utils/constants';
 
 // Import modular subcomponents
@@ -19,12 +23,6 @@ interface QueryFormProps {
   setModelName: (modelName: string) => void;
   temperature: number;
   setTemperature: (temperature: number) => void;
-  stopWords: string[];
-  setStopWords: (stopWords: string[]) => void;
-  jsonSchema: string;
-  setJsonSchema: (jsonSchema: string) => void;
-  dataToInclude: string[];
-  setDataToInclude: (dataToInclude: string[]) => void;
   loading: boolean;
   handleSubmit: () => void;
   selectedContextEntity: string | null;
@@ -44,12 +42,6 @@ const QueryForm = React.memo(
     setModelName,
     temperature,
     setTemperature,
-    stopWords,
-    setStopWords,
-    jsonSchema,
-    setJsonSchema,
-    dataToInclude,
-    setDataToInclude,
     loading,
     handleSubmit,
     selectedContextEntity,
@@ -66,7 +58,13 @@ const QueryForm = React.memo(
     };
 
     return (
-      <div className='flex flex-col gap-4 isolate'>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 'var(--spacing-xl)',
+        }}
+      >
         {/* Context Entity Selection */}
         <ContextEntitySelector
           selectedContextEntity={selectedContextEntity}
@@ -80,13 +78,13 @@ const QueryForm = React.memo(
 
         {/* Model Selection */}
         <SlSelect
-          label='Model'
+          label="Model"
           defaultValue={modelName}
           value={modelName}
           onSlChange={handleModelChange}
         >
-          <SlIcon slot='prefix' name='cpu' />
-          {CHARLOTTE_MODEL_OPTIONS.map(option => (
+          <SlIcon slot="prefix" name="cpu" />
+          {CHARLOTTE_MODEL_OPTIONS.map((option) => (
             <SlOption key={option.value} value={option.value}>
               {option.label}
             </SlOption>
@@ -108,16 +106,10 @@ const QueryForm = React.memo(
           setShowJsonTab={setShowJsonTab}
           temperature={temperature}
           setTemperature={setTemperature}
-          stopWords={stopWords}
-          setStopWords={setStopWords}
-          jsonSchema={jsonSchema}
-          setJsonSchema={setJsonSchema}
-          dataToInclude={dataToInclude}
-          setDataToInclude={setDataToInclude}
         />
       </div>
     );
-  }
+  },
 );
 
 QueryForm.displayName = 'QueryForm';

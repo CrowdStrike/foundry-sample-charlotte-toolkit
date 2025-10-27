@@ -45,8 +45,14 @@ export const createDomainQueryTemplate = (domain: string): string => {
   return BASE_SECURITY_TEMPLATE.replace(/{entityType}/g, 'domain')
     .replace(/{entityValue}/g, domain)
     .replace(/{analysisType}/g, 'DOMAIN')
-    .replace(/{contextSpecific}/g, 'Registration details and ownership information')
-    .replace(/{responseActions}/g, 'Common attack vectors and associated subdomains/URLs');
+    .replace(
+      /{contextSpecific}/g,
+      'Registration details and ownership information',
+    )
+    .replace(
+      /{responseActions}/g,
+      'Common attack vectors and associated subdomains/URLs',
+    );
 };
 
 /**
@@ -58,8 +64,14 @@ export const createFileQueryTemplate = (filename: string): string => {
   return BASE_SECURITY_TEMPLATE.replace(/{entityType}/g, 'file')
     .replace(/{entityValue}/g, filename)
     .replace(/{analysisType}/g, 'FILE')
-    .replace(/{contextSpecific}/g, 'File type, format identification, and behavioral analysis')
-    .replace(/{responseActions}/g, 'Associated hashes, registry keys, and network indicators');
+    .replace(
+      /{contextSpecific}/g,
+      'File type, format identification, and behavioral analysis',
+    )
+    .replace(
+      /{responseActions}/g,
+      'Associated hashes, registry keys, and network indicators',
+    );
 };
 
 /**
@@ -68,7 +80,10 @@ export const createFileQueryTemplate = (filename: string): string => {
  * @param hashType - Type of hash (default: 'SHA256')
  * @returns Structured query template for comprehensive malware analysis
  */
-export const createHashQueryTemplate = (hash: string, hashType: string = 'SHA256'): string => {
+export const createHashQueryTemplate = (
+  hash: string,
+  hashType: string = 'SHA256',
+): string => {
   return `Conduct a comprehensive malware analysis of ${hashType} hash "${hash}" and provide a structured security assessment including:
 
 **🦠 MALWARE ANALYSIS**
@@ -108,8 +123,14 @@ export const createIPQueryTemplate = (ip: string): string => {
   return BASE_SECURITY_TEMPLATE.replace(/{entityType}/g, 'IP address')
     .replace(/{entityValue}/g, ip)
     .replace(/{analysisType}/g, 'IP')
-    .replace(/{contextSpecific}/g, 'Geolocation, ISP information, and network infrastructure')
-    .replace(/{responseActions}/g, 'Network communication patterns, ports, and associated domains');
+    .replace(
+      /{contextSpecific}/g,
+      'Geolocation, ISP information, and network infrastructure',
+    )
+    .replace(
+      /{responseActions}/g,
+      'Network communication patterns, ports, and associated domains',
+    );
 };
 
 /**
@@ -120,7 +141,10 @@ export const createFQDNQueryTemplate = (fqdn: string): string => {
     .replace(/{entityValue}/g, fqdn)
     .replace(/{analysisType}/g, 'HOSTNAME')
     .replace(/{contextSpecific}/g, 'DNS resolution and infrastructure details')
-    .replace(/{responseActions}/g, 'Network services, certificates, and subdomain patterns');
+    .replace(
+      /{responseActions}/g,
+      'Network services, certificates, and subdomain patterns',
+    );
 };
 
 /**
@@ -130,8 +154,14 @@ export const createHostnameQueryTemplate = (hostname: string): string => {
   return BASE_SECURITY_TEMPLATE.replace(/{entityType}/g, 'hostname')
     .replace(/{entityValue}/g, hostname)
     .replace(/{analysisType}/g, 'HOSTNAME')
-    .replace(/{contextSpecific}/g, 'System identification and network infrastructure')
-    .replace(/{responseActions}/g, 'Network connections, services, and associated processes');
+    .replace(
+      /{contextSpecific}/g,
+      'System identification and network infrastructure',
+    )
+    .replace(
+      /{responseActions}/g,
+      'Network connections, services, and associated processes',
+    );
 };
 
 /**
@@ -143,11 +173,11 @@ export const createUserQueryTemplate = (user: string): string => {
     .replace(/{analysisType}/g, 'USER ACCOUNT')
     .replace(
       /{contextSpecific}/g,
-      'Account privileges, activity patterns, and authentication details'
+      'Account privileges, activity patterns, and authentication details',
     )
     .replace(
       /{responseActions}/g,
-      'Login history, privilege escalation attempts, and associated processes'
+      'Login history, privilege escalation attempts, and associated processes',
     );
 };
 
@@ -157,8 +187,13 @@ export const createUserQueryTemplate = (user: string): string => {
  * @param techniqueName - Optional technique name for display
  * @returns Structured query template for comprehensive MITRE technique analysis
  */
-export const createMitreQueryTemplate = (techniqueId: string, techniqueName?: string): string => {
-  const techniqueDisplay = techniqueName ? `${techniqueId} - ${techniqueName}` : techniqueId;
+export const createMitreQueryTemplate = (
+  techniqueId: string,
+  techniqueName?: string,
+): string => {
+  const techniqueDisplay = techniqueName
+    ? `${techniqueId} - ${techniqueName}`
+    : techniqueId;
 
   return `Conduct a comprehensive analysis of MITRE ATT&CK technique "${techniqueDisplay}" and provide a structured assessment including:
 
@@ -212,7 +247,8 @@ Provide specific, actionable guidance for security analysts, SOC teams, and inci
 export const createQueryTemplate = (
   entityType: 'domain' | 'file' | 'ip' | 'fqdn' | 'hostname' | 'user' | 'mitre',
   entityValue: string,
-  entityData?: any
+  // biome-ignore lint/suspicious/noExplicitAny: entityData contains optional metadata varying by entity type
+  entityData?: any,
 ): string => {
   switch (entityType) {
     case 'domain':
@@ -238,50 +274,14 @@ export const createQueryTemplate = (
       return BASE_SECURITY_TEMPLATE.replace(/{entityType}/g, fallbackEntityType)
         .replace(/{entityValue}/g, entityValue)
         .replace(/{analysisType}/g, fallbackEntityType.toUpperCase())
-        .replace(/{contextSpecific}/g, 'Entity-specific analysis and characteristics')
-        .replace(/{responseActions}/g, 'Related indicators and attack patterns');
+        .replace(
+          /{contextSpecific}/g,
+          'Entity-specific analysis and characteristics',
+        )
+        .replace(
+          /{responseActions}/g,
+          'Related indicators and attack patterns',
+        );
     }
   }
-};
-
-/**
- * Create grouped file + hash query template for combined analysis
- * @param filename - Name of the file
- * @param hash - File hash
- * @param hashType - Type of hash (default: 'SHA256')
- * @returns Structured query template combining file and hash analysis
- */
-export const createGroupedFileTemplate = (
-  filename: string,
-  hash: string,
-  hashType: string = 'SHA256'
-): string => {
-  return `Conduct a comprehensive security analysis of file "${filename}" (${hashType}: ${hash}) and provide a structured assessment including:
-
-**📁 FILE ANALYSIS**
-- File type and format identification
-- Threat classification (Malicious/Suspicious/Clean/Unknown)
-- Risk level (Critical/High/Medium/Low)
-
-**🔍 BEHAVIORAL ANALYSIS**
-- Primary file functions and capabilities
-- Execution context and dependencies
-- MITRE ATT&CK techniques if applicable
-
-**🎯 INCIDENT CONTEXT**
-- Relevance to current investigation
-- Digital signatures and certificate information
-- Related IOCs for hunting (registry keys, network indicators)
-
-**🚨 RESPONSE ACTIONS**
-- Immediate containment and quarantine steps
-- Detection rules and hunting queries
-- File reputation and sandbox analysis recommendations
-
-**📊 CONFIDENCE ASSESSMENT**
-- Analysis confidence level (High/Medium/Low)
-- Data source reliability
-- Recommended validation and deeper analysis steps
-
-Provide specific, actionable guidance for file-based threat analysis and incident response.`;
 };

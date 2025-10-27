@@ -77,7 +77,9 @@ export const detectUseCase = (query: string): PromptOptions['useCase'] => {
  * @param useCase - The detected or specified use case for analysis
  * @returns JSON schema string optimized for the specific security analysis type
  */
-export const createSecurityResponseSchema = (useCase: PromptOptions['useCase']): string => {
+export const createSecurityResponseSchema = (
+  useCase: PromptOptions['useCase'],
+): string => {
   // Generate use-case specific schema
   switch (useCase) {
     case 'hash_analysis':
@@ -114,13 +116,13 @@ const createUniversalSecuritySchema = (): string => {
         type: 'string',
         description: 'Brief executive overview for leadership',
       },
-      
+
       threat_level: {
         type: 'string',
         enum: ['Low', 'Medium', 'High', 'Critical'],
         description: 'Overall threat severity',
       },
-      
+
       confidence_level: {
         type: 'string',
         enum: ['Low', 'Medium', 'High'],
@@ -132,7 +134,8 @@ const createUniversalSecuritySchema = (): string => {
         type: 'array',
         items: { type: 'string', maxLength: 150 },
         maxItems: 6,
-        description: 'Top priority security actions ranked by urgency and impact',
+        description:
+          'Top priority security actions ranked by urgency and impact',
       },
 
       // Technical analysis details
@@ -173,7 +176,8 @@ const createUniversalSecuritySchema = (): string => {
       reasoning_assessment: {
         type: 'string',
         maxLength: 800,
-        description: 'Concise explanation of analytical methodology and confidence reasoning: data sources consulted, key decision factors, specific evidence supporting findings, and reasoning behind confidence levels. Focus on essential rationale rather than comprehensive details.',
+        description:
+          'Concise explanation of analytical methodology and confidence reasoning: data sources consulted, key decision factors, specific evidence supporting findings, and reasoning behind confidence levels. Focus on essential rationale rather than comprehensive details.',
       },
     },
     required: [
