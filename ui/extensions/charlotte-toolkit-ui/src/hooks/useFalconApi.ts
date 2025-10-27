@@ -28,12 +28,12 @@ export function useFalconApi() {
 
   useEffect(() => {
     initializeFalcon();
-  }, [falcon]);
+  }, [initializeFalcon]);
 
   return {
     falcon,
     isInitialized,
     error,
-    retry: initializeFalcon
+    retry: initializeFalcon,
   };
 }

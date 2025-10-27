@@ -33,7 +33,9 @@
 @keyframes loading-pulse {
   0% {
     transform: scale(1);
-    filter: drop-shadow(0 0 8px rgb(var(--cs-color-primary-rgb, 0, 123, 255), var(--opacity-medium)));
+    filter: drop-shadow(
+      0 0 8px rgb(var(--cs-color-primary-rgb, 0, 123, 255), var(--opacity-medium))
+    );
   }
 
   100% {
@@ -46,11 +48,7 @@
 .loading-text-pulse {
   font-size: var(--font-size-lg);
   font-weight: var(--font-weight-medium);
-  font-family:
-    system-ui,
-    "SF Pro Display",
-    -apple-system,
-    sans-serif;
+  font-family: system-ui, "SF Pro Display", -apple-system, sans-serif;
   color: var(--cs-text-primary);
   text-align: center;
   line-height: var(--line-height-tight);

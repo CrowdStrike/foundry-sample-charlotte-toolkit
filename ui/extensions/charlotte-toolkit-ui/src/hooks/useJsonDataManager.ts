@@ -1,10 +1,10 @@
 // src/hooks/useJsonDataManager.ts
 
-import { useState, useEffect, useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import type { ContextOption } from '../types';
-import { useCopyToClipboard } from './useCopyToClipboard';
 import { detectCurrentSocket, type SocketInfo } from '../utils/socketDetection';
+import { useCopyToClipboard } from './useCopyToClipboard';
 
 interface JsonContextData {
   falcon_context: {
@@ -86,12 +86,16 @@ export const useJsonDataManager = ({
   contextCounts,
 }: UseJsonDataManagerProps): UseJsonDataManagerResult => {
   const [jsonContextData, setJsonContextData] = useState<JsonContextData | null>(null);
-  
+
   // Individual copy hooks for visual feedback
-  const { copyState: contextCopyState, copyToClipboard: copyContextToClipboard } = useCopyToClipboard();
-  const { copyState: requestCopyState, copyToClipboard: copyRequestToClipboard } = useCopyToClipboard();
-  const { copyState: responseCopyState, copyToClipboard: copyResponseToClipboard } = useCopyToClipboard();
-  const { copyState: rawResponseCopyState, copyToClipboard: copyRawResponseToClipboard } = useCopyToClipboard();
+  const { copyState: contextCopyState, copyToClipboard: copyContextToClipboard } =
+    useCopyToClipboard();
+  const { copyState: requestCopyState, copyToClipboard: copyRequestToClipboard } =
+    useCopyToClipboard();
+  const { copyState: responseCopyState, copyToClipboard: copyResponseToClipboard } =
+    useCopyToClipboard();
+  const { copyState: rawResponseCopyState, copyToClipboard: copyRawResponseToClipboard } =
+    useCopyToClipboard();
 
   // Initialize falcon context data when component mounts
   useEffect(() => {
@@ -149,11 +153,11 @@ export const useJsonDataManager = ({
 
       // Update state with the new context
       setJsonContextData(updatedContext);
-      
+
       // Return the context immediately for synchronous use
       return updatedContext;
     },
-    [jsonContextData]
+    [jsonContextData],
   );
 
   // Update request data in real-time (preserves existing timestamp)
@@ -167,9 +171,9 @@ export const useJsonDataManager = ({
       dataToInclude: string[];
       selectedContext: string;
     }) => {
-      setJsonContextData(prevState => {
+      setJsonContextData((prevState) => {
         if (!prevState) return prevState;
-        
+
         return {
           ...prevState,
           request_data: {
@@ -179,7 +183,7 @@ export const useJsonDataManager = ({
         };
       });
     },
-    []
+    [],
   );
 
   // Update response data
@@ -193,7 +197,7 @@ export const useJsonDataManager = ({
       error?: string;
       workflowResult?: any;
     }) => {
-      setJsonContextData(prevState => {
+      setJsonContextData((prevState) => {
         if (!prevState) {
           return prevState;
         }
@@ -211,14 +215,13 @@ export const useJsonDataManager = ({
           workflow_result: responseData.workflowResult,
         };
 
-
         return {
           ...prevState,
           response_data: newResponseData,
         };
       });
     },
-    []
+    [],
   );
 
   // Copy falcon context to clipboard with visual feedback
@@ -239,7 +242,7 @@ export const useJsonDataManager = ({
       await copyResponseToClipboard(JSON.stringify({}, null, 2));
       return;
     }
-    
+
     const responseData = jsonContextData.response_data;
     // Create a copy without the raw content for metadata-only copy
     // eslint-disable-next-line @typescript-eslint/no-unused-vars

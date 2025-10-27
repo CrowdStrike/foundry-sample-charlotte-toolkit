@@ -190,7 +190,7 @@ function detectSocketFromTitle(): string | null {
  * Get all available sockets from manifest
  */
 export function getAllAvailableSockets(): SocketInfo[] {
-  return Object.values(SOCKET_MAP).map(socket => ({
+  return Object.values(SOCKET_MAP).map((socket) => ({
     ...socket,
     detected: false,
     detectionMethod: 'Not detected',

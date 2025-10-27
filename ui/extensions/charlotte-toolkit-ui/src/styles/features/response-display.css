@@ -51,22 +51,21 @@
 /* Prevent nested scrolling within response content */
 .response-scroll-content sl-card,
 .response-scroll-content .structured-analysis {
-  overflow: visible !important;
-  max-height: none !important;
+  overflow: visible;
+  max-height: none;
 }
 
 .response-scroll-content .prose {
-  overflow: visible !important;
-  max-height: none !important;
+  overflow: visible;
+  max-height: none;
 }
 
 /* Ensure SlCard parts don't create scroll areas */
 .response-scroll-content sl-card::part(base),
 .response-scroll-content sl-card::part(body) {
-  overflow: visible !important;
-  max-height: none !important;
+  overflow: visible;
+  max-height: none;
 }
-
 
 /* Simplified scroll fade indicator - no longer needs to account for borders */
 .response-scroll-fade {
@@ -164,7 +163,7 @@
 
 /* Add subtle visual separator between paragraphs */
 .formatted-paragraph:not(:last-child)::after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: 0;
   left: 0;
@@ -185,7 +184,8 @@
   margin-bottom: var(--spacing-2xl); /* Increased spacing for analytical content */
   padding: var(--spacing-lg);
   background-color: rgb(var(--cs-color-primary-rgb), var(--opacity-light));
-  border-left: var(--border-width-thick) solid rgb(var(--cs-color-primary-rgb), var(--opacity-light));
+  border-left: var(--border-width-thick) solid
+    rgb(var(--cs-color-primary-rgb), var(--opacity-light));
   border-radius: 0 var(--spacing-xs) var(--spacing-xs) 0;
   line-height: var(--line-height-relaxed);
   max-width: none;
@@ -309,12 +309,12 @@
 /* IOC-specific text handling - truncate with ellipsis (higher specificity) */
 .ioc-display-item code.break-all,
 .ioc-display-item .break-all {
-  word-break: normal !important;
-  overflow-wrap: normal !important;
-  white-space: nowrap !important;
-  text-overflow: ellipsis !important;
-  overflow: hidden !important;
-  hyphens: none !important;
+  word-break: normal;
+  overflow-wrap: normal;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  hyphens: none;
 }
 
 /* Standardized responsive adjustments */

@@ -1,22 +1,22 @@
 // Context processing orchestrator - combines all entity processors
 
-import { ContextOption } from '../../types';
+import type { ContextOption } from '../../types';
 
-import { processDomains, extractDomainsFromDetection } from './DomainProcessor';
-import { processFiles, processLegacyFiles, extractFilesFromDetection } from './FileProcessor';
-import { processIPs, extractIPsFromDetection } from './IpProcessor';
+import { extractDomainsFromDetection, processDomains } from './DomainProcessor';
+import { extractFilesFromDetection, processFiles, processLegacyFiles } from './FileProcessor';
+import { extractIPsFromDetection, processIPs } from './IpProcessor';
 import { extractMITREFromDetection, processMITRETechniques } from './MitreProcessor';
 
 // Re-export helper functions for backward compatibility
 export {
-  truncateHash,
-  extractTopLevelDomain,
-  truncateDomain,
-  isDomainTruncated,
-  formatDisplayName,
-  isPublicIP,
-  isExternalFQDN,
   calculateEntityCounts,
+  extractTopLevelDomain,
+  formatDisplayName,
+  isDomainTruncated,
+  isExternalFQDN,
+  isPublicIP,
+  truncateDomain,
+  truncateHash,
 } from './EntityHelpers';
 
 /**
@@ -72,7 +72,7 @@ export const processAllEntities = (falconData: any): ContextOption[] => {
 // Export the main processing function as default
 export default processAllEntities;
 
-export { processDomains, extractDomainsFromDetection } from './DomainProcessor';
-export { processFiles, processLegacyFiles, extractFilesFromDetection } from './FileProcessor';
-export { processIPs, extractIPsFromDetection } from './IpProcessor';
-export { processMITRETechniques, extractMITREFromDetection } from './MitreProcessor';
+export { extractDomainsFromDetection, processDomains } from './DomainProcessor';
+export { extractFilesFromDetection, processFiles, processLegacyFiles } from './FileProcessor';
+export { extractIPsFromDetection, processIPs } from './IpProcessor';
+export { extractMITREFromDetection, processMITRETechniques } from './MitreProcessor';

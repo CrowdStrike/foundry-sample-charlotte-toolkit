@@ -69,9 +69,7 @@ export default defineConfig({
 
   // Environment variables
   define: {
-    'process.env.NODE_ENV': JSON.stringify(
-      isProd ? 'production' : 'development',
-    ),
+    'process.env.NODE_ENV': JSON.stringify(isProd ? 'production' : 'development'),
     BUILD_NUMBER: JSON.stringify(hash),
     BUILD_DATE: JSON.stringify(new Date().toISOString().split('T')[0]),
     IS_PRODUCTION: JSON.stringify(isProd),

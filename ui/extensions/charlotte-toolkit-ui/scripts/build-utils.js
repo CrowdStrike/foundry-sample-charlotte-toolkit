@@ -1,6 +1,7 @@
 // File: scripts/build-utils.js
+
+import path from 'node:path';
 import fs from 'fs-extra';
-import path from 'path';
 
 const command = process.argv[2];
 
@@ -8,17 +9,17 @@ async function clean() {
   try {
     const distPath = path.resolve('dist');
     const cachePath = path.resolve('.rollup-cache');
-    
+
     if (await fs.pathExists(distPath)) {
       await fs.remove(distPath);
       console.log('✓ Cleaned dist directory');
     }
-    
+
     if (await fs.pathExists(cachePath)) {
       await fs.remove(cachePath);
       console.log('✓ Cleaned build cache');
     }
-    
+
     await fs.ensureDir(distPath);
   } catch (error) {
     console.error('Error cleaning directories:', error);
@@ -35,8 +36,8 @@ async function sizeCheck() {
     }
 
     console.log('\n📊 Bundle Size Report:');
-    console.log('=' .repeat(50));
-    
+    console.log('='.repeat(50));
+
     const files = await fs.readdir(distPath);
     let totalSize = 0;
     const sizeReports = [];
@@ -44,11 +45,11 @@ async function sizeCheck() {
     for (const file of files) {
       const filePath = path.join(distPath, file);
       const stats = await fs.stat(filePath);
-      
+
       if (stats.isFile()) {
         const sizeKB = Math.round((stats.size / 1024) * 100) / 100;
         totalSize += sizeKB;
-        
+
         // Categorize files
         let category = '📄';
         if (file.endsWith('.js')) category = '📜';
@@ -57,7 +58,7 @@ async function sizeCheck() {
         else if (file.match(/\.(png|jpg|jpeg|gif|svg)$/)) category = '🖼️';
         else if (file.endsWith('.gz')) category = '🗜️';
         else if (file.endsWith('.br')) category = '🌪️';
-        
+
         sizeReports.push({ file, sizeKB, category });
       }
     }
@@ -71,7 +72,7 @@ async function sizeCheck() {
       console.log(`${category} ${sizeFormatted} KB - ${file}`);
     });
 
-    console.log('=' .repeat(50));
+    console.log('='.repeat(50));
     console.log(`📦 Total bundle size: ${totalSize.toFixed(2)} KB`);
 
     // Size warnings
@@ -82,7 +83,6 @@ async function sizeCheck() {
     } else {
       console.log('✅ Bundle size looks good!');
     }
-
   } catch (error) {
     console.error('Error checking bundle size:', error);
     process.exit(1);
@@ -98,20 +98,20 @@ async function validate() {
     }
 
     console.log('\n🔍 Build Validation:');
-    console.log('=' .repeat(30));
+    console.log('='.repeat(30));
 
     const files = await fs.readdir(distPath);
-    const validationResults = [];
+    const _validationResults = [];
 
     // Check for required files
     const requiredPatterns = [
       { pattern: /index.*\.html$/, name: 'HTML entry point', found: false },
       { pattern: /.*\.js$/, name: 'JavaScript bundles', found: false },
-      { pattern: /styles.*\.css$/, name: 'CSS stylesheet', found: false }
+      { pattern: /styles.*\.css$/, name: 'CSS stylesheet', found: false },
     ];
 
-    files.forEach(file => {
-      requiredPatterns.forEach(req => {
+    files.forEach((file) => {
+      requiredPatterns.forEach((req) => {
         if (req.pattern.test(file)) {
           req.found = true;
         }
@@ -120,7 +120,7 @@ async function validate() {
 
     // Report validation results
     let allValid = true;
-    requiredPatterns.forEach(req => {
+    requiredPatterns.forEach((req) => {
       const status = req.found ? '✅' : '❌';
       console.log(`${status} ${req.name}`);
       if (!req.found) allValid = false;
@@ -132,7 +132,7 @@ async function validate() {
         const filePath = path.join(distPath, file);
         const stats = await fs.stat(filePath);
         const sizeMB = stats.size / (1024 * 1024);
-        
+
         if (sizeMB > 5) {
           console.log(`⚠️  Large JS file detected: ${file} (${sizeMB.toFixed(2)}MB)`);
         }
@@ -140,30 +140,29 @@ async function validate() {
     }
 
     // Check HTML file has proper structure
-    const htmlFiles = files.filter(f => f.endsWith('.html'));
+    const htmlFiles = files.filter((f) => f.endsWith('.html'));
     for (const htmlFile of htmlFiles) {
       const htmlPath = path.join(distPath, htmlFile);
       const content = await fs.readFile(htmlPath, 'utf8');
-      
+
       if (!content.includes('<script')) {
         console.log('❌ HTML file missing script references');
         allValid = false;
       }
-      
+
       if (!content.includes('stylesheet')) {
         console.log('❌ HTML file missing stylesheet references');
         allValid = false;
       }
     }
 
-    console.log('=' .repeat(30));
+    console.log('='.repeat(30));
     if (allValid) {
       console.log('✅ Build validation passed!');
     } else {
       console.log('❌ Build validation failed!');
       process.exit(1);
     }
-
   } catch (error) {
     console.error('Error validating build:', error);
     process.exit(1);

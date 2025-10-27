@@ -6,7 +6,7 @@
  * @returns Promise that resolves after the specified time
  */
 export const wait = (ms: number = 1000): Promise<void> =>
-  new Promise(resolve => setTimeout(resolve, ms));
+  new Promise((resolve) => setTimeout(resolve, ms));
 
 /**
  * Create display name for Charlotte workflow
@@ -27,7 +27,7 @@ const simpleHash = (inputString: string): string => {
   let hash = 0;
   for (let i = 0; i < inputString.length; i++) {
     const char = inputString.codePointAt(i) ?? 0;
-    hash = ((hash << 5) - hash) + char;
+    hash = (hash << 5) - hash + char;
     hash = hash & hash; // Convert to 32bit integer
   }
   return Math.abs(hash).toString(36);
@@ -50,7 +50,7 @@ export const generateCacheKey = (
   temperature: number,
   stopWords: string[],
   jsonSchema: string,
-  dataToInclude: string[]
+  dataToInclude: string[],
 ): string => {
   // Serialize all parameters into single string for consistent hashing
   const cacheParams = {
@@ -59,7 +59,7 @@ export const generateCacheKey = (
     temperature,
     stopWords: stopWords.length > 0 ? stopWords.join('|') : '',
     jsonSchema: jsonSchema.trim().slice(0, 50),
-    dataToInclude: dataToInclude.length > 0 ? dataToInclude.join('|') : ''
+    dataToInclude: dataToInclude.length > 0 ? dataToInclude.join('|') : '',
   };
 
   // Single-pass hash generation - much more efficient than multiple btoa() calls
@@ -119,11 +119,11 @@ export const formatErrorMessage = (error: unknown): string => {
  */
 export const buildMitreUrl = (techniqueId: string): string => {
   const baseUrl = 'https://attack.mitre.org/techniques/';
-  
+
   // Convert dot notation to slash notation for sub-techniques
   // T1566.001 → T1566/001/
   // T1027 → T1027/
   const urlPath = techniqueId.replace('.', '/');
-  
+
   return `${baseUrl}${urlPath}/`;
 };

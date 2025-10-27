@@ -1,6 +1,6 @@
 // MITRE ATT&CK technique processing utilities
 
-import { ContextOption } from '../../types';
+import type { ContextOption } from '../../types';
 import { createQueryTemplate } from '../queryTemplates';
 
 /**
@@ -184,7 +184,7 @@ export const processMITRETechniques = (entityValues: any): ContextOption[] => {
   if (!entityValues) {
     return [];
   }
-  
+
   const options: ContextOption[] = [];
 
   if (entityValues.mitre_techniques && Array.isArray(entityValues.mitre_techniques)) {

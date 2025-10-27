@@ -8,7 +8,7 @@ import type { StructuredSecurityResponse } from '../../types/security';
  * @returns Parsed security response or null
  */
 export const parseStructuredResponse = (
-  responseText: string
+  responseText: string,
 ): StructuredSecurityResponse | null => {
   try {
     // Try to parse as JSON

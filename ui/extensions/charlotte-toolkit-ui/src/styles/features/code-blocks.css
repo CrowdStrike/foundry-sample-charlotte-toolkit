@@ -61,11 +61,11 @@
 
 /* Hover effects for interactive code elements */
 .ioc-hover-bg:hover {
-  background-color: var(--cs-status-info-background) !important;
+  background-color: var(--cs-status-info-background);
 }
 
 .ioc-hover-text:hover {
-  color: var(--cs-status-info) !important;
+  color: var(--cs-status-info);
 }
 
 /* Standardized responsive adjustments */

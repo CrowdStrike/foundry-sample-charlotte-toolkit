@@ -28,7 +28,7 @@ export const DEFAULT_MODEL = 'claude-latest'; // Space-safe default value
  * @returns The display label (e.g., 'Claude Latest') or the original value if not found
  */
 export const getModelLabel = (value: string): string => {
-  const option = CHARLOTTE_MODEL_OPTIONS.find(opt => opt.value === value);
+  const option = CHARLOTTE_MODEL_OPTIONS.find((opt) => opt.value === value);
   return option?.label ?? value;
 };
 
@@ -38,7 +38,7 @@ export const getModelLabel = (value: string): string => {
  * @returns The model value (e.g., 'claude-latest') or the original label if not found
  */
 export const getModelValue = (label: string): string => {
-  const option = CHARLOTTE_MODEL_OPTIONS.find(opt => opt.label === label);
+  const option = CHARLOTTE_MODEL_OPTIONS.find((opt) => opt.label === label);
   return option?.value ?? label;
 };
 
