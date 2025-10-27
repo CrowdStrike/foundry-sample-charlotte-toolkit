@@ -1,7 +1,7 @@
 # Charlotte Toolkit - AI Security Analysis
 
-> **Author**: Nathan Labadie (nathan.labadie@crowdstrike.com)  
-> **Version**: 1.1.0 (Gold Release)
+> **Author**: Nathan Labadie (nathan.labadie@crowdstrike.com)
+> **Version**: 1.2.0
 
 ## What is Charlotte Toolkit?
 
@@ -111,22 +111,24 @@ Charlotte provides comprehensive analysis in several sections:
 - **Permission Aware**: Respects your existing access controls
 - **Audit Trail**: Complete transparency for compliance
 
-## What's New in Gold 1.1.0
+## What's New in v1.2.0
 
-### 🎯 **Enhanced User Experience**
-- **Complete Context Icons**: Fixed missing icons in context dropdown - all entity types now display appropriate visual indicators
-- **MITRE URL Copy**: MITRE technique IDs now have clickable copy buttons for easy URL sharing
-- **Systematic Problem Solving**: Implemented sequential thinking methodology for comprehensive issue resolution
+### 🛠️ **Code Quality & Tooling**
+- **Biome Integration**: Migrated to Biome 2.2.6 for modern linting and formatting
+- **Zero Lint Errors**: All code now passes Biome and Knip validation with zero errors
+- **Dependency Updates**: Updated all npm dependencies to latest stable versions
+- **Improved Build System**: Enhanced build configuration and validation
 
-### 🛠️ **Technical Improvements**
-- **Icon System Completeness**: Added missing TLD domain icons using systematic analysis
-- **UI Component Consistency**: Standardized copy functionality across IOC and MITRE displays
-- **Build Quality**: Enhanced code quality with comprehensive linting and validation
+### 🎨 **Architecture Improvements**
+- **Custom CSS**: Removed Tailwind CSS dependencies in favor of maintainable custom CSS
+- **Type Safety**: Fixed all TypeScript errors and improved type definitions
+- **Code Cleanup**: Removed unused code, comments, and old tooling infrastructure
+- **Better Documentation**: Added proper explanations for linting suppressions
 
-### 🔍 **Development Methodology**
-- **Sequential Thinking Integration**: Used systematic analysis to identify and resolve UI inconsistencies
-- **Context-Efficient Development**: Applied smart loading patterns for optimal performance
-- **Professional Standards**: Maintained CrowdStrike design token compliance throughout
+### 🔧 **Developer Experience**
+- **Consistent Formatting**: Standardized code style across entire codebase
+- **Git Integration**: Added proper .gitignore for VCS integration
+- **Quality Scripts**: Enhanced npm scripts for linting, formatting, and validation
 
 ## Requirements
 
@@ -136,6 +138,6 @@ Charlotte provides comprehensive analysis in several sections:
 
 ---
 
-**Charlotte Toolkit v1.1.0 (Gold Release)** - AI-powered security analysis for CrowdStrike Falcon
+**Charlotte Toolkit v1.2.0** - AI-powered security analysis for CrowdStrike Falcon
 
 *Built by Nathan Labadie (nathan.labadie@crowdstrike.com)*
