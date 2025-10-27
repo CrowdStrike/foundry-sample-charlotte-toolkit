@@ -14,27 +14,35 @@
   align-items: center;
   padding: var(--spacing-base) var(--spacing-lg); /* 8px 12px */
   font-weight: var(--font-weight-semibold);
-  font-size: var(--font-size-base); /* 14px - Reduced by 1 size for better visual density */
+  font-size: var(
+    --font-size-base
+  ); /* 14px - Reduced by 1 size for better visual density */
   color: var(--cs-text-secondary);
   background-color: var(--cs-background-lighter);
   border-bottom: 1px solid var(--cs-border-color-light);
 }
 
 .context-entity-badge {
-  font-size: var(--font-size-xs); /* 11px - Reduced by 1 size for better visual density */
+  font-size: var(
+    --font-size-xs
+  ); /* 11px - Reduced by 1 size for better visual density */
   padding: var(--spacing-xs) var(--spacing-md); /* 2px 6px */
 }
 
 /* Child option indentation and styling */
 sl-option.child-option {
-  padding-left: var(--spacing-4xl) !important; /* 32px */
-  font-size: var(--font-size-xs) !important; /* 11px - Reduced by 1 size for better visual density */
+  padding-left: var(--spacing-4xl); /* 32px */
+  font-size: var(
+    --font-size-xs
+  ); /* 11px - Reduced by 1 size for better visual density */
 }
 
 /* Specific selector for broader coverage */
 sl-select sl-option.child-option {
-  padding-left: var(--spacing-4xl) !important; /* 32px */
-  font-size: var(--font-size-xs) !important; /* 11px - Reduced by 1 size for better visual density */
+  padding-left: var(--spacing-4xl); /* 32px */
+  font-size: var(
+    --font-size-xs
+  ); /* 11px - Reduced by 1 size for better visual density */
 }
 
 /* Prevent text wrapping in dropdown options */
@@ -46,11 +54,12 @@ sl-option::part(label) {
 
 /* Icon spacing in dropdown options */
 sl-option::part(base) {
-  gap: var(--spacing-base); /* 8px */
+  gap: var(--spacing-base); /* 8px - consistent spacing between icon and text */
 }
 
-sl-option sl-icon[slot="prefix"] {
-  margin-right: var(--spacing-base); /* 8px */
+/* Tab icon spacing - lower specificity, comes first */
+sl-tab sl-icon {
+  margin-right: var(--spacing-base); /* 8px - consistent spacing */
 }
 
 /* Context and model dropdown icon spacing - consolidated */
@@ -58,9 +67,14 @@ sl-select sl-icon[slot="prefix"] {
   margin-right: var(--spacing-base); /* 8px */
 }
 
+/* Group header icon spacing - matches option icon spacing */
+.context-group-header sl-icon {
+  margin-right: var(--spacing-base); /* 8px - consistent with option icons */
+}
+
 /* Standardized dropdown font styling - all options use normal fonts for consistency */
 sl-option {
-  font-family: var(--font-family-sans) !important;
+  font-family: var(--font-family-sans);
 }
 
 /* ===== TAB GROUP OVERRIDES ===== */
@@ -131,7 +145,6 @@ sl-select {
   --sl-focus-ring-width: 1px;
 }
 
-
 /* ===== BADGE VARIANT STYLING ===== */
 
 /* Security Analysis Badge Colors - Using CrowdStrike Design Tokens */
@@ -198,10 +211,10 @@ sl-badge {
 
 /* MITRE technique tactic badges - specific styling */
 .tactic-badge {
-  font-size: var(--font-size-xs) !important;
-  font-weight: var(--font-weight-medium) !important;
-  text-transform: uppercase !important;
-  letter-spacing: 0.025em !important;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
 }
 
 /* ===== RESPONSIVE OVERRIDES ===== */
@@ -214,7 +227,9 @@ sl-badge {
 
   .context-group-header {
     padding: var(--spacing-md) var(--spacing-base); /* 6px 8px */
-    font-size: var(--font-size-sm); /* 12px - Reduced to maintain proportional scaling */
+    font-size: var(
+      --font-size-sm
+    ); /* 12px - Reduced to maintain proportional scaling */
   }
 
   /* Responsive badge sizing */
@@ -230,8 +245,8 @@ sl-badge {
     font-size: var(--font-size-2xs);
     padding: var(--spacing-xs) var(--spacing-sm);
   }
-  
+
   .tactic-badge {
-    font-size: var(--font-size-micro) !important;
+    font-size: var(--font-size-micro);
   }
 }

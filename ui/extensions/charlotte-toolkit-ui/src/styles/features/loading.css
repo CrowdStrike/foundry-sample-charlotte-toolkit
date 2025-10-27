@@ -6,7 +6,9 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: var(--container-height-2xl); /* Using design token for consistency */
+  min-height: var(
+    --container-height-2xl
+  ); /* Using design token for consistency */
   gap: var(--spacing-3xl); /* Increased gap for better spacing */
   padding: var(--spacing-4xl);
   color: var(--cs-text-secondary);
@@ -23,7 +25,9 @@
   height: var(--component-size-lg);
 
   /* Add subtle glow effect for CrowdStrike branding */
-  filter: drop-shadow(0 0 8px rgb(var(--cs-color-primary-rgb, 0, 123, 255), var(--opacity-medium)));
+  filter: drop-shadow(
+    0 0 8px rgb(var(--cs-color-primary-rgb, 0, 123, 255), var(--opacity-medium))
+  );
 
   /* Smooth animation */
   animation: loading-pulse 2s ease-in-out infinite alternate;
@@ -33,12 +37,17 @@
 @keyframes loading-pulse {
   0% {
     transform: scale(1);
-    filter: drop-shadow(0 0 8px rgb(var(--cs-color-primary-rgb, 0, 123, 255), var(--opacity-medium)));
+    filter: drop-shadow(
+      0 0 8px
+        rgb(var(--cs-color-primary-rgb, 0, 123, 255), var(--opacity-medium))
+    );
   }
 
   100% {
     transform: scale(var(--scale-hover));
-    filter: drop-shadow(0 0 12px rgb(var(--cs-color-primary-rgb, 0, 123, 255), 0.4));
+    filter: drop-shadow(
+      0 0 12px rgb(var(--cs-color-primary-rgb, 0, 123, 255), 0.4)
+    );
   }
 }
 
@@ -46,18 +55,15 @@
 .loading-text-pulse {
   font-size: var(--font-size-lg);
   font-weight: var(--font-weight-medium);
-  font-family:
-    system-ui,
-    "SF Pro Display",
-    -apple-system,
-    sans-serif;
+  font-family: system-ui, "SF Pro Display", -apple-system, sans-serif;
   color: var(--cs-text-primary);
   text-align: center;
   line-height: var(--line-height-tight);
   letter-spacing: var(--letter-spacing-normal);
 
   /* Slack-style pulsing animation - smooth opacity breathing synced with spinner */
-  animation: loading-text-pulse var(--duration-loading-cycle) var(--easing-ease-in-out) infinite;
+  animation: loading-text-pulse var(--duration-loading-cycle)
+    var(--easing-ease-in-out) infinite;
 }
 
 /* Slack-style pulsing animation - gentle breathing effect */

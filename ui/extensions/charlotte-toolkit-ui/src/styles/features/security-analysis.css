@@ -10,7 +10,8 @@
 .ioc-container,
 .ioc-code-display {
   background-color: var(--cs-background-lightest, #fefefe);
-  border: var(--border-width-thin, 1px) solid var(--cs-border-color-light, #e2e8f0);
+  border: var(--border-width-thin, 1px) solid
+    var(--cs-border-color-light, #e2e8f0);
   padding: var(--spacing-base);
   margin-bottom: var(--spacing-sm);
   border-radius: var(--spacing-sm);
@@ -29,7 +30,7 @@
 .ioc-display-item code,
 .ioc-container code,
 .ioc-code {
-  background-color: transparent !important;
+  background-color: transparent;
   color: var(--cs-text-primary);
   font-family: var(--font-family-mono);
   font-size: var(--font-size-sm);
@@ -43,7 +44,7 @@
 }
 
 .ioc-code:hover {
-  background-color: var(--cs-background-lighter) !important;
+  background-color: var(--cs-background-lighter);
 }
 
 /* Unified Recommendation Styling - Plain text styling like Executive Summary and Technical Analysis */
@@ -89,7 +90,8 @@
 /* Threat Context Items - Unified styling for all items in Threat Context section */
 .threat-context-item {
   background-color: var(--cs-background-lightest, #fefefe);
-  border: var(--border-width-thin, 1px) solid var(--cs-border-color-light, #e2e8f0);
+  border: var(--border-width-thin, 1px) solid
+    var(--cs-border-color-light, #e2e8f0);
   padding: var(--spacing-base);
   margin-bottom: var(--spacing-sm);
   border-radius: var(--spacing-sm);
@@ -110,7 +112,7 @@
 
 /* Code elements within threat context items */
 .threat-context-item code {
-  background-color: transparent !important;
+  background-color: transparent;
   color: var(--cs-text-primary);
   font-family: var(--font-family-mono);
   font-size: var(--font-size-sm);
@@ -134,7 +136,8 @@
 .ioc-type-header {
   margin-bottom: var(--spacing-base);
   padding-bottom: var(--spacing-xs);
-  border-bottom: var(--border-width-thin, 1px) solid var(--cs-border-color-light, #e2e8f0);
+  border-bottom: var(--border-width-thin, 1px) solid
+    var(--cs-border-color-light, #e2e8f0);
 }
 
 .ioc-type-header span {
@@ -146,7 +149,8 @@
 /* Enhanced IOC Value Item Styling */
 .ioc-value-item {
   background-color: var(--cs-background-light, #f8fafc);
-  border: var(--border-width-thin, 1px) solid var(--cs-border-color-light, #e2e8f0);
+  border: var(--border-width-thin, 1px) solid
+    var(--cs-border-color-light, #e2e8f0);
   border-radius: var(--spacing-sm);
   padding: var(--spacing-sm) var(--spacing-base);
   margin-bottom: var(--spacing-sm);
@@ -168,7 +172,7 @@
 
 /* IOC Code Elements Enhancement */
 .ioc-value-item code {
-  background-color: transparent !important;
+  background-color: transparent;
   color: var(--cs-text-primary, #1f2937);
   font-family: var(--font-family-mono);
   font-size: var(--font-size-sm);
@@ -221,21 +225,20 @@
 .threat-context-card code,
 .iocs-card code {
   /* Force word breaking for long monospace text */
-  word-break: break-all !important;
-  overflow-wrap: break-word !important;
-  white-space: pre-wrap !important;
-  max-width: 100% !important;
-  display: inline-block !important;
+  word-break: break-all;
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
+  max-width: 100%;
+  display: inline-block;
 }
-
 
 /* Generic break-words utility for monospace text */
 .text-xs.font-mono.break-words,
 .font-mono.break-words {
-  word-break: break-all !important;
-  overflow-wrap: break-word !important;
-  white-space: pre-wrap !important;
-  max-width: 100% !important;
+  word-break: break-all;
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
+  max-width: 100%;
 }
 
 /* MITRE Techniques Enhanced Styling */
@@ -247,7 +250,8 @@
 
 .mitre-technique-card.enhanced-card {
   background-color: var(--cs-background-lightest, #fefefe);
-  border: var(--border-width-thin, 1px) solid var(--cs-border-color-light, #e2e8f0);
+  border: var(--border-width-thin, 1px) solid
+    var(--cs-border-color-light, #e2e8f0);
   border-radius: var(--spacing-base);
   padding: var(--spacing-lg);
   transition: all var(--transition-fast);
@@ -274,7 +278,8 @@
   background-color: var(--cs-background-light, #f8fafc);
   padding: var(--spacing-xs) var(--spacing-sm);
   border-radius: var(--spacing-xs);
-  border: var(--border-width-thin, 1px) solid var(--cs-border-color-light, #e2e8f0);
+  border: var(--border-width-thin, 1px) solid
+    var(--cs-border-color-light, #e2e8f0);
   text-decoration: none;
   display: inline-block;
   transition: all var(--transition-fast);
@@ -335,24 +340,24 @@
   .mitre-techniques-container {
     gap: var(--spacing-base);
   }
-  
+
   .mitre-technique-card.enhanced-card {
     padding: var(--spacing-base);
   }
-  
+
   .technique-id {
     font-size: var(--font-size-xs);
     padding: var(--spacing-xs);
   }
-  
+
   .technique-name {
     font-size: var(--font-size-sm);
   }
-  
+
   .technique-paragraph {
     font-size: var(--font-size-sm);
   }
-  
+
   .tactic-badge {
     font-size: var(--font-size-2xs);
   }
@@ -362,20 +367,20 @@
   .mitre-techniques-container {
     gap: var(--spacing-sm);
   }
-  
+
   .mitre-technique-card.enhanced-card {
     padding: var(--spacing-sm);
   }
-  
+
   .technique-description {
     gap: var(--spacing-sm);
   }
-  
+
   .technique-paragraph {
     font-size: var(--font-size-xs);
     line-height: 1.5;
   }
-  
+
   .technique-name {
     font-size: var(--font-size-sm);
   }
@@ -441,15 +446,10 @@
 
 /* Executive Summary Formatted Styling */
 .executive-summary-card .formatted-paragraph {
-  font-size: var(--font-size-sm);
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-base);
   line-height: 1.6;
   margin-bottom: var(--spacing-base);
-}
-
-@media (min-width: var(--breakpoint-sm)) {
-  .executive-summary-card .formatted-paragraph {
-    font-size: var(--font-size-base);
-  }
 }
 
 /* Analysis Methodology Formatted Styling */
@@ -478,11 +478,11 @@
     font-size: var(--font-size-sm);
     margin-bottom: var(--spacing-sm);
   }
-  
+
   .technical-details-formatted {
     gap: var(--spacing-sm);
   }
-  
+
   .technical-paragraph {
     margin-bottom: var(--spacing-sm);
   }
@@ -494,7 +494,7 @@
     line-height: 1.5;
     margin-bottom: var(--spacing-xs);
   }
-  
+
   .technical-details-formatted {
     gap: var(--spacing-xs);
   }
@@ -502,17 +502,16 @@
 
 /* Theme-aware utility classes for structured analysis */
 .secondary-text {
-  color: var(--cs-text-secondary) !important;
+  color: var(--cs-text-secondary);
 }
 
 .threat-error-icon {
-  color: var(--cs-text-secondary) !important;
+  color: var(--cs-text-secondary);
 }
 
 .recommendation-icon {
-  color: var(--cs-color-alert-primary) !important;
+  color: var(--cs-color-alert-primary);
 }
-
 
 /* Validation item styling */
 .validation-item {
@@ -545,7 +544,7 @@
   }
 
   .structured-analysis h3 {
-    font-size: var(--font-size-lg) !important;
+    font-size: var(--font-size-lg);
     gap: var(--spacing-md);
     display: flex;
     align-items: center;
@@ -564,7 +563,7 @@
   }
 
   .structured-analysis h3 {
-    font-size: var(--font-size-base) !important;
+    font-size: var(--font-size-base);
     line-height: var(--line-height-tight);
     display: flex;
     align-items: center;
