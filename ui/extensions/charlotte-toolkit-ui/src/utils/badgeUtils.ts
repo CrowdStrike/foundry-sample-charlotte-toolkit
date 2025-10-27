@@ -1,13 +1,13 @@
 // src/utils/badgeUtils.ts
 
-import type { ThreatLevel, ConfidenceLevel } from '../types/security';
+import type { ConfidenceLevel, ThreatLevel } from '../types/security';
 
 /**
  * Shared badge color utilities to eliminate duplication across components
  */
 
 export const getThreatLevelColor = (
-  level: ThreatLevel
+  level: ThreatLevel,
 ): 'danger' | 'warning' | 'neutral' | 'success' => {
   switch (level.toLowerCase() as Lowercase<ThreatLevel>) {
     case 'critical':
@@ -24,7 +24,7 @@ export const getThreatLevelColor = (
 };
 
 export const getConfidenceLevelColor = (
-  level: ConfidenceLevel
+  level: ConfidenceLevel,
 ): 'success' | 'warning' | 'neutral' => {
   switch (level.toLowerCase() as Lowercase<ConfidenceLevel>) {
     case 'high':
@@ -33,22 +33,6 @@ export const getConfidenceLevelColor = (
       return 'warning';
     case 'low':
       return 'neutral';
-    default:
-      return 'neutral';
-  }
-};
-
-/**
- * Get malware classification color
- */
-export const getMalwareClassificationColor = (
-  classification: string
-): 'danger' | 'warning' | 'neutral' => {
-  switch (classification.toLowerCase()) {
-    case 'malicious':
-      return 'danger';
-    case 'suspicious':
-      return 'warning';
     default:
       return 'neutral';
   }

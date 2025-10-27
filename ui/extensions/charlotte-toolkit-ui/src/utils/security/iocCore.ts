@@ -10,18 +10,23 @@ export const detectIOCType = (text: string): IOCType | null => {
   if (!text || typeof text !== 'string') return null;
 
   // Hash patterns
-  const isHash = /^[a-fA-F0-9]{32}$|^[a-fA-F0-9]{40}$|^[a-fA-F0-9]{64}$/.test(text);
+  const isHash = /^[a-fA-F0-9]{32}$|^[a-fA-F0-9]{40}$|^[a-fA-F0-9]{64}$/.test(
+    text,
+  );
   if (isHash) return 'hash';
 
   // IP patterns (including defanged)
   const isIP =
     /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)[.[\].]){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(
-      text
+      text,
     );
   if (isIP) return 'ip';
 
   // Domain patterns (including defanged)
-  const isDomain = /^[a-zA-Z0-9][a-zA-Z0-9\-[\].-]{1,61}[a-zA-Z0-9][.[\].][a-zA-Z]{2,}$/.test(text);
+  const isDomain =
+    /^[a-zA-Z0-9][a-zA-Z0-9\-[\].-]{1,61}[a-zA-Z0-9][.[\].][a-zA-Z]{2,}$/.test(
+      text,
+    );
   if (isDomain) return 'domain';
 
   // URL patterns
@@ -33,15 +38,14 @@ export const detectIOCType = (text: string): IOCType | null => {
   if (isRegistry) return 'registry';
 
   // File path patterns
-  const isPath = /^[a-zA-Z]:\\|^\/|\\/.test(text) || text.includes('\\') || text.includes('/');
+  const isPath =
+    /^[a-zA-Z]:\\|^\/|\\/.test(text) ||
+    text.includes('\\') ||
+    text.includes('/');
   if (isPath) return 'path';
 
   return null;
 };
-
-
-
-
 
 /**
  * Defang an IOC for safe display (prevents accidental clicks/navigation)
@@ -75,7 +79,7 @@ export const normalizeIOC = (ioc: string): string => {
  */
 export const getIOCDisplayClasses = (
   _type: IOCType,
-  variant: 'list' | 'pill' | 'inline' = 'list'
+  variant: 'list' | 'pill' | 'inline' = 'list',
 ): string => {
   const baseClasses = 'font-mono text-xs break-words';
 
@@ -84,7 +88,6 @@ export const getIOCDisplayClasses = (
       return `${baseClasses} inline-block px-2 py-1 rounded border bg-opacity-50`;
     case 'inline':
       return `${baseClasses} inline`;
-    case 'list':
     default:
       return `${baseClasses}`;
   }
@@ -94,7 +97,7 @@ export const getIOCDisplayClasses = (
  * Get badge variant for IOC type (for Shoelace badges)
  */
 export const getIOCBadgeVariant = (
-  type: IOCType
+  type: IOCType,
 ): 'warning' | 'primary' | 'neutral' | 'success' => {
   switch (type) {
     case 'hash':
@@ -122,8 +125,8 @@ export const IOCCore = {
   detectType: detectIOCType,
 
   // Defanging operations
-  defang: defangIOC,        // For safe display
-  removeFanging,            // For copying original values
+  defang: defangIOC, // For safe display
+  removeFanging, // For copying original values
 
   // Normalization and comparison
   normalize: normalizeIOC,

@@ -22,8 +22,8 @@ const createParagraphBreaker = (options: ParagraphBreakerOptions) => {
     // Split on sentence boundaries (. ! ?) followed by space and capital letter
     const sentences = cleanText
       .split(/(?<=[.!?])\s+(?=[A-Z])/)
-      .map(sentence => sentence.trim())
-      .filter(sentence => sentence.length > 0);
+      .map((sentence) => sentence.trim())
+      .filter((sentence) => sentence.length > 0);
 
     // Short text handling
     if (sentences.length <= options.shortTextThreshold) {
@@ -37,13 +37,15 @@ const createParagraphBreaker = (options: ParagraphBreakerOptions) => {
       currentParagraph.push(sentence);
 
       // Determine if we should break paragraph
-      const atMaxLength = currentParagraph.length >= options.maxSentencesPerParagraph;
+      const atMaxLength =
+        currentParagraph.length >= options.maxSentencesPerParagraph;
       const isLastSentence = index === sentences.length - 1;
-      const hasKeywordBreak = options.aggressiveBreaking && 
-        currentParagraph.length > 0 && 
+      const hasKeywordBreak =
+        options.aggressiveBreaking &&
+        currentParagraph.length > 0 &&
         index < sentences.length - 1 &&
-        options.breakKeywords.some(keyword => sentence.includes(keyword));
-      
+        options.breakKeywords.some((keyword) => sentence.includes(keyword));
+
       const shouldBreak = atMaxLength || isLastSentence || hasKeywordBreak;
 
       if (shouldBreak) {
@@ -52,7 +54,7 @@ const createParagraphBreaker = (options: ParagraphBreakerOptions) => {
       }
     });
 
-    return paragraphs.filter(p => p.length > 0);
+    return paragraphs.filter((p) => p.length > 0);
   };
 };
 
@@ -61,8 +63,14 @@ const formatters = {
   default: createParagraphBreaker({
     maxSentencesPerParagraph: 3,
     shortTextThreshold: 2,
-    breakKeywords: ['Additionally', 'Furthermore', 'However', 'This technique', 'Attackers'],
-    aggressiveBreaking: true
+    breakKeywords: [
+      'Additionally',
+      'Furthermore',
+      'However',
+      'This technique',
+      'Attackers',
+    ],
+    aggressiveBreaking: true,
   }),
 
   mitre: createParagraphBreaker({
@@ -70,32 +78,54 @@ const formatters = {
     shortTextThreshold: 1,
     breakKeywords: [
       // Technical transition indicators
-      'This technique', 'Attackers', 'Adversaries', 'The malware',
-      'Additionally', 'Furthermore', 'However', 'For example', 'In some cases',
-      'Common methods', 'Detection methods', 'Mitigation strategies',
-      // Technical process indicators  
-      'executed', 'implemented', 'utilized', 'performed',
+      'This technique',
+      'Attackers',
+      'Adversaries',
+      'The malware',
+      'Additionally',
+      'Furthermore',
+      'However',
+      'For example',
+      'In some cases',
+      'Common methods',
+      'Detection methods',
+      'Mitigation strategies',
+      // Technical process indicators
+      'executed',
+      'implemented',
+      'utilized',
+      'performed',
       // Platform/system indicators
-      'Windows', 'Linux', 'macOS', 'registry', 'file system', 'network', 'process'
+      'Windows',
+      'Linux',
+      'macOS',
+      'registry',
+      'file system',
+      'network',
+      'process',
     ],
-    aggressiveBreaking: true
+    aggressiveBreaking: true,
   }),
 
   summary: createParagraphBreaker({
     maxSentencesPerParagraph: 3,
     shortTextThreshold: 3,
     breakKeywords: ['Additionally', 'However', 'Furthermore'],
-    aggressiveBreaking: true
+    aggressiveBreaking: true,
   }),
 
   technical: createParagraphBreaker({
     maxSentencesPerParagraph: 5,
     shortTextThreshold: 4,
     breakKeywords: [
-      'Additionally', 'Furthermore', 'However', 'The analysis',
-      'This indicates', 'Based on'
+      'Additionally',
+      'Furthermore',
+      'However',
+      'The analysis',
+      'This indicates',
+      'Based on',
     ],
-    aggressiveBreaking: true
+    aggressiveBreaking: true,
   }),
 
   reasoning: createParagraphBreaker({
@@ -103,49 +133,50 @@ const formatters = {
     shortTextThreshold: 1,
     breakKeywords: [
       // Core analytical transition phrases
-      'The analysis', 'This assessment', 'Based on the', 'The evidence',
-      'However', 'Additionally', 'Furthermore', 'Therefore', 'In conclusion',
-      'This indicates', 'The reasoning', 'Charlotte', 'data sources',
-      'analytical methods', 'decision factors', 'confidence level',
-      'limitations', 'assumptions',
+      'The analysis',
+      'This assessment',
+      'Based on the',
+      'The evidence',
+      'However',
+      'Additionally',
+      'Furthermore',
+      'Therefore',
+      'In conclusion',
+      'This indicates',
+      'The reasoning',
+      'Charlotte',
+      'data sources',
+      'analytical methods',
+      'decision factors',
+      'confidence level',
+      'limitations',
+      'assumptions',
       // Technical assessment indicators
-      'probability', 'likelihood', 'assessment shows', 'evaluation indicates',
-      'analysis reveals', 'findings suggest', 'results demonstrate',
-      'investigation', 'methodology', 'approach', 'consideration',
-      'factor', 'criteria', 'metric', 'measurement', 'validation', 'verification'
+      'probability',
+      'likelihood',
+      'assessment shows',
+      'evaluation indicates',
+      'analysis reveals',
+      'findings suggest',
+      'results demonstrate',
+      'investigation',
+      'methodology',
+      'approach',
+      'consideration',
+      'factor',
+      'criteria',
+      'metric',
+      'measurement',
+      'validation',
+      'verification',
     ],
-    aggressiveBreaking: true
-  })
+    aggressiveBreaking: true,
+  }),
 };
 
 // Public API - simplified function exports
 export const formatTextWithParagraphs = formatters.default;
 export const formatMitreDescription = formatters.mitre;
-
-/**
- * Truncates text to a specified length with ellipsis
- * Used for preview/summary views
- */
-export const truncateText = (text: string, maxLength: number): string => {
-  if (!text || text.length <= maxLength) {
-    return text;
-  }
-
-  // Find the last space before maxLength to avoid cutting words
-  const lastSpace = text.lastIndexOf(' ', maxLength);
-  const cutPoint = lastSpace > maxLength * 0.8 ? lastSpace : maxLength;
-
-  return `${text.substring(0, cutPoint).trim()}...`;
-};
-
-/**
- * Capitalizes first letter of each sentence
- * Ensures consistent formatting
- */
-export const capitalizeFirstLetter = (text: string): string => {
-  if (!text) return text;
-  return `${text.charAt(0).toUpperCase()}${text.slice(1)}`;
-};
 
 // Export formatters for use in universalFormatting.ts
 export { formatters };

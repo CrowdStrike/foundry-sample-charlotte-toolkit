@@ -87,7 +87,10 @@ export const stripMarkdown = (markdown: string): string => {
  * @param jsonData - Parsed JSON response
  * @returns Markdown formatted string
  */
-export const convertJsonToMarkdown = (jsonData: any): string => {
+export const convertJsonToMarkdown = (
+  // biome-ignore lint/suspicious/noExplicitAny: jsonData accepts any JSON structure for conversion
+  jsonData: any,
+): string => {
   if (!jsonData) return '';
 
   let markdown = '';
@@ -143,9 +146,11 @@ export const convertJsonToMarkdown = (jsonData: any): string => {
       jsonData.attack_intelligence.persistence_mechanisms.length > 0
     ) {
       markdown += `### Persistence Mechanisms\n`;
-      jsonData.attack_intelligence.persistence_mechanisms.forEach((mech: string) => {
-        markdown += `- ${mech}\n`;
-      });
+      jsonData.attack_intelligence.persistence_mechanisms.forEach(
+        (mech: string) => {
+          markdown += `- ${mech}\n`;
+        },
+      );
       markdown += '\n';
     }
     if (
@@ -153,9 +158,11 @@ export const convertJsonToMarkdown = (jsonData: any): string => {
       jsonData.attack_intelligence.behavior_patterns.length > 0
     ) {
       markdown += `### Behavior Patterns\n`;
-      jsonData.attack_intelligence.behavior_patterns.forEach((pattern: string) => {
-        markdown += `- ${pattern}\n`;
-      });
+      jsonData.attack_intelligence.behavior_patterns.forEach(
+        (pattern: string) => {
+          markdown += `- ${pattern}\n`;
+        },
+      );
       markdown += '\n';
     }
   }
@@ -171,9 +178,11 @@ export const convertJsonToMarkdown = (jsonData: any): string => {
       jsonData.incident_context.associated_filenames.length > 0
     ) {
       markdown += `### Associated Filenames\n`;
-      jsonData.incident_context.associated_filenames.forEach((filename: string) => {
-        markdown += `- \`${filename}\`\n`;
-      });
+      jsonData.incident_context.associated_filenames.forEach(
+        (filename: string) => {
+          markdown += `- \`${filename}\`\n`;
+        },
+      );
       markdown += '\n';
     }
     if (jsonData.incident_context.related_iocs) {
@@ -183,9 +192,11 @@ export const convertJsonToMarkdown = (jsonData: any): string => {
         jsonData.incident_context.related_iocs.domains.length > 0
       ) {
         markdown += `**Domains:**\n`;
-        jsonData.incident_context.related_iocs.domains.forEach((domain: string) => {
-          markdown += `- \`${domain}\`\n`;
-        });
+        jsonData.incident_context.related_iocs.domains.forEach(
+          (domain: string) => {
+            markdown += `- \`${domain}\`\n`;
+          },
+        );
         markdown += '\n';
       }
       if (
@@ -203,9 +214,11 @@ export const convertJsonToMarkdown = (jsonData: any): string => {
         jsonData.incident_context.related_iocs.registry_keys.length > 0
       ) {
         markdown += `**Registry Keys:**\n`;
-        jsonData.incident_context.related_iocs.registry_keys.forEach((key: string) => {
-          markdown += `- \`${key}\`\n`;
-        });
+        jsonData.incident_context.related_iocs.registry_keys.forEach(
+          (key: string) => {
+            markdown += `- \`${key}\`\n`;
+          },
+        );
         markdown += '\n';
       }
       if (
@@ -213,9 +226,11 @@ export const convertJsonToMarkdown = (jsonData: any): string => {
         jsonData.incident_context.related_iocs.hashes.length > 0
       ) {
         markdown += `**Hashes:**\n`;
-        jsonData.incident_context.related_iocs.hashes.forEach((hash: string) => {
-          markdown += `- \`${hash}\`\n`;
-        });
+        jsonData.incident_context.related_iocs.hashes.forEach(
+          (hash: string) => {
+            markdown += `- \`${hash}\`\n`;
+          },
+        );
         markdown += '\n';
       }
     }
@@ -237,9 +252,11 @@ export const convertJsonToMarkdown = (jsonData: any): string => {
       jsonData.response_actions.immediate_containment.length > 0
     ) {
       markdown += `## Immediate Containment\n\n`;
-      jsonData.response_actions.immediate_containment.forEach((action: string, index: number) => {
-        markdown += `${index + 1}. ${action}\n`;
-      });
+      jsonData.response_actions.immediate_containment.forEach(
+        (action: string, index: number) => {
+          markdown += `${index + 1}. ${action}\n`;
+        },
+      );
       markdown += '\n';
     }
     if (
@@ -247,9 +264,11 @@ export const convertJsonToMarkdown = (jsonData: any): string => {
       jsonData.response_actions.detection_rules.length > 0
     ) {
       markdown += `## Detection Rules\n\n`;
-      jsonData.response_actions.detection_rules.forEach((rule: string, index: number) => {
-        markdown += `${index + 1}. ${rule}\n`;
-      });
+      jsonData.response_actions.detection_rules.forEach(
+        (rule: string, index: number) => {
+          markdown += `${index + 1}. ${rule}\n`;
+        },
+      );
       markdown += '\n';
     }
     if (
@@ -257,9 +276,11 @@ export const convertJsonToMarkdown = (jsonData: any): string => {
       jsonData.response_actions.remediation_guidance.length > 0
     ) {
       markdown += `## Remediation Guidance\n\n`;
-      jsonData.response_actions.remediation_guidance.forEach((guidance: string, index: number) => {
-        markdown += `${index + 1}. ${guidance}\n`;
-      });
+      jsonData.response_actions.remediation_guidance.forEach(
+        (guidance: string, index: number) => {
+          markdown += `${index + 1}. ${guidance}\n`;
+        },
+      );
       markdown += '\n';
     }
   }
@@ -312,6 +333,7 @@ export const convertJsonToMarkdown = (jsonData: any): string => {
   // MITRE ATT&CK Techniques
   if (jsonData.mitre_techniques && jsonData.mitre_techniques.length > 0) {
     markdown += `## MITRE ATT&CK Techniques\n\n`;
+    // biome-ignore lint/suspicious/noExplicitAny: technique objects have varying structures from JSON response
     jsonData.mitre_techniques.forEach((technique: any) => {
       markdown += `### ${technique.technique_id}: ${technique.technique_name}\n`;
       if (technique.tactic) {
@@ -329,6 +351,7 @@ export const convertJsonToMarkdown = (jsonData: any): string => {
     jsonData.attack_intelligence.mitre_techniques.length > 0
   ) {
     markdown += `## MITRE ATT&CK Techniques (Attack Intelligence)\n\n`;
+    // biome-ignore lint/suspicious/noExplicitAny: technique objects have varying structures from JSON response
     jsonData.attack_intelligence.mitre_techniques.forEach((technique: any) => {
       markdown += `### ${technique.technique_id}: ${technique.technique_name}\n`;
       if (technique.tactic) {
@@ -371,9 +394,11 @@ export const convertJsonToMarkdown = (jsonData: any): string => {
         jsonData.confidence_assessment.validation_recommendations.length > 0
       ) {
         markdown += `\n**Validation Recommendations:**\n`;
-        jsonData.confidence_assessment.validation_recommendations.forEach((rec: string) => {
-          markdown += `- ${rec}\n`;
-        });
+        jsonData.confidence_assessment.validation_recommendations.forEach(
+          (rec: string) => {
+            markdown += `- ${rec}\n`;
+          },
+        );
       }
       markdown += '\n';
     }
@@ -392,7 +417,10 @@ export const convertJsonToMarkdown = (jsonData: any): string => {
  * @param jsonData - Parsed JSON response
  * @returns Plain text formatted string
  */
-export const convertJsonToPlainText = (jsonData: any): string => {
+export const convertJsonToPlainText = (
+  // biome-ignore lint/suspicious/noExplicitAny: jsonData accepts any JSON structure for conversion
+  jsonData: any,
+): string => {
   if (!jsonData) return '';
 
   let text = '';
@@ -450,9 +478,11 @@ export const convertJsonToPlainText = (jsonData: any): string => {
       jsonData.attack_intelligence.persistence_mechanisms.length > 0
     ) {
       text += `Persistence Mechanisms:\n`;
-      jsonData.attack_intelligence.persistence_mechanisms.forEach((mech: string) => {
-        text += `- ${mech}\n`;
-      });
+      jsonData.attack_intelligence.persistence_mechanisms.forEach(
+        (mech: string) => {
+          text += `- ${mech}\n`;
+        },
+      );
       text += '\n';
     }
     if (
@@ -460,9 +490,11 @@ export const convertJsonToPlainText = (jsonData: any): string => {
       jsonData.attack_intelligence.behavior_patterns.length > 0
     ) {
       text += `Behavior Patterns:\n`;
-      jsonData.attack_intelligence.behavior_patterns.forEach((pattern: string) => {
-        text += `- ${pattern}\n`;
-      });
+      jsonData.attack_intelligence.behavior_patterns.forEach(
+        (pattern: string) => {
+          text += `- ${pattern}\n`;
+        },
+      );
       text += '\n';
     }
   }
@@ -478,9 +510,11 @@ export const convertJsonToPlainText = (jsonData: any): string => {
       jsonData.incident_context.associated_filenames.length > 0
     ) {
       text += `Associated Filenames:\n`;
-      jsonData.incident_context.associated_filenames.forEach((filename: string) => {
-        text += `- ${filename}\n`;
-      });
+      jsonData.incident_context.associated_filenames.forEach(
+        (filename: string) => {
+          text += `- ${filename}\n`;
+        },
+      );
       text += '\n';
     }
     if (jsonData.incident_context.related_iocs) {
@@ -490,9 +524,11 @@ export const convertJsonToPlainText = (jsonData: any): string => {
         jsonData.incident_context.related_iocs.domains.length > 0
       ) {
         text += `Domains:\n`;
-        jsonData.incident_context.related_iocs.domains.forEach((domain: string) => {
-          text += `- ${domain}\n`;
-        });
+        jsonData.incident_context.related_iocs.domains.forEach(
+          (domain: string) => {
+            text += `- ${domain}\n`;
+          },
+        );
         text += '\n';
       }
       if (
@@ -510,9 +546,11 @@ export const convertJsonToPlainText = (jsonData: any): string => {
         jsonData.incident_context.related_iocs.registry_keys.length > 0
       ) {
         text += `Registry Keys:\n`;
-        jsonData.incident_context.related_iocs.registry_keys.forEach((key: string) => {
-          text += `- ${key}\n`;
-        });
+        jsonData.incident_context.related_iocs.registry_keys.forEach(
+          (key: string) => {
+            text += `- ${key}\n`;
+          },
+        );
         text += '\n';
       }
       if (
@@ -520,9 +558,11 @@ export const convertJsonToPlainText = (jsonData: any): string => {
         jsonData.incident_context.related_iocs.hashes.length > 0
       ) {
         text += `Hashes:\n`;
-        jsonData.incident_context.related_iocs.hashes.forEach((hash: string) => {
-          text += `- ${hash}\n`;
-        });
+        jsonData.incident_context.related_iocs.hashes.forEach(
+          (hash: string) => {
+            text += `- ${hash}\n`;
+          },
+        );
         text += '\n';
       }
     }
@@ -544,9 +584,11 @@ export const convertJsonToPlainText = (jsonData: any): string => {
       jsonData.response_actions.immediate_containment.length > 0
     ) {
       text += `IMMEDIATE CONTAINMENT\n`;
-      jsonData.response_actions.immediate_containment.forEach((action: string, index: number) => {
-        text += `${index + 1}. ${action}\n`;
-      });
+      jsonData.response_actions.immediate_containment.forEach(
+        (action: string, index: number) => {
+          text += `${index + 1}. ${action}\n`;
+        },
+      );
       text += '\n';
     }
     if (
@@ -554,9 +596,11 @@ export const convertJsonToPlainText = (jsonData: any): string => {
       jsonData.response_actions.detection_rules.length > 0
     ) {
       text += `DETECTION RULES\n`;
-      jsonData.response_actions.detection_rules.forEach((rule: string, index: number) => {
-        text += `${index + 1}. ${rule}\n`;
-      });
+      jsonData.response_actions.detection_rules.forEach(
+        (rule: string, index: number) => {
+          text += `${index + 1}. ${rule}\n`;
+        },
+      );
       text += '\n';
     }
     if (
@@ -564,9 +608,11 @@ export const convertJsonToPlainText = (jsonData: any): string => {
       jsonData.response_actions.remediation_guidance.length > 0
     ) {
       text += `REMEDIATION GUIDANCE\n`;
-      jsonData.response_actions.remediation_guidance.forEach((guidance: string, index: number) => {
-        text += `${index + 1}. ${guidance}\n`;
-      });
+      jsonData.response_actions.remediation_guidance.forEach(
+        (guidance: string, index: number) => {
+          text += `${index + 1}. ${guidance}\n`;
+        },
+      );
       text += '\n';
     }
   }
@@ -619,6 +665,7 @@ export const convertJsonToPlainText = (jsonData: any): string => {
   // MITRE ATT&CK Techniques
   if (jsonData.mitre_techniques && jsonData.mitre_techniques.length > 0) {
     text += `MITRE ATT&CK TECHNIQUES\n`;
+    // biome-ignore lint/suspicious/noExplicitAny: technique objects have varying structures from JSON response
     jsonData.mitre_techniques.forEach((technique: any) => {
       text += `${technique.technique_id}: ${technique.technique_name}\n`;
       if (technique.description) {
@@ -658,9 +705,11 @@ export const convertJsonToPlainText = (jsonData: any): string => {
         jsonData.confidence_assessment.validation_recommendations.length > 0
       ) {
         text += `\nValidation Recommendations:\n`;
-        jsonData.confidence_assessment.validation_recommendations.forEach((rec: string) => {
-          text += `- ${rec}\n`;
-        });
+        jsonData.confidence_assessment.validation_recommendations.forEach(
+          (rec: string) => {
+            text += `- ${rec}\n`;
+          },
+        );
       }
       text += '\n';
     }
@@ -685,8 +734,10 @@ export const convertJsonToPlainText = (jsonData: any): string => {
 export const formatForCopy = (
   format: CopyFormat,
   responseText: string,
+  // biome-ignore lint/suspicious/noExplicitAny: jsonData accepts any JSON context structure
   jsonData?: any,
-  parsedJsonResponse?: any
+  // biome-ignore lint/suspicious/noExplicitAny: parsedJsonResponse accepts any parsed JSON response structure
+  parsedJsonResponse?: any,
 ): string => {
   switch (format) {
     case 'json':
@@ -705,7 +756,7 @@ export const formatForCopy = (
           timestamp: new Date().toISOString(),
         },
         null,
-        2
+        2,
       );
 
     case 'markdown':
@@ -726,39 +777,5 @@ export const formatForCopy = (
 
     default:
       return responseText;
-  }
-};
-
-/**
- * Copy text to clipboard with error handling
- * @param text - Text to copy
- * @param format - Format being copied (for error messages)
- * @returns Promise that resolves to success boolean
- */
-export const copyToClipboard = async (text: string, _format: CopyFormat): Promise<boolean> => {
-  try {
-    await navigator.clipboard.writeText(text);
-    return true;
-  } catch {
-    // Silently fail - clipboard API might not be available
-    return false;
-  }
-};
-
-/**
- * Get appropriate success message for copy operation
- * @param format - The format that was copied
- * @returns Success message string
- */
-export const getCopySuccessMessage = (format: CopyFormat): string => {
-  switch (format) {
-    case 'json':
-      return 'JSON copied to clipboard!';
-    case 'markdown':
-      return 'Markdown copied to clipboard!';
-    case 'plaintext':
-      return 'Plain text copied to clipboard!';
-    default:
-      return 'Copied to clipboard!';
   }
 };
