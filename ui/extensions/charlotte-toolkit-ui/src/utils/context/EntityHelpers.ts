@@ -1,11 +1,11 @@
 // Entity processing helper utilities
 
-import { ContextOption } from '../../types';
+import type { ContextOption } from '../../types';
 import {
-  HASH_TRUNCATION_LENGTH,
   HASH_DISPLAY_FORMAT,
-  PRIVATE_IP_RANGES,
+  HASH_TRUNCATION_LENGTH,
   INTERNAL_DOMAIN_PATTERNS,
+  PRIVATE_IP_RANGES,
 } from '../contextConstants';
 
 /**
@@ -27,7 +27,14 @@ export const extractTopLevelDomain = (domain: string): string => {
   const lastPart = parts.at(-1)?.toLowerCase() ?? '';
   const secondLastPart = parts.at(-2)?.toLowerCase() ?? '';
 
-  const commonTwoPartTLDs = ['co.uk', 'com.au', 'org.uk', 'net.au', 'gov.uk', 'edu.au'];
+  const commonTwoPartTLDs = [
+    'co.uk',
+    'com.au',
+    'org.uk',
+    'net.au',
+    'gov.uk',
+    'edu.au',
+  ];
   const twoPartTLD = `${secondLastPart}.${lastPart}`;
 
   if (commonTwoPartTLDs.includes(twoPartTLD) && parts.length >= 3) {
@@ -42,7 +49,10 @@ export const extractTopLevelDomain = (domain: string): string => {
  * Smart domain truncation showing beginning with consistent 32-character maximum
  * Example: "aaa.bbb.ccc.ddd.com" becomes "aaa.bbb.ccc..." (32 chars max)
  */
-export const truncateDomain = (domain: string, maxLength: number = 32): string => {
+export const truncateDomain = (
+  domain: string,
+  maxLength: number = 32,
+): string => {
   if (domain.length <= maxLength) return domain;
 
   // Always truncate at the end with consistent character count
@@ -55,18 +65,11 @@ export const truncateDomain = (domain: string, maxLength: number = 32): string =
 };
 
 /**
- * Check if a domain needs truncation
- */
-export const isDomainTruncated = (originalDomain: string, maxLength: number = 32): boolean => {
-  return originalDomain.length > maxLength;
-};
-
-/**
  * Format display names for better readability
  * Returns both display text and original text for tooltip support
  */
 export const formatDisplayName = (
-  option: ContextOption
+  option: ContextOption,
 ): { displayText: string; originalText: string } => {
   if (option.subType === 'md5' || option.subType === 'sha256') {
     const hashMatch = option.displayName.match(/^(MD5|SHA256):\s*(.+)$/);
@@ -85,7 +88,11 @@ export const formatDisplayName = (
   }
 
   // For domain entries, check if it's truncated
-  if (option.type === 'domain' && option.subType === 'fqdn' && option.entityData) {
+  if (
+    option.type === 'domain' &&
+    option.subType === 'fqdn' &&
+    option.entityData
+  ) {
     const { fullDomain, isTruncated } = option.entityData;
     if (isTruncated && fullDomain) {
       return {
@@ -103,22 +110,26 @@ export const formatDisplayName = (
  */
 export const isPublicIP = (ip: string): boolean => {
   const parts = ip.split('.').map(Number);
-  if (parts.length !== 4 || parts.some(part => Number.isNaN(Number(part)) || part < 0 || part > 255)) {
+  if (
+    parts.length !== 4 ||
+    parts.some((part) => Number.isNaN(Number(part)) || part < 0 || part > 255)
+  ) {
     return false;
   }
 
-  const [a, b] = parts; // Safe because we validated length and values above
+  const a = parts[0];
+  const b = parts[1];
 
   // Private ranges (RFC 1918)
   if (a === 10) return false; // 10.0.0.0/8
-  if (a === 172 && b >= 16 && b <= 31) return false; // 172.16.0.0/12
+  if (a === 172 && b !== undefined && b >= 16 && b <= 31) return false; // 172.16.0.0/12
   if (a === 192 && b === 168) return false; // 192.168.0.0/16
 
   // Other non-routable ranges
   if (a === 127) return false; // 127.0.0.0/8 (loopback)
   if (a === 169 && b === 254) return false; // 169.254.0.0/16 (link-local)
   if (a === 0) return false; // 0.0.0.0/8
-  if (a >= PRIVATE_IP_RANGES.MULTICAST_START) return false; // 224.0.0.0/4 (multicast/reserved)
+  if (a !== undefined && a >= PRIVATE_IP_RANGES.MULTICAST_START) return false; // 224.0.0.0/4 (multicast/reserved)
 
   return true;
 };
@@ -137,7 +148,9 @@ export const isExternalFQDN = (hostname: string): boolean => {
 
   // Filter out internal domain patterns
   const lowerHostname = hostname.toLowerCase();
-  return !INTERNAL_DOMAIN_PATTERNS.some(pattern => lowerHostname.endsWith(pattern));
+  return !INTERNAL_DOMAIN_PATTERNS.some((pattern) =>
+    lowerHostname.endsWith(pattern),
+  );
 };
 
 /**
@@ -146,11 +159,9 @@ export const isExternalFQDN = (hostname: string): boolean => {
 export const calculateEntityCounts = (options: ContextOption[]) => {
   return {
     total: options.length,
-    domains: options.filter(opt => opt.type === 'domain').length,
-    files: options.filter(opt => opt.type === 'file').length,
-    ips: options.filter(opt => opt.type === 'ip').length,
-    mitres: options.filter(opt => opt.type === 'mitre').length,
+    domains: options.filter((opt) => opt.type === 'domain').length,
+    files: options.filter((opt) => opt.type === 'file').length,
+    ips: options.filter((opt) => opt.type === 'ip').length,
+    mitres: options.filter((opt) => opt.type === 'mitre').length,
   };
 };
-
-

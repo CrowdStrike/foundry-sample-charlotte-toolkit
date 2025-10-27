@@ -1,21 +1,31 @@
 // MITRE ATT&CK technique processing utilities
 
-import { ContextOption } from '../../types';
+import type { ContextOption } from '../../types';
 import { createQueryTemplate } from '../queryTemplates';
 
 /**
  * Extract MITRE ATT&CK techniques from various detection data structures
  */
-export const extractMITREFromDetection = (detection: any, options: ContextOption[]): void => {
+export const extractMITREFromDetection = (
+  // biome-ignore lint/suspicious/noExplicitAny: detection accepts any Falcon API detection structure
+  detection: any,
+  options: ContextOption[],
+): void => {
   if (!detection) return;
 
   const mitreMap = new Map<
     string,
-    { techniqueName?: string; tactic?: string; count: number; sources: string[] }
+    {
+      techniqueName?: string;
+      tactic?: string;
+      count: number;
+      sources: string[];
+    }
   >();
 
   // Method 1: From detection.behaviors array
   if (detection.behaviors && Array.isArray(detection.behaviors)) {
+    // biome-ignore lint/suspicious/noExplicitAny: behavior objects have varying structures from Falcon API
     detection.behaviors.forEach((behavior: any) => {
       if (behavior.technique_id) {
         const techniqueId = behavior.technique_id.toUpperCase();
@@ -23,7 +33,10 @@ export const extractMITREFromDetection = (detection: any, options: ContextOption
         // Validate MITRE technique ID format (T1055, T1003.001, etc.)
         const mitrePattern = /^T\d{4}(\.\d{3})?$/;
         if (mitrePattern.test(techniqueId)) {
-          const existing = mitreMap.get(techniqueId) ?? { count: 0, sources: [] };
+          const existing = mitreMap.get(techniqueId) ?? {
+            count: 0,
+            sources: [],
+          };
           existing.count += 1;
           existing.sources.push('detection_behaviors');
 
@@ -43,13 +56,17 @@ export const extractMITREFromDetection = (detection: any, options: ContextOption
 
   // Method 2: From detection.kill_chain array
   if (detection.kill_chain && Array.isArray(detection.kill_chain)) {
+    // biome-ignore lint/suspicious/noExplicitAny: kill_chain phase objects have varying structures from Falcon API
     detection.kill_chain.forEach((phase: any) => {
       if (phase.technique_id) {
         const techniqueId = phase.technique_id.toUpperCase();
         const mitrePattern = /^T\d{4}(\.\d{3})?$/;
 
         if (mitrePattern.test(techniqueId)) {
-          const existing = mitreMap.get(techniqueId) ?? { count: 0, sources: [] };
+          const existing = mitreMap.get(techniqueId) ?? {
+            count: 0,
+            sources: [],
+          };
           existing.count += 1;
           existing.sources.push('kill_chain');
 
@@ -68,13 +85,17 @@ export const extractMITREFromDetection = (detection: any, options: ContextOption
 
   // Method 3: From detection.mitre_attack array (common in activity detections)
   if (detection.mitre_attack && Array.isArray(detection.mitre_attack)) {
+    // biome-ignore lint/suspicious/noExplicitAny: mitre_attack objects have varying structures from Falcon API
     detection.mitre_attack.forEach((attack: any) => {
       if (attack.technique_id) {
         const techniqueId = attack.technique_id.toUpperCase();
         const mitrePattern = /^T\d{4}(\.\d{3})?$/;
 
         if (mitrePattern.test(techniqueId)) {
-          const existing = mitreMap.get(techniqueId) ?? { count: 0, sources: [] };
+          const existing = mitreMap.get(techniqueId) ?? {
+            count: 0,
+            sources: [],
+          };
           existing.count += 1;
           existing.sources.push('mitre_attack');
 
@@ -131,7 +152,9 @@ export const extractMITREFromDetection = (detection: any, options: ContextOption
       displayName,
       type: 'mitre',
       subType: 'technique',
-      queryTemplate: createQueryTemplate('mitre', techniqueId, { techniqueName }),
+      queryTemplate: createQueryTemplate('mitre', techniqueId, {
+        techniqueName,
+      }),
       entityData: {
         techniqueId,
         techniqueName,
@@ -154,6 +177,7 @@ export const isValidMITRETechnique = (techniqueId: string): boolean => {
 /**
  * Extract technique ID from various MITRE data formats
  */
+// biome-ignore lint/suspicious/noExplicitAny: mitreData accepts various MITRE technique formats (string or object)
 export const extractTechniqueId = (mitreData: any): string | null => {
   if (typeof mitreData === 'string') {
     return isValidMITRETechnique(mitreData) ? mitreData.toUpperCase() : null;
@@ -180,16 +204,24 @@ export const extractTechniqueId = (mitreData: any): string | null => {
 /**
  * Process MITRE techniques from incident data (for legacy support)
  */
+// biome-ignore lint/suspicious/noExplicitAny: entityValues accepts any Falcon API entity structure
 export const processMITRETechniques = (entityValues: any): ContextOption[] => {
   if (!entityValues) {
     return [];
   }
-  
+
   const options: ContextOption[] = [];
 
-  if (entityValues.mitre_techniques && Array.isArray(entityValues.mitre_techniques)) {
-    const mitreMap = new Map<string, { techniqueName?: string; tactic?: string; count: number }>();
+  if (
+    entityValues.mitre_techniques &&
+    Array.isArray(entityValues.mitre_techniques)
+  ) {
+    const mitreMap = new Map<
+      string,
+      { techniqueName?: string; tactic?: string; count: number }
+    >();
 
+    // biome-ignore lint/suspicious/noExplicitAny: technique objects have varying structures from Falcon API
     entityValues.mitre_techniques.forEach((technique: any) => {
       const techniqueId = extractTechniqueId(technique);
       if (techniqueId) {
@@ -225,7 +257,9 @@ export const processMITRETechniques = (entityValues: any): ContextOption[] => {
         displayName,
         type: 'mitre',
         subType: 'technique',
-        queryTemplate: createQueryTemplate('mitre', techniqueId, { techniqueName }),
+        queryTemplate: createQueryTemplate('mitre', techniqueId, {
+          techniqueName,
+        }),
         entityData: {
           techniqueId,
           techniqueName,

@@ -1,27 +1,34 @@
 // Context processing orchestrator - combines all entity processors
 
-import { ContextOption } from '../../types';
+import type { ContextOption } from '../../types';
 
-import { processDomains, extractDomainsFromDetection } from './DomainProcessor';
-import { processFiles, processLegacyFiles, extractFilesFromDetection } from './FileProcessor';
-import { processIPs, extractIPsFromDetection } from './IpProcessor';
-import { extractMITREFromDetection, processMITRETechniques } from './MitreProcessor';
+import { extractDomainsFromDetection, processDomains } from './DomainProcessor';
+import {
+  extractFilesFromDetection,
+  processFiles,
+  processLegacyFiles,
+} from './FileProcessor';
+import { extractIPsFromDetection, processIPs } from './IpProcessor';
+import {
+  extractMITREFromDetection,
+  processMITRETechniques,
+} from './MitreProcessor';
 
 // Re-export helper functions for backward compatibility
 export {
-  truncateHash,
-  extractTopLevelDomain,
-  truncateDomain,
-  isDomainTruncated,
-  formatDisplayName,
-  isPublicIP,
-  isExternalFQDN,
   calculateEntityCounts,
+  extractTopLevelDomain,
+  formatDisplayName,
+  isExternalFQDN,
+  isPublicIP,
+  truncateDomain,
+  truncateHash,
 } from './EntityHelpers';
 
 /**
  * Extract entities from detection data structure with lowercase normalization
  */
+// biome-ignore lint/suspicious/noExplicitAny: detection accepts any Falcon API detection structure
 const extractDetectionEntities = (detection: any): ContextOption[] => {
   const options: ContextOption[] = [];
 
@@ -39,6 +46,7 @@ const extractDetectionEntities = (detection: any): ContextOption[] => {
 /**
  * Main processing function that coordinates all entity processing
  */
+// biome-ignore lint/suspicious/noExplicitAny: falconData accepts any Falcon API response structure
 export const processAllEntities = (falconData: any): ContextOption[] => {
   if (!falconData) return [];
 
@@ -68,11 +76,14 @@ export const processAllEntities = (falconData: any): ContextOption[] => {
 };
 
 // Export individual processors for advanced usage
-
-// Export the main processing function as default
-export default processAllEntities;
-
-export { processDomains, extractDomainsFromDetection } from './DomainProcessor';
-export { processFiles, processLegacyFiles, extractFilesFromDetection } from './FileProcessor';
-export { processIPs, extractIPsFromDetection } from './IpProcessor';
-export { processMITRETechniques, extractMITREFromDetection } from './MitreProcessor';
+export { extractDomainsFromDetection, processDomains } from './DomainProcessor';
+export {
+  extractFilesFromDetection,
+  processFiles,
+  processLegacyFiles,
+} from './FileProcessor';
+export { extractIPsFromDetection, processIPs } from './IpProcessor';
+export {
+  extractMITREFromDetection,
+  processMITRETechniques,
+} from './MitreProcessor';

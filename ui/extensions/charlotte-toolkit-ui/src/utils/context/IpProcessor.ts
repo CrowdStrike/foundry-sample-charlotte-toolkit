@@ -1,6 +1,6 @@
 // IP address processing utilities
 
-import { ContextOption } from '../../types';
+import type { ContextOption } from '../../types';
 import { createQueryTemplate } from '../queryTemplates';
 
 import { isPublicIP } from './EntityHelpers';
@@ -8,11 +8,12 @@ import { isPublicIP } from './EntityHelpers';
 /**
  * Process IP addresses and filter out private/internal ones
  */
+// biome-ignore lint/suspicious/noExplicitAny: entityValues accepts any Falcon API entity structure
 export const processIPs = (entityValues: any): ContextOption[] => {
   if (!entityValues) {
     return [];
   }
-  
+
   const options: ContextOption[] = [];
 
   if (entityValues.ipv4s && Array.isArray(entityValues.ipv4s)) {
@@ -33,13 +34,20 @@ export const processIPs = (entityValues: any): ContextOption[] => {
 /**
  * Extract IP entities from detection data with validation
  */
-export const extractIPsFromDetection = (detection: any, options: ContextOption[]): void => {
+export const extractIPsFromDetection = (
+  // biome-ignore lint/suspicious/noExplicitAny: detection accepts any Falcon API detection structure
+  detection: any,
+  options: ContextOption[],
+): void => {
   if (!detection) return;
 
   // Extract IPs from device information
   if (detection.device) {
     // External IP
-    if (detection.device.external_ip && isPublicIP(detection.device.external_ip)) {
+    if (
+      detection.device.external_ip &&
+      isPublicIP(detection.device.external_ip)
+    ) {
       options.push({
         value: detection.device.external_ip.toLowerCase(),
         displayName: detection.device.external_ip.toLowerCase(),

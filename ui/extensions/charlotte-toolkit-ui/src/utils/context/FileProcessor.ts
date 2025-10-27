@@ -1,7 +1,10 @@
 // File and hash processing utilities
 
-import { ContextOption } from '../../types';
-import { createQueryTemplate, createHashQueryTemplate } from '../queryTemplates';
+import type { ContextOption } from '../../types';
+import {
+  createHashQueryTemplate,
+  createQueryTemplate,
+} from '../queryTemplates';
 
 import { truncateHash } from './EntityHelpers';
 
@@ -9,15 +12,23 @@ import { truncateHash } from './EntityHelpers';
  * Process files and hashes with proper parent-child grouping
  * Filename as parent, hashes as children. MD5 only shown if no SHA256 available.
  */
-export const processFiles = (entityValues: any, entities: any): ContextOption[] => {
+export const processFiles = (
+  // biome-ignore lint/suspicious/noExplicitAny: entityValues accepts any Falcon API entity structure
+  entityValues: any,
+  // biome-ignore lint/suspicious/noExplicitAny: entities accepts any Falcon API entity structure
+  entities: any,
+): ContextOption[] => {
   if (!entityValues || !entities) {
     return [];
   }
-  
+
   const options: ContextOption[] = [];
 
   // Create a comprehensive file-to-hash mapping
-  const fileHashMap = new Map<string, { sha256Hashes: Set<string>; md5Hashes: Set<string> }>();
+  const fileHashMap = new Map<
+    string,
+    { sha256Hashes: Set<string>; md5Hashes: Set<string> }
+  >();
 
   // Collect all SHA256 hashes from various sources
   const sha256Array = entityValues.sha256s ?? [];
@@ -41,10 +52,13 @@ export const processFiles = (entityValues: any, entities: any): ContextOption[] 
         typeof sha256Hash === 'string'
       ) {
         if (!fileHashMap.has(filename)) {
-          fileHashMap.set(filename, { sha256Hashes: new Set(), md5Hashes: new Set() });
+          fileHashMap.set(filename, {
+            sha256Hashes: new Set(),
+            md5Hashes: new Set(),
+          });
         }
 
-        fileHashMap.get(filename)!.sha256Hashes.add(sha256Hash);
+        fileHashMap.get(filename)?.sha256Hashes.add(sha256Hash);
       }
     }
 
@@ -53,12 +67,20 @@ export const processFiles = (entityValues: any, entities: any): ContextOption[] 
       for (const [i, filename] of fileNameArray.entries()) {
         const md5Hash = md5Array[i];
 
-        if (filename && typeof filename === 'string' && md5Hash && typeof md5Hash === 'string') {
+        if (
+          filename &&
+          typeof filename === 'string' &&
+          md5Hash &&
+          typeof md5Hash === 'string'
+        ) {
           if (!fileHashMap.has(filename)) {
-            fileHashMap.set(filename, { sha256Hashes: new Set(), md5Hashes: new Set() });
+            fileHashMap.set(filename, {
+              sha256Hashes: new Set(),
+              md5Hashes: new Set(),
+            });
           }
 
-          fileHashMap.get(filename)!.md5Hashes.add(md5Hash);
+          fileHashMap.get(filename)?.md5Hashes.add(md5Hash);
         }
       }
     }
@@ -67,8 +89,15 @@ export const processFiles = (entityValues: any, entities: any): ContextOption[] 
     // If we have filenames but no positional association, create entries for standalone hashes
     if (fileNameArray.length > 0) {
       fileNameArray.forEach((filename: string) => {
-        if (filename && typeof filename === 'string' && !fileHashMap.has(filename)) {
-          fileHashMap.set(filename, { sha256Hashes: new Set(), md5Hashes: new Set() });
+        if (
+          filename &&
+          typeof filename === 'string' &&
+          !fileHashMap.has(filename)
+        ) {
+          fileHashMap.set(filename, {
+            sha256Hashes: new Set(),
+            md5Hashes: new Set(),
+          });
         }
       });
     }
@@ -93,7 +122,7 @@ export const processFiles = (entityValues: any, entities: any): ContextOption[] 
     });
 
     // Add SHA256 hashes as children (always preferred)
-    sha256Hashes.forEach(sha256Hash => {
+    sha256Hashes.forEach((sha256Hash) => {
       const truncatedHash = truncateHash(sha256Hash);
       options.push({
         value: `sha256:${sha256Hash}`,
@@ -113,7 +142,7 @@ export const processFiles = (entityValues: any, entities: any): ContextOption[] 
 
     // Add MD5 hashes as children ONLY if no SHA256 hashes exist for this file
     if (sha256Hashes.size === 0 && md5Hashes.size > 0) {
-      md5Hashes.forEach(md5Hash => {
+      md5Hashes.forEach((md5Hash) => {
         const truncatedHash = truncateHash(md5Hash);
         options.push({
           value: `md5:${md5Hash}`,
@@ -143,27 +172,39 @@ export const processFiles = (entityValues: any, entities: any): ContextOption[] 
  * Creates proper parent-child structure: filename as parent, hashes as children
  */
 export const processLegacyFiles = (
+  // biome-ignore lint/suspicious/noExplicitAny: entitiesFull accepts array of any Falcon API entity objects
   entitiesFull: any[],
-  existingOptions: ContextOption[]
+  existingOptions: ContextOption[],
 ): ContextOption[] => {
   const options: ContextOption[] = [];
 
   if (entitiesFull && Array.isArray(entitiesFull)) {
-    const fileMap = new Map<string, { sha256Hashes: Set<string>; md5Hashes: Set<string> }>();
+    const fileMap = new Map<
+      string,
+      { sha256Hashes: Set<string>; md5Hashes: Set<string> }
+    >();
 
     // Process entities_full to collect unique filenames and their hashes
+    // biome-ignore lint/suspicious/noExplicitAny: entity objects have varying structures from Falcon API
     entitiesFull.forEach((entity: any) => {
       if (entity?.FileName) {
         const filename = entity.FileName;
 
         if (!fileMap.has(filename)) {
-          fileMap.set(filename, { sha256Hashes: new Set(), md5Hashes: new Set() });
+          fileMap.set(filename, {
+            sha256Hashes: new Set(),
+            md5Hashes: new Set(),
+          });
         }
 
+        // biome-ignore lint/style/noNonNullAssertion: fileData exists because we just set it above
         const fileData = fileMap.get(filename)!;
 
         // Add SHA256 hashes (automatically deduplicates)
-        if (entity.SHA256HashData && typeof entity.SHA256HashData === 'string') {
+        if (
+          entity.SHA256HashData &&
+          typeof entity.SHA256HashData === 'string'
+        ) {
           fileData.sha256Hashes.add(entity.SHA256HashData);
         }
 
@@ -180,7 +221,7 @@ export const processLegacyFiles = (
 
       // Only create entries if not already handled by main processFiles function
       const filenameExists = existingOptions.some(
-        opt => opt.value === `file:${filename}` && opt.subType === 'filename'
+        (opt) => opt.value === `file:${filename}` && opt.subType === 'filename',
       );
 
       if (!filenameExists && (sha256Hashes.size > 0 || md5Hashes.size > 0)) {
@@ -200,9 +241,11 @@ export const processLegacyFiles = (
         });
 
         // Add SHA256 hashes as children (always preferred)
-        sha256Hashes.forEach(sha256Hash => {
+        sha256Hashes.forEach((sha256Hash) => {
           const optionValue = `sha256:${sha256Hash}`;
-          const alreadyExists = existingOptions.some(opt => opt.value === optionValue);
+          const alreadyExists = existingOptions.some(
+            (opt) => opt.value === optionValue,
+          );
 
           if (!alreadyExists) {
             const truncatedHash = truncateHash(sha256Hash);
@@ -227,9 +270,11 @@ export const processLegacyFiles = (
 
         // Add MD5 hashes as children ONLY if no SHA256 hashes exist for this file
         if (sha256Hashes.size === 0 && md5Hashes.size > 0) {
-          md5Hashes.forEach(md5Hash => {
+          md5Hashes.forEach((md5Hash) => {
             const optionValue = `md5:${md5Hash}`;
-            const alreadyExists = existingOptions.some(opt => opt.value === optionValue);
+            const alreadyExists = existingOptions.some(
+              (opt) => opt.value === optionValue,
+            );
 
             if (!alreadyExists) {
               const truncatedHash = truncateHash(md5Hash);
@@ -262,7 +307,11 @@ export const processLegacyFiles = (
 /**
  * Extract file entities from detection data with hash association
  */
-export const extractFilesFromDetection = (detection: any, options: ContextOption[]): void => {
+export const extractFilesFromDetection = (
+  // biome-ignore lint/suspicious/noExplicitAny: detection accepts any Falcon API detection structure
+  detection: any,
+  options: ContextOption[],
+): void => {
   if (!detection) return;
 
   // Extract file information from main detection
@@ -306,7 +355,7 @@ export const extractFilesFromDetection = (detection: any, options: ContextOption
 
       // Only add MD5 if no SHA256 exists
       const hasSha256 = options.some(
-        opt => opt.subType === 'sha256' && opt.parentFile === filename
+        (opt) => opt.subType === 'sha256' && opt.parentFile === filename,
       );
       if (!hasSha256) {
         options.push({
@@ -332,7 +381,7 @@ export const extractFilesFromDetection = (detection: any, options: ContextOption
 
       // Only add SHA1 if no SHA256 exists
       const hasSha256 = options.some(
-        opt => opt.subType === 'sha256' && opt.parentFile === filename
+        (opt) => opt.subType === 'sha256' && opt.parentFile === filename,
       );
       if (!hasSha256) {
         options.push({
@@ -361,7 +410,9 @@ export const extractFilesFromDetection = (detection: any, options: ContextOption
       const filename = parent.filename.toLowerCase();
 
       // Avoid duplicates
-      const fileExists = options.some(opt => opt.value === `file:${filename}`);
+      const fileExists = options.some(
+        (opt) => opt.value === `file:${filename}`,
+      );
       if (!fileExists) {
         options.push({
           value: `file:${filename}`,
@@ -400,7 +451,7 @@ export const extractFilesFromDetection = (detection: any, options: ContextOption
 
           // Only add MD5 if no SHA256 exists for this file
           const hasSha256 = options.some(
-            opt => opt.subType === 'sha256' && opt.parentFile === filename
+            (opt) => opt.subType === 'sha256' && opt.parentFile === filename,
           );
           if (!hasSha256) {
             options.push({
@@ -432,7 +483,9 @@ export const extractFilesFromDetection = (detection: any, options: ContextOption
       const filename = grandparent.filename.toLowerCase();
 
       // Avoid duplicates
-      const fileExists = options.some(opt => opt.value === `file:${filename}`);
+      const fileExists = options.some(
+        (opt) => opt.value === `file:${filename}`,
+      );
       if (!fileExists) {
         options.push({
           value: `file:${filename}`,
@@ -471,7 +524,7 @@ export const extractFilesFromDetection = (detection: any, options: ContextOption
 
           // Only add MD5 if no SHA256 exists for this file
           const hasSha256 = options.some(
-            opt => opt.subType === 'sha256' && opt.parentFile === filename
+            (opt) => opt.subType === 'sha256' && opt.parentFile === filename,
           );
           if (!hasSha256) {
             options.push({

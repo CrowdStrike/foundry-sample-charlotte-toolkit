@@ -1,19 +1,24 @@
 // Domain processing utilities
 
-import { ContextOption } from '../../types';
+import type { ContextOption } from '../../types';
 import { createQueryTemplate } from '../queryTemplates';
 
-import { extractTopLevelDomain, truncateDomain, isExternalFQDN } from './EntityHelpers';
+import {
+  extractTopLevelDomain,
+  isExternalFQDN,
+  truncateDomain,
+} from './EntityHelpers';
 
 /**
  * Process domains with hierarchical structure: TLD as parent, full domains as children
  * Filters out internal/non-routable domains
  */
+// biome-ignore lint/suspicious/noExplicitAny: entityValues accepts any Falcon API entity structure
 export const processDomains = (entityValues: any): ContextOption[] => {
   if (!entityValues) {
     return [];
   }
-  
+
   const domainMap = new Map<string, { count: number; sources: string[] }>();
 
   // Add domains from direct domain_names array
@@ -29,7 +34,10 @@ export const processDomains = (entityValues: any): ContextOption[] => {
   }
 
   // Add domains from email addresses
-  if (entityValues.email_addresses && Array.isArray(entityValues.email_addresses)) {
+  if (
+    entityValues.email_addresses &&
+    Array.isArray(entityValues.email_addresses)
+  ) {
     entityValues.email_addresses.forEach((email: string) => {
       const [, domain] = email.split('@');
       if (domain && isExternalFQDN(domain)) {
@@ -59,7 +67,11 @@ export const processDomains = (entityValues: any): ContextOption[] => {
   // Add domains from host_names (previously handled by processFQDNs)
   if (entityValues.host_names && Array.isArray(entityValues.host_names)) {
     entityValues.host_names.forEach((hostname: string) => {
-      if (hostname && typeof hostname === 'string' && isExternalFQDN(hostname)) {
+      if (
+        hostname &&
+        typeof hostname === 'string' &&
+        isExternalFQDN(hostname)
+      ) {
         const existing = domainMap.get(hostname) ?? { count: 0, sources: [] };
         existing.count += 1;
         existing.sources.push('host_names');
@@ -81,12 +93,13 @@ export const processDomains = (entityValues: any): ContextOption[] => {
       tldGroups.set(tld, { domains: [], totalCount: 0, allSources: [] });
     }
 
+    // biome-ignore lint/style/noNonNullAssertion: group exists because we just set it above
     const group = tldGroups.get(tld)!;
     group.domains.push(fullDomain);
     group.totalCount += count;
 
     // Add unique sources
-    sources.forEach(source => {
+    sources.forEach((source) => {
       if (!group.allSources.includes(source)) {
         group.allSources.push(source);
       }
@@ -99,7 +112,9 @@ export const processDomains = (entityValues: any): ContextOption[] => {
   tldGroups.forEach(({ domains, totalCount, allSources }, tld) => {
     // Create TLD as parent entry
     const tldDisplayName =
-      totalCount > 1 ? `${tld.toLowerCase()} (${totalCount} instances)` : tld.toLowerCase();
+      totalCount > 1
+        ? `${tld.toLowerCase()} (${totalCount} instances)`
+        : tld.toLowerCase();
 
     options.push({
       value: `tld:${tld}`,
@@ -116,7 +131,8 @@ export const processDomains = (entityValues: any): ContextOption[] => {
     });
 
     // Create full domains as children under each TLD
-    domains.forEach(fullDomain => {
+    domains.forEach((fullDomain) => {
+      // biome-ignore lint/style/noNonNullAssertion: domainData exists because we're iterating over domains from domainMap
       const domainData = domainMap.get(fullDomain)!;
       const truncatedDomain = truncateDomain(fullDomain);
 
@@ -144,13 +160,20 @@ export const processDomains = (entityValues: any): ContextOption[] => {
 /**
  * Extract domain entities from detection data with validation
  */
-export const extractDomainsFromDetection = (detection: any, options: ContextOption[]): void => {
+export const extractDomainsFromDetection = (
+  // biome-ignore lint/suspicious/noExplicitAny: detection accepts any Falcon API detection structure
+  detection: any,
+  options: ContextOption[],
+): void => {
   if (!detection) return;
 
   // Extract domains from device information
   if (detection.device) {
     // Domains from device
-    if (detection.device.machine_domain && isExternalFQDN(detection.device.machine_domain)) {
+    if (
+      detection.device.machine_domain &&
+      isExternalFQDN(detection.device.machine_domain)
+    ) {
       const domain = detection.device.machine_domain.toLowerCase();
       const truncatedDomain = truncateDomain(domain);
 
@@ -168,12 +191,17 @@ export const extractDomainsFromDetection = (detection: any, options: ContextOpti
     }
 
     // Domain from hostinfo
-    if (detection.device.hostinfo?.domain && isExternalFQDN(detection.device.hostinfo.domain)) {
+    if (
+      detection.device.hostinfo?.domain &&
+      isExternalFQDN(detection.device.hostinfo.domain)
+    ) {
       const domain = detection.device.hostinfo.domain.toLowerCase();
       const truncatedDomain = truncateDomain(domain);
 
       // Avoid duplicates
-      const domainExists = options.some(opt => opt.value === `domain:${domain}`);
+      const domainExists = options.some(
+        (opt) => opt.value === `domain:${domain}`,
+      );
       if (!domainExists) {
         options.push({
           value: `domain:${domain}`,
@@ -202,7 +230,9 @@ export const extractDomainsFromDetection = (detection: any, options: ContextOpti
       const truncatedDomain = truncateDomain(domain);
 
       // Avoid duplicates
-      const domainExists = options.some(opt => opt.value === `domain:${domain}`);
+      const domainExists = options.some(
+        (opt) => opt.value === `domain:${domain}`,
+      );
       if (!domainExists) {
         options.push({
           value: `domain:${domain}`,
