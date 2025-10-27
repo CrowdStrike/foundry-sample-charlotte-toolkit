@@ -9,6 +9,7 @@ export interface SecurityContext {
   detectionType?: string;
   severity?: string;
   timestamp?: string;
+  // biome-ignore lint/suspicious/noExplicitAny: additionalContext accepts arbitrary security metadata from various sources
   additionalContext?: Record<string, any>;
 }
 
@@ -51,49 +52,14 @@ export enum WorkflowStatus {
 }
 
 /**
- * Interface for workflow execution payload
- */
-export interface WorkflowPayload {
-  user_prompt: string;
-  model_name: string;
-  temperature: number;
-  stop_words?: string[];
-  json_schema?: string;
-  data_to_include?: string[];
-}
-
-/**
- * Interface for API error responses
- */
-export interface ApiError {
-  message: string;
-  code?: string;
-}
-
-/**
- * Interface for standard API responses
- */
-export interface ApiResponse<T = unknown> {
-  resources?: T[];
-  errors?: ApiError[];
-}
-
-/**
  * Interface for workflow polling result
  */
 export interface WorkflowPollResult {
   status: WorkflowStatus;
   output_data?: Record<string, unknown>;
   error?: string;
+  // biome-ignore lint/suspicious/noExplicitAny: pollResults contains raw API responses with varying structures
   pollResults?: any[];
-}
-
-/**
- * Interface for workflow execution data from API
- */
-export interface WorkflowExecutionData {
-  status: WorkflowStatus;
-  output_data?: Record<string, unknown>;
 }
 
 /**
