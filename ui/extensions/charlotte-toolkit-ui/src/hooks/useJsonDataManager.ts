@@ -10,12 +10,9 @@ interface JsonContextData {
   falcon_context: {
     socket_info: SocketInfo;
     falcon_object: {
-      // biome-ignore lint/suspicious/noExplicitAny: Falcon data structure is dynamic and varies by context (incident, detection, etc.)
       full_data: any;
       data_structure: string[];
-      // biome-ignore lint/suspicious/noExplicitAny: Incident data structure varies by type and is dynamically typed
       incident: any;
-      // biome-ignore lint/suspicious/noExplicitAny: Detection data structure varies by type and is dynamically typed
       detection: any;
       available_entities: ContextOption[];
       entity_counts: {
@@ -47,13 +44,11 @@ interface JsonContextData {
     content: string | null;
     content_length: number;
     error: string | null;
-    // biome-ignore lint/suspicious/noExplicitAny: Workflow result structure is dynamic and varies by workflow execution
     workflow_result: any;
   };
 }
 
 interface UseJsonDataManagerProps {
-  // biome-ignore lint/suspicious/noExplicitAny: Falcon API data is dynamically typed and varies by context
   falconData: any;
   availableContextOptions: ContextOption[];
   contextCounts: {
@@ -67,11 +62,8 @@ interface UseJsonDataManagerProps {
 
 interface UseJsonDataManagerResult {
   jsonContextData: JsonContextData | null;
-  // biome-ignore lint/suspicious/noExplicitAny: Request params are dynamically typed based on workflow requirements
   initializeRequestData: (requestParams: any) => JsonContextData;
-  // biome-ignore lint/suspicious/noExplicitAny: Request params are dynamically typed based on workflow requirements
   updateRequestData: (requestParams: any) => void;
-  // biome-ignore lint/suspicious/noExplicitAny: Response data structure varies by workflow execution result
   updateResponseData: (responseData: any) => void;
   copyFalconContext: () => Promise<void>;
   copyRequestData: () => Promise<void>;

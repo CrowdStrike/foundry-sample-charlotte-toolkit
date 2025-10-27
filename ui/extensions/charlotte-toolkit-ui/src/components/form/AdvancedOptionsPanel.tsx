@@ -127,7 +127,6 @@ const AdvancedOptionsPanel: React.FC<AdvancedOptionsPanelProps> = ({
         {/* Stop Words */}
         <div className="flex items-start gap-2">
           <div className="flex-1">
-            {/* biome-ignore lint/a11y/noLabelWithoutControl: This is a section header, not a form label - actual input is below */}
             <label className="block text-sm font-medium mb-2">Stop Sequences</label>
             {stopWords.length > 0 ? (
               <div
@@ -138,7 +137,6 @@ const AdvancedOptionsPanel: React.FC<AdvancedOptionsPanelProps> = ({
                 }}
               >
                 {stopWords.map((word, index) => {
-                  // biome-ignore lint/suspicious/noArrayIndexKey: Stop words array is stable and doesn't reorder, index is safe as key
                   return (
                     <div
                       key={index}
@@ -230,7 +228,6 @@ const AdvancedOptionsPanel: React.FC<AdvancedOptionsPanelProps> = ({
         {/* Data to Include */}
         <div className="flex items-start gap-2">
           <div className="flex-1">
-            {/* biome-ignore lint/a11y/noLabelWithoutControl: This is a section header, not a form label - actual input is below */}
             <label className="block text-sm font-medium mb-2">Data to Include</label>
             {dataToInclude.length > 0 ? (
               <div
@@ -241,7 +238,6 @@ const AdvancedOptionsPanel: React.FC<AdvancedOptionsPanelProps> = ({
                 }}
               >
                 {dataToInclude.map((data, index) => {
-                  // biome-ignore lint/suspicious/noArrayIndexKey: Data to include array is stable and doesn't reorder, index is safe as key
                   return (
                     <div
                       key={index}

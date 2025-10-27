@@ -40,7 +40,6 @@ export const InlineCode: React.FC<InlineCodeProps> = ({ children, className }) =
           distance={8}
           hoist
         >
-          {/* biome-ignore lint/a11y/useKeyWithClickEvents: IOC copying is supplementary UX - primary interaction is via adjacent copy button with proper keyboard support */}
           <code
             className="ioc-code cursor-pointer ioc-hover-bg transition-colors"
             onClick={handleIOCCopy}

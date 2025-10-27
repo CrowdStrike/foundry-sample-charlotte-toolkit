@@ -147,7 +147,6 @@ export class ErrorBoundary extends Component<ErrorBoundaryProperties, ErrorBound
                 borderColor: 'var(--cs-border-color-light)',
                 color: 'var(--cs-text-primary)',
                 backgroundColor: 'var(--cs-background-base)',
-                focusRingColor: 'var(--cs-primary)',
               }}
             >
               Try Again
@@ -159,7 +158,6 @@ export class ErrorBoundary extends Component<ErrorBoundaryProperties, ErrorBound
               style={{
                 color: 'white',
                 backgroundColor: 'var(--cs-status-error)',
-                focusRingColor: 'var(--cs-status-error)',
               }}
             >
               Refresh Page

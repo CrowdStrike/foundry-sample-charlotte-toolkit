@@ -37,7 +37,6 @@ import QueryForm from './QueryForm';
 import ResponseDisplay from './ResponseDisplay';
 
 interface HomeProps {
-  // biome-ignore lint/suspicious/noExplicitAny: Falcon API has complex dynamic runtime types from @crowdstrike/foundry-js that vary by context
   falcon: any;
 }
 
