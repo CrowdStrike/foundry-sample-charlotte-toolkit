@@ -110,18 +110,19 @@ export const isPublicIP = (ip: string): boolean => {
     return false;
   }
 
-  const [a, b] = parts; // Safe because we validated length and values above
+  // Type assertion is safe because we validated length and values above
+  const [a, b] = parts as [number, number, number, number];
 
   // Private ranges (RFC 1918)
   if (a === 10) return false; // 10.0.0.0/8
-  if (a === 172 && b! >= 16 && b! <= 31) return false; // 172.16.0.0/12
+  if (a === 172 && b >= 16 && b <= 31) return false; // 172.16.0.0/12
   if (a === 192 && b === 168) return false; // 192.168.0.0/16
 
   // Other non-routable ranges
   if (a === 127) return false; // 127.0.0.0/8 (loopback)
   if (a === 169 && b === 254) return false; // 169.254.0.0/16 (link-local)
   if (a === 0) return false; // 0.0.0.0/8
-  if (a! >= PRIVATE_IP_RANGES.MULTICAST_START) return false; // 224.0.0.0/4 (multicast/reserved)
+  if (a >= PRIVATE_IP_RANGES.MULTICAST_START) return false; // 224.0.0.0/4 (multicast/reserved)
 
   return true;
 };
