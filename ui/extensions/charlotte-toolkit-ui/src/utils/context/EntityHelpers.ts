@@ -55,13 +55,6 @@ export const truncateDomain = (domain: string, maxLength: number = 32): string =
 };
 
 /**
- * Check if a domain needs truncation
- */
-export const isDomainTruncated = (originalDomain: string, maxLength: number = 32): boolean => {
-  return originalDomain.length > maxLength;
-};
-
-/**
  * Format display names for better readability
  * Returns both display text and original text for tooltip support
  */
@@ -75,7 +68,7 @@ export const formatDisplayName = (
 
       // Get the original hash from entityData
       const originalHash = option.entityData?.hash;
-      if (originalHash && originalHash !== displayedHash) {
+      if (typeof originalHash === 'string' && originalHash !== displayedHash) {
         return {
           displayText: option.displayName, // Already formatted with truncated hash
           originalText: `${type}: ${originalHash}`, // Show full hash in tooltip
@@ -86,8 +79,9 @@ export const formatDisplayName = (
 
   // For domain entries, check if it's truncated
   if (option.type === 'domain' && option.subType === 'fqdn' && option.entityData) {
-    const { fullDomain, isTruncated } = option.entityData;
-    if (isTruncated && fullDomain) {
+    const fullDomain = option.entityData.fullDomain;
+    const isTruncated = option.entityData.isTruncated;
+    if (isTruncated && typeof fullDomain === 'string') {
       return {
         displayText: option.displayName, // Already truncated
         originalText: fullDomain, // Show original full domain

@@ -1,82 +1,3 @@
-// Core Foundry types
-export interface FalconData {
-  incident?: {
-    id: string;
-    name: string;
-    description?: string;
-    created_date?: string;
-    modified_date?: string;
-    status?: string;
-    severity?: number;
-  };
-  detection?: {
-    id: string;
-    name: string;
-    description?: string;
-    created_date?: string;
-    severity?: string;
-  };
-  host?: {
-    id: string;
-    hostname?: string;
-    platform?: string;
-    os_version?: string;
-  };
-}
-
-export interface FalconContext {
-  data?: FalconData;
-  api: {
-    workflows: {
-      postEntitiesExecuteV1: (
-        payload: WorkflowPayload,
-        config?: any,
-      ) => Promise<WorkflowPendingResponse>;
-      getEntitiesExecutionResultsV1: (
-        ids: string[],
-        config?: any,
-      ) => Promise<WorkflowResultResponse>;
-    };
-  };
-}
-
-// Workflow types
-export interface WorkflowPayload {
-  definition_id?: string;
-  name?: string;
-  parameters?: Record<string, any>;
-}
-
-export interface WorkflowPendingResponse {
-  errors?: Array<{ message: string; code?: number }>;
-  resources?: string[];
-  meta?: {
-    query_time: number;
-    pagination?: {
-      offset: number;
-      limit: number;
-      total: number;
-    };
-  };
-}
-
-export interface WorkflowResultResponse {
-  errors?: Array<{ message: string; code?: number }>;
-  resources?: Array<{
-    id: string;
-    status: 'InProgress' | 'Completed' | 'Failed' | 'Cancelled';
-    output_data?: {
-      content?: string;
-      [key: string]: any;
-    };
-    created_date?: string;
-    last_updated?: string;
-  }>;
-  meta?: {
-    query_time: number;
-  };
-}
-
 // LLM API types
 export interface LLMResponse {
   content: string;
@@ -89,23 +10,8 @@ export interface LLMResponse {
   finish_reason?: string;
 }
 
-export interface ModelOption {
-  value: string;
-  label: string;
-  description?: string;
-  maxTokens?: number;
-  costPer1kTokens?: number;
-}
-
-// Hook return types
-export interface UseFalconApiReturn {
-  isInitialized: boolean;
-  falcon: FalconContext | null;
-  error: string | null;
-}
-
 // Cache types
-export interface CacheEntry<T = any> {
+export interface CacheEntry<T = unknown> {
   data: T;
   timestamp: number;
   ttl: number;
@@ -138,11 +44,11 @@ export interface ContextOption {
   parentFile?: string;
   parentDomain?: string;
   queryTemplate: string;
-  entityData?: any;
+  entityData?: Record<string, unknown>;
 }
 
 export interface UseContextProcessorProps {
-  falconData: any;
+  falconData: unknown;
 }
 
 export interface UseContextProcessorResult {
@@ -154,10 +60,4 @@ export interface UseContextProcessorResult {
     ips: number;
     mitres: number;
   };
-}
-
-export interface EntityCounts {
-  domain: number;
-  file: number;
-  ip: number;
 }

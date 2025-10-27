@@ -37,19 +37,3 @@ export const getConfidenceLevelColor = (
       return 'neutral';
   }
 };
-
-/**
- * Get malware classification color
- */
-export const getMalwareClassificationColor = (
-  classification: string,
-): 'danger' | 'warning' | 'neutral' => {
-  switch (classification.toLowerCase()) {
-    case 'malicious':
-      return 'danger';
-    case 'suspicious':
-      return 'warning';
-    default:
-      return 'neutral';
-  }
-};

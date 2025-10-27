@@ -6,14 +6,14 @@ import type { ContextOption } from '../types';
 import { detectCurrentSocket, type SocketInfo } from '../utils/socketDetection';
 import { useCopyToClipboard } from './useCopyToClipboard';
 
-interface JsonContextData {
+type JsonContextData = {
   falcon_context: {
     socket_info: SocketInfo;
     falcon_object: {
-      full_data: any;
+      full_data: unknown;
       data_structure: string[];
-      incident: any;
-      detection: any;
+      incident: unknown;
+      detection: unknown;
       available_entities: ContextOption[];
       entity_counts: {
         total_entities: number;
@@ -44,12 +44,32 @@ interface JsonContextData {
     content: string | null;
     content_length: number;
     error: string | null;
-    workflow_result: any;
+    workflow_result: unknown;
   };
-}
+};
 
-interface UseJsonDataManagerProps {
-  falconData: any;
+type RequestParams = {
+  query: string;
+  model: string;
+  temperature: number;
+  stopWords: string[];
+  jsonSchema: string;
+  dataToInclude: string[];
+  selectedContext: string;
+};
+
+type ResponseData = {
+  executionEndTime: string;
+  executionStartTime: string;
+  success: boolean;
+  fromCache?: boolean;
+  content?: string;
+  error?: string;
+  workflowResult?: unknown;
+};
+
+type UseJsonDataManagerProps = {
+  falconData: unknown;
   availableContextOptions: ContextOption[];
   contextCounts: {
     total: number;
@@ -58,13 +78,13 @@ interface UseJsonDataManagerProps {
     ips: number;
     fqdns: number;
   };
-}
+};
 
-interface UseJsonDataManagerResult {
+type UseJsonDataManagerResult = {
   jsonContextData: JsonContextData | null;
-  initializeRequestData: (requestParams: any) => JsonContextData;
-  updateRequestData: (requestParams: any) => void;
-  updateResponseData: (responseData: any) => void;
+  initializeRequestData: (requestParams: RequestParams) => JsonContextData;
+  updateRequestData: (requestParams: RequestParams) => void;
+  updateResponseData: (responseData: ResponseData) => void;
   copyFalconContext: () => Promise<void>;
   copyRequestData: () => Promise<void>;
   copyResponseData: () => Promise<void>;
@@ -74,7 +94,7 @@ interface UseJsonDataManagerResult {
   requestCopyState: 'clipboard' | 'check-circle';
   responseCopyState: 'clipboard' | 'check-circle';
   rawResponseCopyState: 'clipboard' | 'check-circle';
-}
+};
 
 /**
  * Custom hook to manage JSON context data for the application
@@ -107,9 +127,10 @@ export const useJsonDataManager = ({
         socket_info: socketInfo,
         falcon_object: {
           full_data: falconData,
-          data_structure: Object.keys(falconData),
-          incident: falconData.incident ?? null,
-          detection: falconData.detection ?? null,
+          data_structure:
+            falconData && typeof falconData === 'object' ? Object.keys(falconData) : [],
+          incident: (falconData as Record<string, unknown>)?.incident ?? null,
+          detection: (falconData as Record<string, unknown>)?.detection ?? null,
           available_entities: availableContextOptions,
           entity_counts: {
             total_entities: contextCounts.total,
@@ -131,20 +152,16 @@ export const useJsonDataManager = ({
 
   // Initialize request data and return updated context
   const initializeRequestData = useCallback(
-    (requestParams: {
-      query: string;
-      model: string;
-      temperature: number;
-      stopWords: string[];
-      jsonSchema: string;
-      dataToInclude: string[];
-      selectedContext: string;
-    }): JsonContextData => {
+    (requestParams: RequestParams): JsonContextData => {
       const executionStartTime = new Date().toISOString();
+
+      if (!jsonContextData) {
+        throw new Error('Cannot initialize request data: jsonContextData is null');
+      }
 
       // Create the updated context directly
       const updatedContext: JsonContextData = {
-        ...jsonContextData!,
+        ...jsonContextData,
         request_data: {
           timestamp: executionStartTime,
           parameters: requestParams,
@@ -161,68 +178,46 @@ export const useJsonDataManager = ({
   );
 
   // Update request data in real-time (preserves existing timestamp)
-  const updateRequestData = useCallback(
-    (requestParams: {
-      query: string;
-      model: string;
-      temperature: number;
-      stopWords: string[];
-      jsonSchema: string;
-      dataToInclude: string[];
-      selectedContext: string;
-    }) => {
-      setJsonContextData((prevState) => {
-        if (!prevState) return prevState;
+  const updateRequestData = useCallback((requestParams: RequestParams) => {
+    setJsonContextData((prevState) => {
+      if (!prevState) return prevState;
 
-        return {
-          ...prevState,
-          request_data: {
-            timestamp: prevState.request_data?.timestamp ?? '', // Don't generate new timestamp during updates
-            parameters: requestParams,
-          },
-        };
-      });
-    },
-    [],
-  );
+      return {
+        ...prevState,
+        request_data: {
+          timestamp: prevState.request_data?.timestamp ?? '', // Don't generate new timestamp during updates
+          parameters: requestParams,
+        },
+      };
+    });
+  }, []);
 
   // Update response data
-  const updateResponseData = useCallback(
-    (responseData: {
-      executionEndTime: string;
-      executionStartTime: string;
-      success: boolean;
-      fromCache?: boolean;
-      content?: string;
-      error?: string;
-      workflowResult?: any;
-    }) => {
-      setJsonContextData((prevState) => {
-        if (!prevState) {
-          return prevState;
-        }
+  const updateResponseData = useCallback((responseData: ResponseData) => {
+    setJsonContextData((prevState) => {
+      if (!prevState) {
+        return prevState;
+      }
 
-        const newResponseData = {
-          timestamp: responseData.executionEndTime,
-          execution_time_ms:
-            new Date(responseData.executionEndTime).getTime() -
-            new Date(responseData.executionStartTime).getTime(),
-          success: responseData.success,
-          from_cache: responseData.fromCache ?? false,
-          content: responseData.content ?? null,
-          content_length: responseData.content?.length ?? 0,
-          error: responseData.error ?? null,
-          workflow_result: responseData.workflowResult,
-        };
+      const newResponseData = {
+        timestamp: responseData.executionEndTime,
+        execution_time_ms:
+          new Date(responseData.executionEndTime).getTime() -
+          new Date(responseData.executionStartTime).getTime(),
+        success: responseData.success,
+        from_cache: responseData.fromCache ?? false,
+        content: responseData.content ?? null,
+        content_length: responseData.content?.length ?? 0,
+        error: responseData.error ?? null,
+        workflow_result: responseData.workflowResult,
+      };
 
-        return {
-          ...prevState,
-          response_data: newResponseData,
-        };
-      });
-    },
-    [],
-  );
+      return {
+        ...prevState,
+        response_data: newResponseData,
+      };
+    });
+  }, []);
 
   // Copy falcon context to clipboard with visual feedback
   const copyFalconContext = useCallback(async () => {
@@ -272,5 +267,3 @@ export const useJsonDataManager = ({
     rawResponseCopyState,
   };
 };
-
-export type { JsonContextData, UseJsonDataManagerProps, UseJsonDataManagerResult };

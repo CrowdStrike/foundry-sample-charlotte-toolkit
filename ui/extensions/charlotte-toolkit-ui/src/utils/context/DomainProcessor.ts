@@ -9,16 +9,17 @@ import { extractTopLevelDomain, isExternalFQDN, truncateDomain } from './EntityH
  * Process domains with hierarchical structure: TLD as parent, full domains as children
  * Filters out internal/non-routable domains
  */
-export const processDomains = (entityValues: any): ContextOption[] => {
+export const processDomains = (entityValues: unknown): ContextOption[] => {
   if (!entityValues) {
     return [];
   }
 
+  const entityValuesRecord = entityValues as Record<string, unknown>;
   const domainMap = new Map<string, { count: number; sources: string[] }>();
 
   // Add domains from direct domain_names array
-  if (entityValues.domain_names && Array.isArray(entityValues.domain_names)) {
-    entityValues.domain_names.forEach((domain: string) => {
+  if (entityValuesRecord.domain_names && Array.isArray(entityValuesRecord.domain_names)) {
+    entityValuesRecord.domain_names.forEach((domain: string) => {
       if (domain && typeof domain === 'string' && isExternalFQDN(domain)) {
         const existing = domainMap.get(domain) ?? { count: 0, sources: [] };
         existing.count += 1;
@@ -29,8 +30,8 @@ export const processDomains = (entityValues: any): ContextOption[] => {
   }
 
   // Add domains from email addresses
-  if (entityValues.email_addresses && Array.isArray(entityValues.email_addresses)) {
-    entityValues.email_addresses.forEach((email: string) => {
+  if (entityValuesRecord.email_addresses && Array.isArray(entityValuesRecord.email_addresses)) {
+    entityValuesRecord.email_addresses.forEach((email: string) => {
       const [, domain] = email.split('@');
       if (domain && isExternalFQDN(domain)) {
         const existing = domainMap.get(domain) ?? { count: 0, sources: [] };
@@ -42,8 +43,8 @@ export const processDomains = (entityValues: any): ContextOption[] => {
   }
 
   // Add domains from email-formatted usernames
-  if (entityValues.users && Array.isArray(entityValues.users)) {
-    entityValues.users.forEach((user: string) => {
+  if (entityValuesRecord.users && Array.isArray(entityValuesRecord.users)) {
+    entityValuesRecord.users.forEach((user: string) => {
       if (user && typeof user === 'string' && user.includes('@')) {
         const [, domain] = user.split('@');
         if (domain && isExternalFQDN(domain)) {
@@ -57,8 +58,8 @@ export const processDomains = (entityValues: any): ContextOption[] => {
   }
 
   // Add domains from host_names (previously handled by processFQDNs)
-  if (entityValues.host_names && Array.isArray(entityValues.host_names)) {
-    entityValues.host_names.forEach((hostname: string) => {
+  if (entityValuesRecord.host_names && Array.isArray(entityValuesRecord.host_names)) {
+    entityValuesRecord.host_names.forEach((hostname: string) => {
       if (hostname && typeof hostname === 'string' && isExternalFQDN(hostname)) {
         const existing = domainMap.get(hostname) ?? { count: 0, sources: [] };
         existing.count += 1;
@@ -81,7 +82,8 @@ export const processDomains = (entityValues: any): ContextOption[] => {
       tldGroups.set(tld, { domains: [], totalCount: 0, allSources: [] });
     }
 
-    const group = tldGroups.get(tld)!;
+    const group = tldGroups.get(tld);
+    if (!group) return;
     group.domains.push(fullDomain);
     group.totalCount += count;
 
@@ -117,7 +119,8 @@ export const processDomains = (entityValues: any): ContextOption[] => {
 
     // Create full domains as children under each TLD
     domains.forEach((fullDomain) => {
-      const domainData = domainMap.get(fullDomain)!;
+      const domainData = domainMap.get(fullDomain);
+      if (!domainData) return;
       const truncatedDomain = truncateDomain(fullDomain);
 
       options.push({
@@ -144,14 +147,17 @@ export const processDomains = (entityValues: any): ContextOption[] => {
 /**
  * Extract domain entities from detection data with validation
  */
-export const extractDomainsFromDetection = (detection: any, options: ContextOption[]): void => {
+export const extractDomainsFromDetection = (detection: unknown, options: ContextOption[]): void => {
   if (!detection) return;
 
+  const detectionRecord = detection as Record<string, unknown>;
+
   // Extract domains from device information
-  if (detection.device) {
+  if (detectionRecord.device && typeof detectionRecord.device === 'object') {
+    const device = detectionRecord.device as Record<string, unknown>;
     // Domains from device
-    if (detection.device.machine_domain && isExternalFQDN(detection.device.machine_domain)) {
-      const domain = detection.device.machine_domain.toLowerCase();
+    if (typeof device.machine_domain === 'string' && isExternalFQDN(device.machine_domain)) {
+      const domain = device.machine_domain.toLowerCase();
       const truncatedDomain = truncateDomain(domain);
 
       options.push({
@@ -168,32 +174,38 @@ export const extractDomainsFromDetection = (detection: any, options: ContextOpti
     }
 
     // Domain from hostinfo
-    if (detection.device.hostinfo?.domain && isExternalFQDN(detection.device.hostinfo.domain)) {
-      const domain = detection.device.hostinfo.domain.toLowerCase();
-      const truncatedDomain = truncateDomain(domain);
+    if (device.hostinfo && typeof device.hostinfo === 'object') {
+      const hostinfo = device.hostinfo as Record<string, unknown>;
+      if (typeof hostinfo.domain === 'string' && isExternalFQDN(hostinfo.domain)) {
+        const domain = hostinfo.domain.toLowerCase();
+        const truncatedDomain = truncateDomain(domain);
 
-      // Avoid duplicates
-      const domainExists = options.some((opt) => opt.value === `domain:${domain}`);
-      if (!domainExists) {
-        options.push({
-          value: `domain:${domain}`,
-          displayName: truncatedDomain,
-          type: 'domain',
-          subType: 'fqdn',
-          queryTemplate: createQueryTemplate('domain', domain),
-          entityData: {
-            fullDomain: domain,
-            isTruncated: truncatedDomain !== domain,
-          },
-        });
+        // Avoid duplicates
+        const domainExists = options.some((opt) => opt.value === `domain:${domain}`);
+        if (!domainExists) {
+          options.push({
+            value: `domain:${domain}`,
+            displayName: truncatedDomain,
+            type: 'domain',
+            subType: 'fqdn',
+            queryTemplate: createQueryTemplate('domain', domain),
+            entityData: {
+              fullDomain: domain,
+              isTruncated: truncatedDomain !== domain,
+            },
+          });
+        }
       }
     }
   }
 
   // Extract domain from user email if it's external (e.g., gmail.com from user@gmail.com)
   // Note: We don't extract the user account itself as that's private information
-  if (detection.user_principal?.includes('@')) {
-    const email = detection.user_principal.toLowerCase();
+  if (
+    typeof detectionRecord.user_principal === 'string' &&
+    detectionRecord.user_principal.includes('@')
+  ) {
+    const email = detectionRecord.user_principal.toLowerCase();
     const [, domain] = email.split('@');
 
     // Only add domain from email if external (e.g., gmail.com, outlook.com)

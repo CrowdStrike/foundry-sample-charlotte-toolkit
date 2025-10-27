@@ -9,16 +9,6 @@ export const wait = (ms: number = 1000): Promise<void> =>
   new Promise((resolve) => setTimeout(resolve, ms));
 
 /**
- * Create display name for Charlotte workflow
- * @param modelName - Selected Charlotte model name
- * @returns Display name showing the selected model with proper formatting
- */
-export const getDisplayModelName = (modelName: string): string => {
-  // Normalize model name for display (convert underscores to spaces)
-  return modelName.replace(/_/g, ' ');
-};
-
-/**
  * Simple hash function for cache key generation
  * @param str - String to hash
  * @returns Hash number

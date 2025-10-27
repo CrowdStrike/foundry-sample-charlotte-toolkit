@@ -41,7 +41,7 @@ Provide specific, actionable guidance for SOC analysts and incident responders.`
  * @param domain - Domain name to analyze (e.g., 'example.com')
  * @returns Structured query template for comprehensive domain security analysis
  */
-export const createDomainQueryTemplate = (domain: string): string => {
+const createDomainQueryTemplate = (domain: string): string => {
   return BASE_SECURITY_TEMPLATE.replace(/{entityType}/g, 'domain')
     .replace(/{entityValue}/g, domain)
     .replace(/{analysisType}/g, 'DOMAIN')
@@ -54,7 +54,7 @@ export const createDomainQueryTemplate = (domain: string): string => {
  * @param filename - Name of the file to analyze
  * @returns Structured query template for comprehensive file security analysis
  */
-export const createFileQueryTemplate = (filename: string): string => {
+const createFileQueryTemplate = (filename: string): string => {
   return BASE_SECURITY_TEMPLATE.replace(/{entityType}/g, 'file')
     .replace(/{entityValue}/g, filename)
     .replace(/{analysisType}/g, 'FILE')
@@ -68,7 +68,7 @@ export const createFileQueryTemplate = (filename: string): string => {
  * @param hashType - Type of hash (default: 'SHA256')
  * @returns Structured query template for comprehensive malware analysis
  */
-export const createHashQueryTemplate = (hash: string, hashType: string = 'SHA256'): string => {
+const createHashQueryTemplate = (hash: string, hashType: string = 'SHA256'): string => {
   return `Conduct a comprehensive malware analysis of ${hashType} hash "${hash}" and provide a structured security assessment including:
 
 **🦠 MALWARE ANALYSIS**
@@ -104,7 +104,7 @@ Provide specific, actionable guidance for incident response and threat hunting.`
  * @param ip - IP address to analyze (IPv4 or IPv6)
  * @returns Structured query template for comprehensive IP address analysis
  */
-export const createIPQueryTemplate = (ip: string): string => {
+const createIPQueryTemplate = (ip: string): string => {
   return BASE_SECURITY_TEMPLATE.replace(/{entityType}/g, 'IP address')
     .replace(/{entityValue}/g, ip)
     .replace(/{analysisType}/g, 'IP')
@@ -115,7 +115,7 @@ export const createIPQueryTemplate = (ip: string): string => {
 /**
  * Generate FQDN analysis query template
  */
-export const createFQDNQueryTemplate = (fqdn: string): string => {
+const createFQDNQueryTemplate = (fqdn: string): string => {
   return BASE_SECURITY_TEMPLATE.replace(/{entityType}/g, 'hostname')
     .replace(/{entityValue}/g, fqdn)
     .replace(/{analysisType}/g, 'HOSTNAME')
@@ -126,7 +126,7 @@ export const createFQDNQueryTemplate = (fqdn: string): string => {
 /**
  * Generate hostname analysis query template
  */
-export const createHostnameQueryTemplate = (hostname: string): string => {
+const createHostnameQueryTemplate = (hostname: string): string => {
   return BASE_SECURITY_TEMPLATE.replace(/{entityType}/g, 'hostname')
     .replace(/{entityValue}/g, hostname)
     .replace(/{analysisType}/g, 'HOSTNAME')
@@ -137,7 +137,7 @@ export const createHostnameQueryTemplate = (hostname: string): string => {
 /**
  * Generate user analysis query template
  */
-export const createUserQueryTemplate = (user: string): string => {
+const createUserQueryTemplate = (user: string): string => {
   return BASE_SECURITY_TEMPLATE.replace(/{entityType}/g, 'user account')
     .replace(/{entityValue}/g, user)
     .replace(/{analysisType}/g, 'USER ACCOUNT')
@@ -157,7 +157,7 @@ export const createUserQueryTemplate = (user: string): string => {
  * @param techniqueName - Optional technique name for display
  * @returns Structured query template for comprehensive MITRE technique analysis
  */
-export const createMitreQueryTemplate = (techniqueId: string, techniqueName?: string): string => {
+const createMitreQueryTemplate = (techniqueId: string, techniqueName?: string): string => {
   const techniqueDisplay = techniqueName ? `${techniqueId} - ${techniqueName}` : techniqueId;
 
   return `Conduct a comprehensive analysis of MITRE ATT&CK technique "${techniqueDisplay}" and provide a structured assessment including:
@@ -212,13 +212,13 @@ Provide specific, actionable guidance for security analysts, SOC teams, and inci
 export const createQueryTemplate = (
   entityType: 'domain' | 'file' | 'ip' | 'fqdn' | 'hostname' | 'user' | 'mitre',
   entityValue: string,
-  entityData?: any,
+  entityData?: Record<string, unknown>,
 ): string => {
   switch (entityType) {
     case 'domain':
       return createDomainQueryTemplate(entityValue);
     case 'file':
-      if (entityData?.hashType) {
+      if (entityData?.hashType && typeof entityData.hashType === 'string') {
         return createHashQueryTemplate(entityValue, entityData.hashType);
       }
       return createFileQueryTemplate(entityValue);
@@ -231,7 +231,10 @@ export const createQueryTemplate = (
     case 'user':
       return createUserQueryTemplate(entityValue);
     case 'mitre':
-      return createMitreQueryTemplate(entityValue, entityData?.techniqueName);
+      return createMitreQueryTemplate(
+        entityValue,
+        typeof entityData?.techniqueName === 'string' ? entityData.techniqueName : undefined,
+      );
     default: {
       // This should never happen with the current type system, but provides a fallback
       const fallbackEntityType = entityType as string;
@@ -242,46 +245,4 @@ export const createQueryTemplate = (
         .replace(/{responseActions}/g, 'Related indicators and attack patterns');
     }
   }
-};
-
-/**
- * Create grouped file + hash query template for combined analysis
- * @param filename - Name of the file
- * @param hash - File hash
- * @param hashType - Type of hash (default: 'SHA256')
- * @returns Structured query template combining file and hash analysis
- */
-export const createGroupedFileTemplate = (
-  filename: string,
-  hash: string,
-  hashType: string = 'SHA256',
-): string => {
-  return `Conduct a comprehensive security analysis of file "${filename}" (${hashType}: ${hash}) and provide a structured assessment including:
-
-**📁 FILE ANALYSIS**
-- File type and format identification
-- Threat classification (Malicious/Suspicious/Clean/Unknown)
-- Risk level (Critical/High/Medium/Low)
-
-**🔍 BEHAVIORAL ANALYSIS**
-- Primary file functions and capabilities
-- Execution context and dependencies
-- MITRE ATT&CK techniques if applicable
-
-**🎯 INCIDENT CONTEXT**
-- Relevance to current investigation
-- Digital signatures and certificate information
-- Related IOCs for hunting (registry keys, network indicators)
-
-**🚨 RESPONSE ACTIONS**
-- Immediate containment and quarantine steps
-- Detection rules and hunting queries
-- File reputation and sandbox analysis recommendations
-
-**📊 CONFIDENCE ASSESSMENT**
-- Analysis confidence level (High/Medium/Low)
-- Data source reliability
-- Recommended validation and deeper analysis steps
-
-Provide specific, actionable guidance for file-based threat analysis and incident response.`;
 };

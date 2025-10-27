@@ -8,7 +8,7 @@
 /**
  * Supported use cases for Charlotte AI security analysis
  */
-export interface PromptOptions {
+interface PromptOptions {
   useCase:
     | 'hash_analysis'
     | 'ip_investigation'

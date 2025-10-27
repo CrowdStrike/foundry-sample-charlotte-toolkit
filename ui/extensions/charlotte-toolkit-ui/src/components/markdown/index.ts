@@ -6,11 +6,36 @@ import React from 'react';
 import { CodeBlock } from './CodeBlock';
 import { InlineCode } from './InlineCode';
 
-export { CodeBlock } from './CodeBlock';
-export { InlineCode } from './InlineCode';
+// Type definitions
+interface HeadingWithAnchorProps extends React.HTMLAttributes<HTMLHeadingElement> {
+  level: number;
+  children?: React.ReactNode;
+}
 
-// Simple components that don't need separate files
-export const HeadingWithAnchor = ({ level, children, ...props }: any) => {
+interface ListItemProps extends React.HTMLAttributes<HTMLLIElement> {
+  children?: React.ReactNode;
+}
+
+interface CodeRendererProps extends React.HTMLAttributes<HTMLElement> {
+  _node?: unknown;
+  inline?: boolean;
+  className?: string;
+  children?: React.ReactNode;
+}
+
+interface HeadingRendererProps extends React.HTMLAttributes<HTMLHeadingElement> {
+  _node?: unknown;
+  level: number;
+  children?: React.ReactNode;
+}
+
+interface ListItemRendererProps extends React.HTMLAttributes<HTMLLIElement> {
+  _node?: unknown;
+  children?: React.ReactNode;
+}
+
+// Simple components used only internally
+const HeadingWithAnchor = ({ level, children, ...props }: HeadingWithAnchorProps) => {
   const tagName = `h${level}`;
   const id = String(children)
     .toLowerCase()
@@ -39,7 +64,7 @@ export const HeadingWithAnchor = ({ level, children, ...props }: any) => {
   );
 };
 
-export const ListItem = ({ children, ...props }: any) => {
+const ListItem = ({ children, ...props }: ListItemProps) => {
   return React.createElement(
     'li',
     { className: 'flex items-start gap-2', ...props },
@@ -52,12 +77,14 @@ export const ListItem = ({ children, ...props }: any) => {
 };
 
 export const createMarkdownRenderers = () => ({
-  code: ({ _node, inline, className, children, ...props }: any) => {
+  code: ({ inline, className, children }: CodeRendererProps) => {
+    const codeProps = { children, ...(className && { className }) };
     return inline
-      ? React.createElement(InlineCode, { className, ...props }, children)
-      : React.createElement(CodeBlock, { className, ...props }, children);
+      ? React.createElement(InlineCode, codeProps)
+      : React.createElement(CodeBlock, codeProps);
   },
-  heading: ({ _node, level, children, ...props }: any) =>
-    React.createElement(HeadingWithAnchor, { level, ...props }, children),
-  li: ({ _node, children, ...props }: any) => React.createElement(ListItem, { ...props }, children),
+  heading: ({ level, children, ...props }: HeadingRendererProps) =>
+    React.createElement(HeadingWithAnchor, { level, children, ...props }),
+  li: ({ children, ...props }: ListItemRendererProps) =>
+    React.createElement(ListItem, { children, ...props }),
 });

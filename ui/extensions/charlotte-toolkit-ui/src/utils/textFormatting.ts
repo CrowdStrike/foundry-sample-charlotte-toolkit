@@ -171,30 +171,5 @@ const formatters = {
 export const formatTextWithParagraphs = formatters.default;
 export const formatMitreDescription = formatters.mitre;
 
-/**
- * Truncates text to a specified length with ellipsis
- * Used for preview/summary views
- */
-export const truncateText = (text: string, maxLength: number): string => {
-  if (!text || text.length <= maxLength) {
-    return text;
-  }
-
-  // Find the last space before maxLength to avoid cutting words
-  const lastSpace = text.lastIndexOf(' ', maxLength);
-  const cutPoint = lastSpace > maxLength * 0.8 ? lastSpace : maxLength;
-
-  return `${text.substring(0, cutPoint).trim()}...`;
-};
-
-/**
- * Capitalizes first letter of each sentence
- * Ensures consistent formatting
- */
-export const capitalizeFirstLetter = (text: string): string => {
-  if (!text) return text;
-  return `${text.charAt(0).toUpperCase()}${text.slice(1)}`;
-};
-
 // Export formatters for use in universalFormatting.ts
 export { formatters };

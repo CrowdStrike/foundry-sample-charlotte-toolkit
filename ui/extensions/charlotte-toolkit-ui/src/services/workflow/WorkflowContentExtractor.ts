@@ -5,6 +5,9 @@
  * Handles various workflow output formats and ensures robust content extraction
  */
 
+// Export only the functions used by WorkflowExecutor
+export { extractWorkflowContent, validateExtractedContent };
+
 /**
  * Extract content from workflow output data
  * Tries multiple extraction strategies to handle different workflow output formats
@@ -12,7 +15,7 @@
  * @returns Extracted content string
  * @throws Error if no content can be extracted
  */
-export const extractWorkflowContent = (outputData: any): string => {
+const extractWorkflowContent = (outputData: Record<string, unknown> | undefined): string => {
   if (!outputData) {
     throw new Error('No output data received from workflow');
   }
@@ -22,11 +25,11 @@ export const extractWorkflowContent = (outputData: any): string => {
   // Strategy 1: Charlotte workflow dynamic completion field
   // Pattern: "activity_{UUID}.FaaS.nlpassistantapi.llminvocator_handler.completion"
   const dynamicCompletionField = findDynamicCompletionField(outputData);
-  if (dynamicCompletionField) {
-    content = outputData[dynamicCompletionField];
+  if (dynamicCompletionField && typeof outputData[dynamicCompletionField] === 'string') {
+    content = outputData[dynamicCompletionField] as string;
   }
   // Strategy 2: Simple Charlotte schema format
-  else if (outputData.completion) {
+  else if ('completion' in outputData && typeof outputData.completion === 'string') {
     content = outputData.completion;
   }
   // Strategy 3: Legacy fallback formats
@@ -58,7 +61,7 @@ export const extractWorkflowContent = (outputData: any): string => {
  * @param outputData - Output data to search
  * @returns Field name if found, null otherwise
  */
-const findDynamicCompletionField = (outputData: any): string | null => {
+const findDynamicCompletionField = (outputData: Record<string, unknown>): string | null => {
   const found = Object.keys(outputData).find(
     (key) =>
       key.includes('.completion') &&
@@ -76,25 +79,25 @@ const findDynamicCompletionField = (outputData: any): string | null => {
  * @param outputData - Output data to extract from
  * @returns Extracted content or empty string
  */
-const extractFromLegacyFormats = (outputData: any): string => {
+const extractFromLegacyFormats = (outputData: Record<string, unknown>): string => {
   // Try standard content fields
-  if (outputData.content) {
+  if ('content' in outputData && typeof outputData.content === 'string') {
     return outputData.content;
   }
 
-  if (outputData.response) {
+  if ('response' in outputData && typeof outputData.response === 'string') {
     return outputData.response;
   }
 
-  if (outputData.result) {
+  if ('result' in outputData && typeof outputData.result === 'string') {
     return outputData.result;
   }
 
-  if (outputData.output) {
+  if ('output' in outputData && typeof outputData.output === 'string') {
     return outputData.output;
   }
 
-  // Handle string output data directly
+  // Handle string output data directly (should not happen with Record type, but kept for safety)
   if (typeof outputData === 'string') {
     return outputData;
   }
@@ -117,7 +120,7 @@ const extractFromLegacyFormats = (outputData: any): string => {
  * @param outputData - Output data with nested structure
  * @returns Extracted content or empty string
  */
-const extractFromNestedStructure = (outputData: any): string => {
+const extractFromNestedStructure = (outputData: Record<string, unknown>): string => {
   const keys = Object.keys(outputData);
   if (keys.length === 0) {
     return '';
@@ -135,12 +138,13 @@ const extractFromNestedStructure = (outputData: any): string => {
   }
 
   if (firstValue && typeof firstValue === 'object') {
-    if (firstValue.completion) {
-      return firstValue.completion;
+    const objValue = firstValue as Record<string, unknown>;
+    if ('completion' in objValue && typeof objValue.completion === 'string') {
+      return objValue.completion;
     }
 
-    if (firstValue.content) {
-      return firstValue.content;
+    if ('content' in objValue && typeof objValue.content === 'string') {
+      return objValue.content;
     }
   }
 
@@ -151,7 +155,7 @@ const extractFromNestedStructure = (outputData: any): string => {
  * Log detailed information about extraction failure for debugging
  * @param outputData - Output data that failed extraction
  */
-const logExtractionFailure = (outputData: any): void => {
+const logExtractionFailure = (outputData: Record<string, unknown>): void => {
   // console.error('=== CONTENT EXTRACTION FAILURE ===');
   // console.error('Unable to extract content from output data:', outputData);
   // console.error('Available fields:', Object.keys(outputData));
@@ -175,75 +179,11 @@ const logExtractionFailure = (outputData: any): void => {
 };
 
 /**
- * Analyze workflow output structure for debugging
- * @param outputData - Output data to analyze
- * @returns Analysis summary
- */
-export const analyzeWorkflowOutput = (
-  outputData: any,
-): {
-  hasContent: boolean;
-  contentFields: string[];
-  structure: 'simple' | 'nested' | 'complex';
-  recommendedExtraction: string | null;
-} => {
-  if (!outputData || typeof outputData !== 'object') {
-    return {
-      hasContent: false,
-      contentFields: [],
-      structure: 'simple',
-      recommendedExtraction: null,
-    };
-  }
-
-  const keys = Object.keys(outputData);
-  const contentFields = keys.filter(
-    (key) =>
-      key.includes('completion') ||
-      key.includes('content') ||
-      key.includes('response') ||
-      key.includes('result') ||
-      key.includes('output'),
-  );
-
-  // Determine structure complexity
-  let structure: 'simple' | 'nested' | 'complex' = 'simple';
-  const hasNestedObjects = keys.some(
-    (key) => outputData[key] && typeof outputData[key] === 'object',
-  );
-
-  if (hasNestedObjects) {
-    structure = keys.length > 3 ? 'complex' : 'nested';
-  }
-
-  // Find recommended extraction field
-  let recommendedExtraction: string | null = null;
-
-  // Prioritize Charlotte-specific fields
-  const dynamicField = findDynamicCompletionField(outputData);
-  if (dynamicField) {
-    recommendedExtraction = dynamicField;
-  } else if (outputData.completion) {
-    recommendedExtraction = 'completion';
-  } else if (contentFields.length > 0) {
-    const [firstField] = contentFields;
-    recommendedExtraction = firstField ?? null;
-  }
-
-  return {
-    hasContent: contentFields.length > 0,
-    contentFields,
-    structure,
-    recommendedExtraction,
-  };
-};
-
-/**
  * Validate extracted content quality
  * @param content - Extracted content to validate
  * @returns Validation result with quality metrics
  */
-export const validateExtractedContent = (
+const validateExtractedContent = (
   content: string,
 ): {
   isValid: boolean;
@@ -307,42 +247,4 @@ export const validateExtractedContent = (
     estimatedFormat,
     warnings,
   };
-};
-
-/**
- * Extract metadata from workflow output if available
- * @param outputData - Workflow output data
- * @returns Extracted metadata object
- */
-export const extractWorkflowMetadata = (outputData: any): Record<string, any> => {
-  if (!outputData || typeof outputData !== 'object') {
-    return {};
-  }
-
-  const metadata: Record<string, any> = {};
-
-  // Look for metadata fields
-  Object.keys(outputData).forEach((key) => {
-    if (key.includes('.meta') || key.includes('metadata') || key.includes('_meta')) {
-      metadata[key] = outputData[key];
-    }
-  });
-
-  // Extract timing information if available
-  if (outputData.execution_time || outputData.processing_time) {
-    metadata.timing = {
-      execution_time: outputData.execution_time,
-      processing_time: outputData.processing_time,
-    };
-  }
-
-  // Extract model information if available
-  if (outputData.model_used || outputData.model_name) {
-    metadata.model = {
-      model_used: outputData.model_used,
-      model_name: outputData.model_name,
-    };
-  }
-
-  return metadata;
 };
