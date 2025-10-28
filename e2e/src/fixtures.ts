@@ -1,14 +1,9 @@
 import { test as baseTest } from '@playwright/test';
-import { FoundryHomePage } from './pages/FoundryHomePage';
-import { AppManagerPage } from './pages/AppManagerPage';
 import { AppCatalogPage } from './pages/AppCatalogPage';
 import { CharlotteExtensionPage } from './pages/CharlotteExtensionPage';
 import { config } from './config/TestConfig';
-import { logger } from './utils/Logger';
 
 type FoundryFixtures = {
-  foundryHomePage: FoundryHomePage;
-  appManagerPage: AppManagerPage;
   appCatalogPage: AppCatalogPage;
   charlotteExtensionPage: CharlotteExtensionPage;
   appName: string;
@@ -29,15 +24,7 @@ export const test = baseTest.extend<FoundryFixtures>({
     await use(page);
   },
 
-  // Page object fixtures with dependency injection
-  foundryHomePage: async ({ page }, use) => {
-    await use(new FoundryHomePage(page));
-  },
-
-  appManagerPage: async ({ page }, use) => {
-    await use(new AppManagerPage(page));
-  },
-
+  // Page object fixtures
   appCatalogPage: async ({ page }, use) => {
     await use(new AppCatalogPage(page));
   },
@@ -46,7 +33,7 @@ export const test = baseTest.extend<FoundryFixtures>({
     await use(new CharlotteExtensionPage(page));
   },
 
-  // App name from centralized config
+  // App name from config
   appName: async ({}, use) => {
     await use(config.appName);
   },

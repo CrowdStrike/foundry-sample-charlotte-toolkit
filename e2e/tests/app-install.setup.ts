@@ -11,7 +11,7 @@ setup('install Charlotte Toolkit app', async ({ appCatalogPage, appName }) => {
     if (!installed) {
       throw new Error(
         `Failed to install app '${appName}'. Please install the app manually at:\n` +
-        `https://falcon.us-2.crowdstrike.com/foundry/app-catalog/179c33c7963e4b1fb33d1d2734e6c621\n` +
+        `https://falcon.us-2.crowdstrike.com/foundry/app-catalog/90f5d42520f6435f890ed94662a25d93\n` +
         `This is a known issue - see #ask-foundry for app installation problems.`
       );
     }
