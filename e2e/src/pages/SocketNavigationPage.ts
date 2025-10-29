@@ -73,13 +73,16 @@ export class SocketNavigationPage extends BasePage {
 
   /**
    * Navigate to XDR Detections page (xdr.detections.panel socket)
-   * Uses menu navigation: Menu → Next-Gen SIEM → appropriate submenu → XDR detections
-   * Note: Requires XDR SKU - may not be available in all environments
+   *
+   * Note: Despite the socket name "xdr.detections.panel", this socket actually appears
+   * on the Incidents page at /xdr/incidents (same as ngsiem.workbench.details).
+   *
+   * Uses menu navigation: Menu → Next-Gen SIEM → Incidents
    */
   async navigateToXDRDetections(): Promise<void> {
     return this.withTiming(
       async () => {
-        this.logger.info('Navigating to XDR Detections page');
+        this.logger.info('Navigating to XDR Detections page (Incidents)');
 
         // Navigate to Foundry home first to ensure menu is available
         await this.navigateToPath('/foundry/home', 'Foundry home');
@@ -95,17 +98,16 @@ export class SocketNavigationPage extends BasePage {
         await ngsiemButton.click();
         await this.waiter.delay(500);
 
-        // Look for XDR-related navigation items
-        // Note: This may vary based on environment configuration
-        const xdrLink = this.page.getByRole('link', { name: /XDR.*[Dd]etections?/i });
-        await xdrLink.click();
+        // Click "Incidents" - use section-link selector to avoid the learn card
+        const incidentsLink = this.page.getByTestId('section-link').filter({ hasText: /Incidents/i });
+        await incidentsLink.click();
 
         await this.page.waitForLoadState('networkidle');
 
         const pageTitle = this.page.locator('h1, [role="heading"]').first();
         await expect(pageTitle).toBeVisible({ timeout: 10000 });
 
-        this.logger.success('Navigated to XDR Detections page');
+        this.logger.success('Navigated to XDR Detections page (Incidents)');
       },
       'Navigate to XDR Detections'
     );

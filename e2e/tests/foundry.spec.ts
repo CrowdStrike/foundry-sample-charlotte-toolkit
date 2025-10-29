@@ -17,7 +17,7 @@ test.describe('Charlotte Toolkit - E2E Tests', () => {
     await charlotteExtensionPage.verifyCharlotteExtensionRenders();
   });
 
-  test.skip('should render Charlotte Toolkit extension in XDR Detections (xdr.detections.panel)', async ({
+  test('should render Charlotte Toolkit extension in XDR Detections (xdr.detections.panel)', async ({
     charlotteExtensionPage,
   }) => {
     await charlotteExtensionPage.navigateToXDRDetectionsExtension();
