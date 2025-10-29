@@ -81,13 +81,17 @@ export class SocketNavigationPage extends BasePage {
       async () => {
         this.logger.info('Navigating to XDR Detections page');
 
+        // Navigate to Foundry home first to ensure menu is available
+        await this.navigateToPath('/foundry/home', 'Foundry home');
+        await this.page.waitForLoadState('networkidle');
+
         // Open the hamburger menu
         const menuButton = this.page.getByRole('button', { name: 'Menu' });
         await menuButton.click();
         await this.page.waitForLoadState('networkidle');
 
-        // Click "Next-Gen SIEM"
-        const ngsiemButton = this.page.getByRole('button', { name: /Next-Gen SIEM/i });
+        // Click "Next-Gen SIEM" in the menu (not the home page card)
+        const ngsiemButton = this.page.getByTestId('popout-button').filter({ hasText: /Next-Gen SIEM/i });
         await ngsiemButton.click();
         await this.waiter.delay(500);
 
@@ -117,18 +121,22 @@ export class SocketNavigationPage extends BasePage {
       async () => {
         this.logger.info('Navigating to NGSIEM Incidents page');
 
+        // Navigate to Foundry home first to ensure menu is available
+        await this.navigateToPath('/foundry/home', 'Foundry home');
+        await this.page.waitForLoadState('networkidle');
+
         // Open the hamburger menu
         const menuButton = this.page.getByRole('button', { name: 'Menu' });
         await menuButton.click();
         await this.page.waitForLoadState('networkidle');
 
-        // Click "Next-Gen SIEM"
-        const ngsiemButton = this.page.getByRole('button', { name: /Next-Gen SIEM/i });
+        // Click "Next-Gen SIEM" in the menu (not the home page card)
+        const ngsiemButton = this.page.getByTestId('popout-button').filter({ hasText: /Next-Gen SIEM/i });
         await ngsiemButton.click();
         await this.waiter.delay(500);
 
-        // Look for Incidents navigation
-        const incidentsLink = this.page.getByRole('link', { name: /Incidents/i });
+        // Look for Incidents navigation - use section-link selector to avoid the learn card
+        const incidentsLink = this.page.getByTestId('section-link').filter({ hasText: /Incidents/i });
         await incidentsLink.click();
 
         await this.page.waitForLoadState('networkidle');

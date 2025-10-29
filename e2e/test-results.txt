@@ -1,0 +1,99 @@
+
+> playwright-foundry-charlotte-toolkit@1.0.0 test
+> npx playwright test
+
+[38;5;142m[dotenvx@1.49.0] injecting env (0) from .env[39m
+
+Running 6 tests using 1 worker
+
+[33m[dotenvx@1.49.0] injecting env (0) from .env[39m
+  ✘  1 [setup] › tests/authenticate.setup.ts:9:6 › authenticate (44.3s)
+
+
+  1) [setup] › tests/authenticate.setup.ts:9:6 › authenticate › Expect "toPass" ────────────────────
+
+    Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeOK[2m()[22m
+    Call log:
+    [2m→ POST https://falcon.us-2.crowdstrike.com/api2//identities/self/factors/totp:verify/v1[22m
+    [2m  user-agent: Playwright/1.55.0 (arm64; macOS 15.7) node/22.18[22m
+    [2m  accept: */*[22m
+    [2m  accept-encoding: gzip,deflate,br[22m
+    [2m  x-csrf-token: 4Uhvs0zutDlEd9TTw8e9hTzgoQw=f7219e725bf69653d68c0da4612657e1be74b1df543a8d26398e61a0c241caa037f1fbab4ac408da6fd1a07f6bb730301ab5e41a[22m
+    [2m  content-type: application/json[22m
+    [2m  content-length: 21[22m
+    [2m  cookie: id=MTc2MTY5NzgzN3xMd3dBTERaTWFrSnBSR2xPUTFoTWJWZ3paa1JITmt0MFNsZERibmhPWlZwNlRXaHhkbUozYzBwemJWRktUVEE5fJCtrO3g5hVKu-jQSQiIOS5yTJjO9mOn-XmTshe8wS99; _hc=falcon.us-2.crowdstrike.com[22m
+    [2m← 500 Internal Server Error[22m
+    [2m  date: Wed, 29 Oct 2025 00:31:21 GMT[22m
+    [2m  content-type: application/json[22m
+    [2m  content-length: 179[22m
+    [2m  connection: keep-alive[22m
+    [2m  strict-transport-security: max-age=31536000; includeSubDomains[22m
+    [2m  vary: Origin[22m
+    [2m  expect-ct: max-age=30[22m
+    [2m  x-content-type-options: nosniff[22m
+    [2m  x-xss-protection: 0[22m
+    [2m  x-frame-options: SAMEORIGIN[22m
+    [2m  cache-control: no-store, no-cache, must-revalidate[22m
+    [2m  front-end-https: on[22m
+
+    Response text:
+    [2m{"resources":[],"meta":{"pagination":null,"powered_by":"slayer","query_time":0,"trace_id":"fa1c80bf8da2b227ea4c56df2229fed6"},"errors":[{"code":"500","message":"internal error"}]}[22m
+
+    Call Log:
+    - Test timeout of 45000ms exceeded
+
+       at ../src/authenticate.cjs:68
+
+      66 |
+      67 |         await expect(verifyResponse).toBeOK();
+    > 68 |       }).toPass();
+         |          ^
+      69 |       // retry passcode generation and verification in the off chance that
+      70 |       // the otpauth library generates a passcode which immediately expires
+      71 |
+        at authenticate (/Users/mraible/dev/foundry-sample-charlotte-toolkit/e2e/src/authenticate.cjs:68:10)
+        at /Users/mraible/dev/foundry-sample-charlotte-toolkit/e2e/tests/authenticate.setup.ts:14:3
+
+  1 failed
+    [setup] › tests/authenticate.setup.ts:9:6 › authenticate ───────────────────────────────────────
+  5 did not run
+tivity.detections.details) 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m()[22m failed
+
+    Locator:  locator('h1, h2').filter({ hasText: /Detections/i }).first()
+    Expected: visible
+    Received: <element(s) not found>
+    Timeout:  10000ms
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 10000ms[22m
+    [2m  - waiting for locator('h1, h2').filter({ hasText: /Detections/i }).first()[22m
+
+
+       at ../src/pages/SocketNavigationPage.ts:66
+
+      64 |         // Verify we're on the detections page by looking for the page heading
+      65 |         const pageTitle = this.page.locator('h1, h2').filter({ hasText: /Detections/i }).first();
+    > 66 |         await expect(pageTitle).toBeVisible({ timeout: 10000 });
+         |                                 ^
+      67 |
+      68 |         this.logger.success('Navigated to Endpoint Detections page');
+      69 |       },
+        at /Users/mraible/dev/foundry-sample-charlotte-toolkit/e2e/src/pages/SocketNavigationPage.ts:66:33
+        at CharlotteExtensionPage.withTiming (/Users/mraible/dev/foundry-sample-charlotte-toolkit/e2e/src/pages/BasePage.ts:217:22)
+        at /Users/mraible/dev/foundry-sample-charlotte-toolkit/e2e/src/pages/CharlotteExtensionPage.ts:30:9
+        at CharlotteExtensionPage.withTiming (/Users/mraible/dev/foundry-sample-charlotte-toolkit/e2e/src/pages/BasePage.ts:217:22)
+        at /Users/mraible/dev/foundry-sample-charlotte-toolkit/e2e/tests/foundry.spec.ts:9:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/foundry-Charlotte-Toolkit--ac402-ctivity-detections-details--chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/foundry-Charlotte-Toolkit--ac402-ctivity-detections-details--chromium/error-context.md
+
+  1 failed
+    [chromium] › tests/foundry.spec.ts:6:7 › Charlotte Toolkit - E2E Tests › should render Charlotte Toolkit extension in Endpoint Detections (activity.detections.details) 
+  2 skipped
+  1 did not run
+  2 passed (25.4s)

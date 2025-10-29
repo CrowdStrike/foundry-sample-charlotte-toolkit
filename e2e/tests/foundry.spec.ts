@@ -10,9 +10,7 @@ test.describe('Charlotte Toolkit - E2E Tests', () => {
     await charlotteExtensionPage.verifyCharlotteExtensionRenders();
   });
 
-  // Skipping NGSIEM and XDR tests as they require additional SKUs/access
-  // These sockets are documented in manifest.yml but may not be available in all environments
-  test.skip('should render Charlotte Toolkit extension in NGSIEM Incidents (ngsiem.workbench.details)', async ({
+  test('should render Charlotte Toolkit extension in NGSIEM Incidents (ngsiem.workbench.details)', async ({
     charlotteExtensionPage,
   }) => {
     await charlotteExtensionPage.navigateToNGSIEMIncidentsExtension();
