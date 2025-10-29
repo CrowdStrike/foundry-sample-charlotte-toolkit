@@ -1,0 +1,54 @@
+
+> playwright-foundry-charlotte-toolkit@1.0.0 test
+> npx playwright test
+
+[38;5;142m[dotenvx@1.49.0] injecting env (0) from .env[39m
+
+Running 6 tests using 1 worker
+
+[33m[dotenvx@1.49.0] injecting env (0) from .env[39m
+  ✓  1 [setup] › tests/authenticate.setup.ts:9:6 › authenticate (1.8s)
+🔧 Test Configuration:
+  Environment: Local
+  Base URL: https://falcon.us-2.crowdstrike.com
+  App Name: foundry-sample-charlotte-toolkit
+  Default Timeout: 30000ms
+  Retry Attempts: 2
+  Debug Mode: false (enable with DEBUG=true npm test or npm run test:debug)
+🔍 [1] AppCatalogPage: Check if app 'foundry-sample-charlotte-toolkit' is installed
+ℹ️ Searching for app 'foundry-sample-charlotte-toolkit' in catalog
+🔧 [2] AppCatalogPage: App catalog page
+  ✘  2 [app-install] › tests/app-install.setup.ts:3:6 › install Charlotte Toolkit app (16.2s)
+
+
+  1) [app-install] › tests/app-install.setup.ts:3:6 › install Charlotte Toolkit app ────────────────
+
+    Error: Could not find app 'foundry-sample-charlotte-toolkit' in catalog. Make sure the app is deployed.
+
+       at ../src/pages/AppCatalogPage.ts:52
+
+      50 |       await this.page.waitForLoadState('networkidle');
+      51 |     } catch (error) {
+    > 52 |       throw new Error(`Could not find app '${appName}' in catalog. Make sure the app is deployed.`);
+         |             ^
+      53 |     }
+      54 |   }
+      55 |
+        at AppCatalogPage.searchAndNavigateToApp (/Users/mraible/dev/foundry-sample-charlotte-toolkit/e2e/src/pages/AppCatalogPage.ts:52:13)
+        at AppCatalogPage.isAppInstalled (/Users/mraible/dev/foundry-sample-charlotte-toolkit/e2e/src/pages/AppCatalogPage.ts:63:5)
+        at /Users/mraible/dev/foundry-sample-charlotte-toolkit/e2e/tests/app-install.setup.ts:5:23
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/app-install.setup.ts-install-Charlotte-Toolkit-app-app-install/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/app-install.setup.ts-install-Charlotte-Toolkit-app-app-install/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/app-install.setup.ts-install-Charlotte-Toolkit-app-app-install/error-context.md
+
+  1 failed
+    [app-install] › tests/app-install.setup.ts:3:6 › install Charlotte Toolkit app ─────────────────
+  4 did not run
+  1 passed (18.9s)
