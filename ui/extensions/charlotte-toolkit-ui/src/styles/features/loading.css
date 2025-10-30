@@ -22,8 +22,9 @@
   width: var(--component-size-lg); /* Larger spinner using design token */
   height: var(--component-size-lg);
 
-  /* Add subtle glow effect for CrowdStrike branding */
-  filter: drop-shadow(0 0 8px rgb(var(--cs-color-primary-rgb, 0, 123, 255), var(--opacity-medium)));
+  /* Add subtle glow effect for CrowdStrike branding using proper tokens */
+  filter: drop-shadow(0 0 8px var(--cs-color-primary));
+  opacity: 0.9;
 
   /* Smooth animation */
   animation: loading-pulse 2s ease-in-out infinite alternate;
@@ -33,14 +34,14 @@
 @keyframes loading-pulse {
   0% {
     transform: scale(1);
-    filter: drop-shadow(
-      0 0 8px rgb(var(--cs-color-primary-rgb, 0, 123, 255), var(--opacity-medium))
-    );
+    filter: drop-shadow(0 0 8px var(--cs-color-primary));
+    opacity: 0.85;
   }
 
   100% {
     transform: scale(var(--scale-hover));
-    filter: drop-shadow(0 0 12px rgb(var(--cs-color-primary-rgb, 0, 123, 255), 0.4));
+    filter: drop-shadow(0 0 12px var(--cs-color-primary));
+    opacity: 1;
   }
 }
 

@@ -1,5 +1,6 @@
 // src/components/Home.tsx
 
+import type FalconApi from '@crowdstrike/foundry-js';
 import {
   SlButton,
   SlCard,
@@ -37,7 +38,7 @@ import QueryForm from './QueryForm';
 import ResponseDisplay from './ResponseDisplay';
 
 interface HomeProps {
-  falcon: any;
+  falcon: FalconApi;
 }
 
 interface HomeState {
@@ -308,11 +309,11 @@ const Home = React.memo(({ falcon }: HomeProps) => {
   ]);
 
   return (
-    <div className="w-full py-2">
+    <div style={{ width: '100%', padding: 'var(--spacing-base) 0' }}>
       <SlCard className="full-width-card">
         <SlTabGroup ref={tabGroupRefFromHook} placement="top" onSlTabShow={handleTabChange}>
           <SlTab slot="nav" panel="request">
-            <SlIcon name="pencil" className="mr-2" />
+            <SlIcon name="pencil" className="icon-spacing-right" />
             Request
           </SlTab>
           <SlTab
@@ -327,7 +328,7 @@ const Home = React.memo(({ falcon }: HomeProps) => {
 
           {state.showJsonTab ? (
             <SlTab slot="nav" panel="json">
-              <SlIcon name="code-square" className="mr-2" />
+              <SlIcon name="code-square" className="icon-spacing-right" />
               JSON
             </SlTab>
           ) : null}
@@ -363,10 +364,16 @@ const Home = React.memo(({ falcon }: HomeProps) => {
           </SlTabPanel>
 
           <SlTabPanel name="response">
-            <div className="flex flex-col">
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
               {/* Response Header with Copy Button */}
               {state.responseText && !state.loading && !state.errorMessage && (
-                <div className="flex justify-end mb-2">
+                <div
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'flex-end',
+                    marginBottom: 'var(--spacing-base)',
+                  }}
+                >
                   <SlDropdown>
                     <SlButton
                       slot="trigger"
@@ -388,7 +395,7 @@ const Home = React.memo(({ falcon }: HomeProps) => {
                           onClick={() => handleCopyFormat(option.format)}
                         >
                           <SlIcon slot="prefix" name={option.icon} />
-                          <span className="ml-2">{option.label}</span>
+                          <span style={{ marginLeft: 'var(--spacing-base)' }}>{option.label}</span>
                         </SlMenuItem>
                       ))}
                     </SlMenu>

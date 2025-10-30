@@ -15,9 +15,17 @@ export const InlineCode: React.FC<InlineCodeProps> = ({ children, className }) =
   const iocType = IOCCore.detectType(text);
   const { copyState, copyToClipboard } = useCopyToClipboard();
 
-  const handleIOCCopy = (e: React.MouseEvent) => {
+  const handleIOCCopy = (e: React.MouseEvent | React.KeyboardEvent) => {
     e.stopPropagation();
     copyToClipboard(text);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    // Trigger on Enter or Space key (standard button behavior)
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      handleIOCCopy(e);
+    }
   };
 
   if (iocType) {
@@ -26,8 +34,11 @@ export const InlineCode: React.FC<InlineCodeProps> = ({ children, className }) =
     const defangedText = IOCCore.defang(text);
 
     return (
-      <span className="inline-flex items-center gap-1 ioc-container">
-        <SlBadge variant={badgeVariant} className="text-xs">
+      <span
+        className="ioc-container"
+        style={{ display: 'inline-flex', alignItems: 'center', gap: 'var(--spacing-xs)' }}
+      >
+        <SlBadge variant={badgeVariant} style={{ fontSize: 'var(--font-size-xs)' }}>
           {iocType.toUpperCase()}
         </SlBadge>
         <SlTooltip
@@ -40,12 +51,14 @@ export const InlineCode: React.FC<InlineCodeProps> = ({ children, className }) =
           distance={8}
           hoist
         >
-          <code
+          <button
+            type="button"
             className="ioc-code cursor-pointer ioc-hover-bg transition-colors"
             onClick={handleIOCCopy}
+            onKeyDown={handleKeyDown}
           >
             {defangedText}
-          </code>
+          </button>
         </SlTooltip>
         <SlTooltip
           content={
@@ -57,11 +70,25 @@ export const InlineCode: React.FC<InlineCodeProps> = ({ children, className }) =
           distance={8}
           hoist
         >
-          <SlIcon
-            name={copyState}
-            className={`text-xs cursor-pointer ioc-hover-text ${copyState === 'check-circle' ? 'copy-success' : 'secondary-text'}`}
+          <button
+            type="button"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              border: 0,
+              background: 'transparent',
+              padding: 0,
+              cursor: 'pointer',
+            }}
             onClick={handleIOCCopy}
-          />
+            onKeyDown={handleKeyDown}
+            aria-label={`Copy ${iocType} to clipboard`}
+          >
+            <SlIcon
+              name={copyState}
+              className={`text-xs cursor-pointer ioc-hover-text ${copyState === 'check-circle' ? 'copy-success' : 'secondary-text'}`}
+            />
+          </button>
         </SlTooltip>
       </span>
     );

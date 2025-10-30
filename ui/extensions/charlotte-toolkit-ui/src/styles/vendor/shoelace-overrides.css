@@ -25,16 +25,15 @@
   padding: var(--spacing-xs) var(--spacing-md); /* 2px 6px */
 }
 
-/* Child option indentation and styling */
-sl-option.child-option {
-  padding-left: var(--spacing-4xl); /* 32px */
-  font-size: var(--font-size-xs); /* 11px - Reduced by 1 size for better visual density */
+/* Consistent font size for all dropdown options - work WITH Shoelace */
+sl-option::part(base) {
+  font-size: var(--font-size-base); /* 14px - consistent across all options */
+  gap: var(--spacing-base); /* 8px */
 }
 
-/* Specific selector for broader coverage */
-sl-select sl-option.child-option {
-  padding-left: var(--spacing-4xl); /* 32px */
-  font-size: var(--font-size-xs); /* 11px - Reduced by 1 size for better visual density */
+/* Child option indentation - use ::part(base) to penetrate Shadow DOM */
+sl-option.child-option::part(base) {
+  padding-left: var(--spacing-4xl); /* 32px indentation for hierarchy */
 }
 
 /* Prevent text wrapping in dropdown options */
@@ -42,11 +41,6 @@ sl-option::part(label) {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-}
-
-/* Icon spacing in dropdown options */
-sl-option::part(base) {
-  gap: var(--spacing-base); /* 8px */
 }
 
 sl-option sl-icon[slot="prefix"] {
@@ -58,9 +52,14 @@ sl-select sl-icon[slot="prefix"] {
   margin-right: var(--spacing-base); /* 8px */
 }
 
-/* Standardized dropdown font styling - all options use normal fonts for consistency */
+/* Standardized dropdown font family - all options use normal fonts for consistency */
 sl-option {
   font-family: var(--font-family-sans);
+}
+
+/* Ensure font size is also set via CSS custom property for Shoelace */
+sl-option {
+  --sl-font-size-medium: var(--font-size-base); /* 14px */
 }
 
 /* ===== TAB GROUP OVERRIDES ===== */

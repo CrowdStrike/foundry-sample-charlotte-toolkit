@@ -62,9 +62,9 @@ type ResponseData = {
   executionEndTime: string;
   executionStartTime: string;
   success: boolean;
-  fromCache?: boolean;
-  content?: string;
-  error?: string;
+  fromCache?: boolean | undefined;
+  content?: string | undefined;
+  error?: string | undefined;
   workflowResult?: unknown;
 };
 

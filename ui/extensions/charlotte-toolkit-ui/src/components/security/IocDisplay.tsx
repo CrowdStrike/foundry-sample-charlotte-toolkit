@@ -32,19 +32,35 @@ export const IOCDisplay: React.FC<IOCDisplayProps> = ({ iocs }) => {
     return (
       <div className="ioc-section-spacing">
         <div className="ioc-type-header">
-          <span className="text-sm font-semibold">
+          <span style={{ fontWeight: 'var(--font-weight-semibold)' }}>
             {type.toUpperCase()}S ({items.length})
           </span>
         </div>
-        <div className="space-y-2">
-          {items.map((item, index) => {
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-base)' }}>
+          {items.map((item) => {
             // Defang IOCs for display (but keep original for copying)
             const defangedItem = IOCCore.defang(item);
 
             return (
-              <div key={index} className="ioc-value-item">
-                <div className="flex items-center gap-1 p-0">
-                  <code className="flex-1 text-xs font-mono min-w-0 break-all">{defangedItem}</code>
+              <div key={item} className="ioc-value-item">
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 'var(--spacing-xs)',
+                    padding: 0,
+                  }}
+                >
+                  <code
+                    style={{
+                      flex: 1,
+                      fontFamily: 'var(--font-family-mono)',
+                      minWidth: 0,
+                      wordBreak: 'break-all',
+                    }}
+                  >
+                    {defangedItem}
+                  </code>
                   <SlTooltip
                     content={
                       copyStates[`${type}-${item}`]
@@ -59,7 +75,8 @@ export const IOCDisplay: React.FC<IOCDisplayProps> = ({ iocs }) => {
                       size="small"
                       variant="text"
                       onClick={() => copyIOC(item, type)}
-                      className="compact-copy-btn ioc-copy-btn flex-shrink-0"
+                      className="compact-copy-btn ioc-copy-btn"
+                      style={{ flexShrink: 0 }}
                     >
                       <SlIcon
                         name={copyStates[`${type}-${item}`] ? 'check-circle' : 'clipboard'}

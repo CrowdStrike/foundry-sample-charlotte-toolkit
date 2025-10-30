@@ -96,21 +96,32 @@ export const MITREDisplay: React.FC<MITREDisplayProps> = ({ techniques }) => {
   };
 
   return (
-    <div className="mitre-techniques-container space-y-3">
-      {techniques.map((technique, index) => {
+    <div className="mitre-techniques-container">
+      {techniques.map((technique, _index) => {
         const formattedDescriptions = formatMitreDescription(technique.description);
         const tactic = getTacticFromTechnique(technique);
         const tacticVariant = getTacticBadgeVariant(tactic);
         const tacticName = formatTacticName(tactic);
 
         return (
-          <div key={index} className="mitre-technique-card enhanced-card">
+          <div key={technique.technique_id} className="mitre-technique-card enhanced-card">
             {/* Technique Header - Restructured Layout */}
             <div className="technique-header">
               <div className="technique-title-section">
                 {/* Icon, ID and copy button on first line - IOC-style pattern */}
-                <div className="flex items-center gap-1 mb-1">
-                  <SlIcon name="shield-check" className="technique-icon flex-shrink-0" />
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 'var(--spacing-xs)',
+                    marginBottom: 'var(--spacing-xs)',
+                  }}
+                >
+                  <SlIcon
+                    name="shield-check"
+                    className="technique-icon"
+                    style={{ flexShrink: 0 }}
+                  />
                   <span className="technique-id">{technique.technique_id}</span>
                   <SlTooltip
                     content={
@@ -128,7 +139,8 @@ export const MITREDisplay: React.FC<MITREDisplayProps> = ({ techniques }) => {
                       onClick={() =>
                         copyMitreUrl(buildMitreUrl(technique.technique_id), technique.technique_id)
                       }
-                      className="compact-copy-btn ioc-copy-btn flex-shrink-0"
+                      className="compact-copy-btn ioc-copy-btn"
+                      style={{ flexShrink: 0 }}
                     >
                       <SlIcon
                         name={copyStates[technique.technique_id] ? 'check-circle' : 'clipboard'}
@@ -141,14 +153,21 @@ export const MITREDisplay: React.FC<MITREDisplayProps> = ({ techniques }) => {
                 </div>
 
                 {/* Technique Name on second line */}
-                <div className="technique-name-line mb-1">
+                <div className="technique-name-line" style={{ marginBottom: 'var(--spacing-xs)' }}>
                   <span className="technique-name">{technique.technique_name}</span>
                 </div>
 
                 {/* Tactic Badge on third line */}
                 {tacticName && (
-                  <div className="tactic-badge-container mb-3">
-                    <SlBadge variant={tacticVariant} className="text-xs w-fit tactic-badge">
+                  <div
+                    className="tactic-badge-container"
+                    style={{ marginBottom: 'var(--spacing-lg)' }}
+                  >
+                    <SlBadge
+                      variant={tacticVariant}
+                      className="tactic-badge"
+                      style={{ fontSize: 'var(--font-size-xs)', width: 'fit-content' }}
+                    >
                       {tacticName}
                     </SlBadge>
                   </div>
@@ -161,14 +180,24 @@ export const MITREDisplay: React.FC<MITREDisplayProps> = ({ techniques }) => {
               {formattedDescriptions.length > 0 ? (
                 formattedDescriptions.map((paragraph, paragraphIndex) => (
                   <p
-                    key={paragraphIndex}
-                    className="text-sm sm:text-base secondary-text leading-relaxed break-words technique-paragraph"
+                    key={`${technique.technique_id}-p${paragraphIndex}`}
+                    className="secondary-text technique-paragraph"
+                    style={{
+                      lineHeight: 'var(--line-height-relaxed)',
+                      wordBreak: 'break-word',
+                    }}
                   >
                     {paragraph}
                   </p>
                 ))
               ) : (
-                <p className="text-sm sm:text-base secondary-text leading-relaxed break-words technique-paragraph">
+                <p
+                  className="secondary-text technique-paragraph"
+                  style={{
+                    lineHeight: 'var(--line-height-relaxed)',
+                    wordBreak: 'break-word',
+                  }}
+                >
                   {technique.description}
                 </p>
               )}

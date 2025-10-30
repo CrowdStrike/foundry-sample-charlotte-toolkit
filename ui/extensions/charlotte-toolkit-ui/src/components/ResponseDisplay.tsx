@@ -131,11 +131,18 @@ const ResponseDisplay = React.memo(
     if (errorMessage) {
       return (
         <div
-          className="flex flex-col items-center justify-center min-h-96 gap-3"
-          style={{ color: `var(--cs-status-error)` }}
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            minHeight: '384px',
+            gap: 'var(--spacing-lg)',
+            color: 'var(--cs-status-error)',
+          }}
         >
           <SlIcon name="exclamation-triangle" />
-          <p className="text-base text-center">{errorMessage}</p>
+          <p style={{ fontSize: 'var(--font-size-base)', textAlign: 'center' }}>{errorMessage}</p>
         </div>
       );
     }
@@ -144,11 +151,20 @@ const ResponseDisplay = React.memo(
     if (!responseText) {
       return (
         <div
-          className="flex flex-col items-center justify-center min-h-96 gap-3"
-          style={{ color: `var(--cs-text-secondary)` }}
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            minHeight: '384px',
+            gap: 'var(--spacing-lg)',
+            color: 'var(--cs-text-secondary)',
+          }}
         >
           <SlIcon name="chat-square-text" />
-          <p className="text-base">Submit a query to see analysis results</p>
+          <p style={{ fontSize: 'var(--font-size-base)' }}>
+            Submit a query to see analysis results
+          </p>
         </div>
       );
     }
@@ -175,18 +191,31 @@ const ResponseDisplay = React.memo(
       return (
         <div className="response-scroll-container">
           <div className="response-scroll-content">
-            <div className="space-y-4">
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-xl)' }}>
               <div
-                className="p-3 rounded-lg"
                 style={{
+                  padding: 'var(--spacing-lg)',
+                  borderRadius: 'var(--spacing-base)',
                   backgroundColor: `var(--cs-background-light)`,
                   border: `1px solid var(--cs-border-color-medium)`,
                 }}
               >
-                <p className="text-sm font-medium" style={{ color: `var(--cs-status-warning)` }}>
+                <p
+                  style={{
+                    fontSize: 'var(--font-size-sm)',
+                    fontWeight: 'var(--font-weight-medium)',
+                    color: 'var(--cs-status-warning)',
+                  }}
+                >
                   ⚠️ Response Format Issue
                 </p>
-                <p className="text-sm mt-1" style={{ color: `var(--cs-text-secondary)` }}>
+                <p
+                  style={{
+                    fontSize: 'var(--font-size-sm)',
+                    marginTop: 'var(--spacing-xs)',
+                    color: 'var(--cs-text-secondary)',
+                  }}
+                >
                   Charlotte AI did not return the expected JSON format. Displaying as markdown
                   instead.
                 </p>

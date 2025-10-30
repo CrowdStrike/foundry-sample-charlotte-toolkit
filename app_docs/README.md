@@ -125,6 +125,13 @@ Charlotte provides comprehensive analysis in several sections:
 - **Code Cleanup**: Removed unused code, comments, and old tooling infrastructure
 - **Better Documentation**: Added proper explanations for linting suppressions
 
+### 🎨 **UI Improvements**
+- **Typography Consistency**: Unified font sizes across all components (14px base, 12px monospace, 11px badges)
+- **Shadow DOM Styling**: Proper Shoelace component styling using `::part()` selectors and CSS custom properties
+- **Visual Hierarchy**: Improved dropdown indentation and spacing for better readability
+- **CSS Architecture**: Removed inline styles in favor of reusable CSS classes and utility patterns
+- **Component Polish**: Optimized container spacing and visual balance throughout the UI
+
 ### 🔧 **Developer Experience**
 - **Consistent Formatting**: Standardized code style across entire codebase
 - **Git Integration**: Added proper .gitignore for VCS integration

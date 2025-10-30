@@ -183,12 +183,12 @@
 .reasoning-assessment-card .formatted-paragraph {
   margin-bottom: var(--spacing-2xl); /* Increased spacing for analytical content */
   padding: var(--spacing-lg);
-  background-color: rgb(var(--cs-color-primary-rgb), var(--opacity-light));
-  border-left: var(--border-width-thick) solid
-    rgb(var(--cs-color-primary-rgb), var(--opacity-light));
+  background-color: var(--cs-background-light);
+  border-left: var(--border-width-thick) solid var(--cs-border-color-blue);
   border-radius: 0 var(--spacing-xs) var(--spacing-xs) 0;
   line-height: var(--line-height-relaxed);
   max-width: none;
+  opacity: 0.95;
 }
 
 /* Remove separator line for reasoning assessment cards since they have background */
