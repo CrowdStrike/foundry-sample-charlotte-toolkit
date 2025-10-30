@@ -133,17 +133,9 @@
   overflow: hidden auto;
 }
 
-.container-scroll-standard.scrollbar-base {
-  /* Inherits scrollbar styling from .scrollbar-base */
-}
-
 .container-scroll-compact {
   max-height: var(--container-height-md);
   overflow: hidden auto;
-}
-
-.container-scroll-compact.scrollbar-thin {
-  /* Inherits scrollbar styling from .scrollbar-thin */
 }
 
 /* Structured analysis scrollbar */

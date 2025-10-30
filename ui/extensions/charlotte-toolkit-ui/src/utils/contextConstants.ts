@@ -31,41 +31,5 @@ export const INTERNAL_DOMAIN_PATTERNS = [
   '.ad',
 ];
 
-// Entity type configurations
-export const ENTITY_TYPE_CONFIG = {
-  domain: {
-    name: 'Domains',
-    icon: 'shield-exclamation',
-    childIcon: 'shield',
-  },
-  file: {
-    name: 'Files',
-    icon: 'file-lock',
-    childIcons: {
-      filename: 'file-earmark',
-      md5: 'fingerprint',
-      sha256: 'fingerprint',
-    },
-  },
-  ip: {
-    name: 'IP Addresses',
-    icon: 'router-fill',
-    childIcon: 'router',
-  },
-  fqdn: {
-    name: 'FQDNs',
-    icon: 'globe2',
-    childIcon: 'dns',
-  },
-};
-
 // Note: Validation constants moved to constants.ts VALIDATION_THRESHOLDS
 // to eliminate duplication and provide centralized configuration
-
-// Processing limits
-export const PROCESSING_LIMITS = {
-  MAX_DOMAIN_INSTANCES_DISPLAY: 20,
-  MAX_FILE_ASSOCIATIONS: 50,
-  MIN_DOMAIN_PARTS: 2,
-  MIN_TLD_LENGTH: 2,
-};

@@ -29,3 +29,12 @@
 .structured-analysis {
   animation: fade-in var(--duration-slow) var(--easing-ease-out);
 }
+
+/* Icon spacing utilities for better maintainability */
+.icon-spacing-right {
+  margin-right: var(--spacing-base);
+}
+
+.icon-spacing-left {
+  margin-left: var(--spacing-base);
+}

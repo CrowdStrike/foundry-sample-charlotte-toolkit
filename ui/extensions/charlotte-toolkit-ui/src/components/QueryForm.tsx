@@ -1,9 +1,9 @@
 // Modular QueryForm component using extracted subcomponents
 
-import { SlSelect, SlOption, SlIcon } from '@shoelace-style/shoelace/dist/react';
+import { SlIcon, SlOption, SlSelect } from '@shoelace-style/shoelace/dist/react';
 import React from 'react';
 
-import { ContextOption } from '../types';
+import type { ContextOption } from '../types';
 import { CHARLOTTE_MODEL_OPTIONS } from '../utils/constants';
 
 // Import modular subcomponents
@@ -66,7 +66,14 @@ const QueryForm = React.memo(
     };
 
     return (
-      <div className='flex flex-col gap-4 isolate'>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 'var(--spacing-xl)',
+          isolation: 'isolate',
+        }}
+      >
         {/* Context Entity Selection */}
         <ContextEntitySelector
           selectedContextEntity={selectedContextEntity}
@@ -79,19 +86,21 @@ const QueryForm = React.memo(
         <PromptTextarea query={query} setQuery={setQuery} />
 
         {/* Model Selection */}
-        <SlSelect
-          label='Model'
-          defaultValue={modelName}
-          value={modelName}
-          onSlChange={handleModelChange}
-        >
-          <SlIcon slot='prefix' name='cpu' />
-          {CHARLOTTE_MODEL_OPTIONS.map(option => (
-            <SlOption key={option.value} value={option.value}>
-              {option.label}
-            </SlOption>
-          ))}
-        </SlSelect>
+        <div style={{ marginBottom: 'var(--spacing-base)' }}>
+          <SlSelect
+            label="Model"
+            defaultValue={modelName}
+            value={modelName}
+            onSlChange={handleModelChange}
+          >
+            <SlIcon slot="prefix" name="cpu" />
+            {CHARLOTTE_MODEL_OPTIONS.map((option) => (
+              <SlOption key={option.value} value={option.value}>
+                {option.label}
+              </SlOption>
+            ))}
+          </SlSelect>
+        </div>
 
         {/* Submit Section */}
         <SubmitSection
@@ -117,7 +126,7 @@ const QueryForm = React.memo(
         />
       </div>
     );
-  }
+  },
 );
 
 QueryForm.displayName = 'QueryForm';

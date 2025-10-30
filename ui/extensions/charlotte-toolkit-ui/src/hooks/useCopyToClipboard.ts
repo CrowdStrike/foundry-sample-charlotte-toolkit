@@ -1,6 +1,6 @@
 // src/hooks/useCopyToClipboard.ts
 
-import { useState, useCallback } from 'react';
+import { useCallback, useState } from 'react';
 
 interface CopyToClipboardState {
   copyState: 'clipboard' | 'check-circle';
@@ -19,7 +19,7 @@ export const useCopyToClipboard = (): CopyToClipboardState => {
     try {
       await navigator.clipboard.writeText(text);
       setCopyState('check-circle');
-      
+
       setTimeout(() => {
         setCopyState('clipboard');
       }, successDuration);

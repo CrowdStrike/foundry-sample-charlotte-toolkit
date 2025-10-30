@@ -1,6 +1,6 @@
 // src/utils/cache.ts
 
-import type { LLMResponse, CacheEntry, ResponseCache } from '../types';
+import type { CacheEntry, LLMResponse, ResponseCache } from '../types';
 
 import { CACHE_TTL, MAX_CACHE_SIZE } from './constants';
 
@@ -8,7 +8,7 @@ import { CACHE_TTL, MAX_CACHE_SIZE } from './constants';
  * LRU Cache implementation for LLM responses
  * Provides efficient caching with automatic expiration and size-based eviction
  */
-export class LRUResponseCache implements ResponseCache {
+class LRUResponseCache implements ResponseCache {
   private cache = new Map<string, CacheEntry<LLMResponse>>();
   private maxSize: number;
   private defaultTtl: number;

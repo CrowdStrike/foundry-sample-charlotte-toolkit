@@ -1,11 +1,11 @@
 // Entity processing helper utilities
 
-import { ContextOption } from '../../types';
+import type { ContextOption } from '../../types';
 import {
-  HASH_TRUNCATION_LENGTH,
   HASH_DISPLAY_FORMAT,
-  PRIVATE_IP_RANGES,
+  HASH_TRUNCATION_LENGTH,
   INTERNAL_DOMAIN_PATTERNS,
+  PRIVATE_IP_RANGES,
 } from '../contextConstants';
 
 /**
@@ -55,18 +55,11 @@ export const truncateDomain = (domain: string, maxLength: number = 32): string =
 };
 
 /**
- * Check if a domain needs truncation
- */
-export const isDomainTruncated = (originalDomain: string, maxLength: number = 32): boolean => {
-  return originalDomain.length > maxLength;
-};
-
-/**
  * Format display names for better readability
  * Returns both display text and original text for tooltip support
  */
 export const formatDisplayName = (
-  option: ContextOption
+  option: ContextOption,
 ): { displayText: string; originalText: string } => {
   if (option.subType === 'md5' || option.subType === 'sha256') {
     const hashMatch = option.displayName.match(/^(MD5|SHA256):\s*(.+)$/);
@@ -75,7 +68,7 @@ export const formatDisplayName = (
 
       // Get the original hash from entityData
       const originalHash = option.entityData?.hash;
-      if (originalHash && originalHash !== displayedHash) {
+      if (typeof originalHash === 'string' && originalHash !== displayedHash) {
         return {
           displayText: option.displayName, // Already formatted with truncated hash
           originalText: `${type}: ${originalHash}`, // Show full hash in tooltip
@@ -86,8 +79,9 @@ export const formatDisplayName = (
 
   // For domain entries, check if it's truncated
   if (option.type === 'domain' && option.subType === 'fqdn' && option.entityData) {
-    const { fullDomain, isTruncated } = option.entityData;
-    if (isTruncated && fullDomain) {
+    const fullDomain = option.entityData.fullDomain;
+    const isTruncated = option.entityData.isTruncated;
+    if (isTruncated && typeof fullDomain === 'string') {
       return {
         displayText: option.displayName, // Already truncated
         originalText: fullDomain, // Show original full domain
@@ -103,11 +97,15 @@ export const formatDisplayName = (
  */
 export const isPublicIP = (ip: string): boolean => {
   const parts = ip.split('.').map(Number);
-  if (parts.length !== 4 || parts.some(part => Number.isNaN(Number(part)) || part < 0 || part > 255)) {
+  if (
+    parts.length !== 4 ||
+    parts.some((part) => Number.isNaN(Number(part)) || part < 0 || part > 255)
+  ) {
     return false;
   }
 
-  const [a, b] = parts; // Safe because we validated length and values above
+  // Type assertion is safe because we validated length and values above
+  const [a, b] = parts as [number, number, number, number];
 
   // Private ranges (RFC 1918)
   if (a === 10) return false; // 10.0.0.0/8
@@ -137,7 +135,7 @@ export const isExternalFQDN = (hostname: string): boolean => {
 
   // Filter out internal domain patterns
   const lowerHostname = hostname.toLowerCase();
-  return !INTERNAL_DOMAIN_PATTERNS.some(pattern => lowerHostname.endsWith(pattern));
+  return !INTERNAL_DOMAIN_PATTERNS.some((pattern) => lowerHostname.endsWith(pattern));
 };
 
 /**
@@ -146,11 +144,9 @@ export const isExternalFQDN = (hostname: string): boolean => {
 export const calculateEntityCounts = (options: ContextOption[]) => {
   return {
     total: options.length,
-    domains: options.filter(opt => opt.type === 'domain').length,
-    files: options.filter(opt => opt.type === 'file').length,
-    ips: options.filter(opt => opt.type === 'ip').length,
-    mitres: options.filter(opt => opt.type === 'mitre').length,
+    domains: options.filter((opt) => opt.type === 'domain').length,
+    files: options.filter((opt) => opt.type === 'file').length,
+    ips: options.filter((opt) => opt.type === 'ip').length,
+    mitres: options.filter((opt) => opt.type === 'mitre').length,
   };
 };
-
-

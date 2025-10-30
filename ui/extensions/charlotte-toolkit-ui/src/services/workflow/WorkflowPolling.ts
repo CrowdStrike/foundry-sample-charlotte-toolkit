@@ -1,10 +1,10 @@
 // src/services/workflow/WorkflowPolling.ts
 
-import FalconApi from '@crowdstrike/foundry-js';
+import type FalconApi from '@crowdstrike/foundry-js';
 
 import { wait } from '../../utils/helpers';
 
-import { WorkflowStatus, WORKFLOW_CONFIG, type WorkflowPollResult } from './types';
+import { WORKFLOW_CONFIG, type WorkflowPollResult, WorkflowStatus } from './types';
 
 /**
  * Poll workflow for completion with simple 1-second intervals
@@ -19,13 +19,19 @@ export const pollWorkflowCompletion = async (
   workflowId: string,
   options: {
     maxAttempts?: number;
-  } = {}
+  } = {},
 ): Promise<WorkflowPollResult> => {
   const { maxAttempts = WORKFLOW_CONFIG.MAX_POLL_ATTEMPTS } = options;
 
   let attempts = 0;
   const delay = 1000; // Fixed 1-second delay
-  const pollResults: any[] = [];
+  const pollResults: Array<{
+    attempt: number;
+    timestamp: number;
+    status?: WorkflowStatus;
+    hasOutput?: boolean;
+    error?: string;
+  }> = [];
 
   while (attempts < maxAttempts) {
     try {
@@ -99,9 +105,9 @@ export const pollWorkflowCompletion = async (
  * @param workflowId - Workflow execution ID
  * @returns Current workflow status and data
  */
-export const getWorkflowStatus = async (
+const getWorkflowStatus = async (
   falcon: FalconApi,
-  workflowId: string
+  workflowId: string,
 ): Promise<{
   status: WorkflowStatus;
   output_data?: Record<string, unknown>;
@@ -119,12 +125,16 @@ export const getWorkflowStatus = async (
     throw new Error('No workflow results found');
   }
 
-  const workflowResult = result.resources[0] as any;
+  const workflowResult = result.resources[0] as unknown as {
+    status: string;
+    output_data?: Record<string, unknown>;
+    error?: string;
+  };
 
   return {
     status: parseWorkflowStatus(workflowResult.status),
-    output_data: workflowResult.output_data,
-    error: workflowResult.error,
+    ...(workflowResult.output_data && { output_data: workflowResult.output_data }),
+    ...(workflowResult.error && { error: workflowResult.error }),
   };
 };
 
@@ -133,7 +143,7 @@ export const getWorkflowStatus = async (
  * @param status - Workflow status to check
  * @returns True if workflow is still running
  */
-export const isWorkflowRunning = (status: WorkflowStatus): boolean => {
+const isWorkflowRunning = (status: WorkflowStatus): boolean => {
   return (
     status === WorkflowStatus.IN_PROGRESS ||
     status === WorkflowStatus.RUNNING ||
@@ -142,20 +152,11 @@ export const isWorkflowRunning = (status: WorkflowStatus): boolean => {
 };
 
 /**
- * Check if workflow is in a terminal state (completed or failed)
- * @param status - Workflow status to check
- * @returns True if workflow is finished
- */
-export const isWorkflowTerminal = (status: WorkflowStatus): boolean => {
-  return status === WorkflowStatus.COMPLETED || status === WorkflowStatus.FAILED;
-};
-
-/**
  * Parse workflow status string to enum
  * @param statusString - Status string from API
  * @returns Parsed workflow status
  */
-export const parseWorkflowStatus = (statusString: string): WorkflowStatus => {
+const parseWorkflowStatus = (statusString: string): WorkflowStatus => {
   const normalizedStatus = statusString?.trim().toLowerCase();
 
   switch (normalizedStatus) {

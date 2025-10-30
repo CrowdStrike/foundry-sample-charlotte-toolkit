@@ -3,13 +3,13 @@
 /**
  * Interface for security context (simplified)
  */
-export interface SecurityContext {
+interface SecurityContext {
   incidentId?: string;
   hostName?: string;
   detectionType?: string;
   severity?: string;
   timestamp?: string;
-  additionalContext?: Record<string, any>;
+  additionalContext?: Record<string, unknown>;
 }
 
 /**
@@ -51,7 +51,17 @@ export enum WorkflowStatus {
 }
 
 /**
- * Interface for workflow execution payload
+ * Interface for workflow polling result
+ */
+export interface WorkflowPollResult {
+  status: WorkflowStatus;
+  output_data?: Record<string, unknown>;
+  error?: string;
+  pollResults?: unknown[];
+}
+
+/**
+ * Interface for workflow payload sent to the API
  */
 export interface WorkflowPayload {
   user_prompt: string;
@@ -63,37 +73,11 @@ export interface WorkflowPayload {
 }
 
 /**
- * Interface for API error responses
+ * Interface for workflow execution API response
  */
-export interface ApiError {
-  message: string;
-  code?: string;
-}
-
-/**
- * Interface for standard API responses
- */
-export interface ApiResponse<T = unknown> {
-  resources?: T[];
-  errors?: ApiError[];
-}
-
-/**
- * Interface for workflow polling result
- */
-export interface WorkflowPollResult {
-  status: WorkflowStatus;
-  output_data?: Record<string, unknown>;
-  error?: string;
-  pollResults?: any[];
-}
-
-/**
- * Interface for workflow execution data from API
- */
-export interface WorkflowExecutionData {
-  status: WorkflowStatus;
-  output_data?: Record<string, unknown>;
+export interface WorkflowExecutionResponse {
+  errors?: Array<{ message?: string }>;
+  resources?: unknown[];
 }
 
 /**
