@@ -15,24 +15,40 @@ function App(): React.ReactNode {
   if (error) {
     return (
       <div
-        className="error-state p-6 rounded-lg"
+        className="error-state"
         style={{
+          padding: 'var(--spacing-3xl)',
+          borderRadius: 'var(--spacing-base)',
           backgroundColor: 'var(--cs-background-base)',
           border: '1px solid var(--cs-border-color-light)',
-          borderRadius: 'var(--spacing-base)',
         }}
       >
-        <h3 className="text-lg font-medium mb-2" style={{ color: 'var(--cs-status-error)' }}>
+        <h3
+          style={{
+            fontSize: 'var(--font-size-lg)',
+            fontWeight: 'var(--font-weight-medium)',
+            marginBottom: 'var(--spacing-base)',
+            color: 'var(--cs-status-error)',
+          }}
+        >
           Failed to Initialize
         </h3>
-        <p className="text-sm mb-4" style={{ color: 'var(--cs-text-primary)' }}>
+        <p
+          style={{
+            fontSize: 'var(--font-size-sm)',
+            marginBottom: 'var(--spacing-xl)',
+            color: 'var(--cs-text-primary)',
+          }}
+        >
           Unable to connect to the Falcon API: {error}
         </p>
         <button
           type="button"
           onClick={retry}
-          className="px-4 py-2 rounded hover:opacity-80 focus:outline-none focus:ring-2"
           style={{
+            padding: 'var(--spacing-base) var(--spacing-xl)',
+            borderRadius: 'var(--spacing-sm)',
+            cursor: 'pointer',
             backgroundColor: 'var(--cs-status-error)',
             color: 'var(--cs-text-on-primary)',
           }}
@@ -46,11 +62,25 @@ function App(): React.ReactNode {
   // Show loading state while initializing
   if (!isInitialized) {
     return (
-      <div className="loading-state flex items-center justify-center min-h-screen">
-        <div className="text-center">
+      <div
+        className="loading-state"
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          minHeight: '100vh',
+        }}
+      >
+        <div style={{ textAlign: 'center' }}>
           <div
-            className="animate-spin rounded-full h-8 w-8 border-b-2 mx-auto mb-4"
-            style={{ borderBottomColor: 'var(--cs-primary)' }}
+            style={{
+              animation: 'spin 1s linear infinite',
+              borderRadius: '9999px',
+              height: '2rem',
+              width: '2rem',
+              borderBottom: '2px solid var(--cs-primary)',
+              margin: '0 auto var(--spacing-xl)',
+            }}
           ></div>
           <p style={{ color: 'var(--cs-text-primary)' }}>Initializing...</p>
         </div>
@@ -62,13 +92,12 @@ function App(): React.ReactNode {
     <ErrorBoundary onRetry={retry}>
       <React.StrictMode>
         <div
-          className="font-sans min-h-screen p-4"
           style={{
             fontFamily: 'var(--font-family-sans)',
-            color: 'var(--cs-text-primary)',
-            backgroundColor: 'var(--cs-background-dark)',
             minHeight: '100vh',
             padding: 'var(--spacing-xl)',
+            color: 'var(--cs-text-primary)',
+            backgroundColor: 'var(--cs-background-dark)',
           }}
         >
           <Home falcon={falcon} />

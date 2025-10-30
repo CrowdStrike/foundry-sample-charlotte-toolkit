@@ -1,6 +1,6 @@
 // src/hooks/useTabManager.ts
 
-import { SlIcon } from '@shoelace-style/shoelace/dist/react';
+import { SlIcon, type SlTabGroup } from '@shoelace-style/shoelace/dist/react';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 type TabType = 'request' | 'response' | 'json';
@@ -14,7 +14,7 @@ interface UseTabManagerProps {
 
 interface UseTabManagerReturn {
   activeTab: TabType;
-  tabGroupRef: React.RefObject<any>;
+  tabGroupRef: React.RefObject<React.ElementRef<typeof SlTabGroup> | null>;
   handleTabChange: (e: CustomEvent) => void;
   setActiveTab: (tab: TabType) => void;
   getResponseTabIndicator: () => React.ReactNode;
@@ -31,7 +31,7 @@ export const useTabManager = ({
   responseText,
 }: UseTabManagerProps): UseTabManagerReturn => {
   const [activeTab, setActiveTab] = useState<TabType>('request');
-  const tabGroupRef = useRef<any>(null);
+  const tabGroupRef = useRef<React.ElementRef<typeof SlTabGroup>>(null);
 
   // Handle tab change events from Shoelace TabGroup
   const handleTabChange = useCallback((e: CustomEvent) => {
@@ -52,24 +52,21 @@ export const useTabManager = ({
     if (loading) {
       return React.createElement(SlIcon, {
         name: 'hourglass-split',
-        className: 'mr-2',
-        style: { color: 'var(--cs-status-info)' },
+        style: { color: 'var(--cs-status-info)', marginRight: 'var(--spacing-base)' },
       });
     }
 
     if (errorMessage) {
       return React.createElement(SlIcon, {
         name: 'exclamation-triangle',
-        className: 'mr-2',
-        style: { color: 'var(--cs-status-error)' },
+        style: { color: 'var(--cs-status-error)', marginRight: 'var(--spacing-base)' },
       });
     }
 
     if (responseText) {
       return React.createElement(SlIcon, {
         name: 'check-circle',
-        className: 'mr-2',
-        style: { color: 'var(--cs-status-success)' },
+        style: { color: 'var(--cs-status-success)', marginRight: 'var(--spacing-base)' },
       });
     }
 

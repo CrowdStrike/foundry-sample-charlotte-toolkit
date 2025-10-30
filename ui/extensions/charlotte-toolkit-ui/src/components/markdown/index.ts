@@ -19,7 +19,7 @@ interface ListItemProps extends React.HTMLAttributes<HTMLLIElement> {
 interface CodeRendererProps extends React.HTMLAttributes<HTMLElement> {
   _node?: unknown;
   inline?: boolean;
-  className?: string;
+  className?: string | undefined;
   children?: React.ReactNode;
 }
 

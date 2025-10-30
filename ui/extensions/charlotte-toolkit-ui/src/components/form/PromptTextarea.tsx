@@ -10,7 +10,7 @@ interface PromptTextareaProps {
 }
 
 const PromptTextarea: React.FC<PromptTextareaProps> = ({ query, setQuery }) => {
-  const textareaRef = useRef<any>(null);
+  const textareaRef = useRef<React.ElementRef<typeof SlTextarea>>(null);
 
   // Set initial textarea dimensions on mount with delayed calculation and no transitions
   useEffect(() => {
@@ -58,7 +58,7 @@ const PromptTextarea: React.FC<PromptTextareaProps> = ({ query, setQuery }) => {
   };
 
   return (
-    <div className="relative min-h-[120px] z-10">
+    <div style={{ position: 'relative', minHeight: '120px', zIndex: 10 }}>
       <SlTextarea
         ref={textareaRef}
         label="Prompt"

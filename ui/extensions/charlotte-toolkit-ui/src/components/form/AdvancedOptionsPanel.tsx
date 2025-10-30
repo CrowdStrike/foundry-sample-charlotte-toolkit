@@ -75,226 +75,283 @@ const AdvancedOptionsPanel: React.FC<AdvancedOptionsPanelProps> = ({
 
   return (
     <SlDetails summary="Advanced Options" className="advanced-options-subtle">
-      <div className="flex flex-col gap-4 mt-3">
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 'var(--spacing-xl)',
+          marginTop: 'var(--spacing-lg)',
+        }}
+      >
         {/* Show JSON Tab - Moved to Top */}
-        <div className="flex items-center gap-2">
-          <div className="flex-1">
-            <SlCheckbox
-              checked={showJsonTab}
-              onSlChange={(e: CustomEvent) =>
-                setShowJsonTab((e.target as HTMLInputElement).checked)
-              }
-            >
+        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-base)' }}>
+          <SlCheckbox
+            checked={showJsonTab}
+            onSlChange={(e: CustomEvent) => setShowJsonTab((e.target as HTMLInputElement).checked)}
+          >
+            <span style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-base)' }}>
               Show JSON objects
-            </SlCheckbox>
-          </div>
-          <SlTooltip content="Enable a JSON tab in the response to view complete request and response data for analysis and troubleshooting.">
-            <SlIcon
-              name="question-circle"
-              className="cursor-help"
-              style={{ color: `var(--cs-text-secondary)` }}
-            />
-          </SlTooltip>
+              <SlTooltip content="Enable a JSON tab in the response to view complete request and response data for analysis and troubleshooting.">
+                <SlIcon
+                  name="question-circle"
+                  className="cursor-help"
+                  style={{ color: `var(--cs-text-secondary)` }}
+                />
+              </SlTooltip>
+            </span>
+          </SlCheckbox>
         </div>
 
         {/* Temperature */}
-        <div className="flex items-center gap-2">
-          <div className="flex-1">
-            <SlSelect
-              label="Temperature"
-              value={String(temperature)}
-              onSlChange={(e: CustomEvent) =>
-                setTemperature(Number.parseFloat((e.target as HTMLSelectElement).value))
-              }
-            >
-              <SlIcon slot="prefix" name="thermometer" />
-              {TEMPERATURE_OPTIONS.map((option) => (
-                <SlOption key={option.value} value={String(option.value)}>
-                  {option.label}
-                </SlOption>
-              ))}
-            </SlSelect>
+        <SlSelect
+          value={String(temperature)}
+          onSlChange={(e: CustomEvent) =>
+            setTemperature(Number.parseFloat((e.target as HTMLSelectElement).value))
+          }
+        >
+          <div
+            slot="label"
+            style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-base)' }}
+          >
+            Temperature
+            <SlTooltip content="Controls randomness. Lowering results in less random completions. As the temperature approaches zero, the model will become deterministic and repetitive.">
+              <SlIcon
+                name="question-circle"
+                className="cursor-help"
+                style={{ color: `var(--cs-text-secondary)` }}
+              />
+            </SlTooltip>
           </div>
-          <SlTooltip content="Controls randomness. Lowering results in less random completions. As the temperature approaches zero, the model will become deterministic and repetitive.">
-            <SlIcon
-              name="question-circle"
-              className="cursor-help"
-              style={{ color: `var(--cs-text-secondary)` }}
-            />
-          </SlTooltip>
-        </div>
+          <SlIcon slot="prefix" name="thermometer" />
+          {TEMPERATURE_OPTIONS.map((option) => (
+            <SlOption key={option.value} value={String(option.value)}>
+              {option.label}
+            </SlOption>
+          ))}
+        </SlSelect>
 
         {/* Stop Words */}
-        <div className="flex items-start gap-2">
-          <div className="flex-1">
-            <label className="block text-sm font-medium mb-2">Stop Sequences</label>
-            {stopWords.length > 0 ? (
-              <div
-                className="flex flex-wrap gap-2 mb-2 min-h-[32px] p-2 rounded"
-                style={{
-                  border: `1px solid var(--cs-border-color-light)`,
-                  backgroundColor: `var(--cs-background-light)`,
-                }}
-              >
-                {stopWords.map((word, index) => {
-                  return (
-                    <div
-                      key={index}
-                      className="flex items-center gap-1 px-2 py-1 rounded text-sm"
-                      style={{
-                        backgroundColor: 'var(--cs-background-light)',
-                        color: `var(--cs-text-primary)`,
-                      }}
-                    >
-                      <span>{word}</span>
-                      <button
-                        type="button"
-                        onClick={() => handleRemoveStopWord(index)}
-                        className="hover:opacity-80 transition-opacity"
-                        style={{ color: `var(--cs-status-info)` }}
-                      >
-                        <SlIcon name="x" style={{ fontSize: 'var(--font-size-sm)' }} />
-                      </button>
-                    </div>
-                  );
-                })}
-              </div>
-            ) : (
-              <p className="text-sm mb-2 italic" style={{ color: `var(--cs-text-secondary)` }}>
-                Optional: Add stop sequences to control output termination
-              </p>
-            )}
-            {stopWords.length < 4 && (
-              <div className="flex gap-2">
-                <SlInput
-                  placeholder="Enter stop sequence"
-                  value={stopWordsInput}
-                  onSlInput={(e: CustomEvent) =>
-                    setStopWordsInput((e.target as HTMLInputElement).value)
-                  }
-                  onKeyDown={(e: React.KeyboardEvent) => {
-                    if (e.key === 'Enter') {
-                      e.preventDefault();
-                      handleAddStopWord();
-                    }
-                  }}
-                />
-                <SlButton
-                  size="small"
-                  onClick={handleAddStopWord}
-                  disabled={!stopWordsInput.trim()}
-                >
-                  <SlIcon name="plus" />
-                </SlButton>
-              </div>
-            )}
-            {stopWords.length >= 4 && (
-              <p className="text-sm" style={{ color: `var(--cs-text-secondary)` }}>
-                Maximum 4 stop sequences allowed
-              </p>
-            )}
+        <div>
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 'var(--spacing-base)',
+              fontSize: 'var(--font-size-sm)',
+              fontWeight: 'var(--font-weight-medium)',
+              marginBottom: 'var(--spacing-base)',
+            }}
+          >
+            Stop Sequences
+            <SlTooltip content="Up to 4 sequences where API will stop generating further tokens. The return text will not contain the stop sequence.">
+              <SlIcon
+                name="question-circle"
+                className="cursor-help"
+                style={{ color: `var(--cs-text-secondary)` }}
+              />
+            </SlTooltip>
           </div>
-          <SlTooltip content="Up to 4 sequences where API will stop generating further tokens. The return text will not contain the stop sequence.">
-            <SlIcon
-              name="question-circle"
-              className="cursor-help mt-6"
-              style={{ color: `var(--cs-text-secondary)` }}
-            />
-          </SlTooltip>
-        </div>
-
-        {/* JSON Schema */}
-        <div className="flex items-start gap-2">
-          <div className="flex-1">
-            <SlTextarea
-              label="JSON Schema"
-              value={jsonSchema}
-              placeholder="Enter JSON schema to define response structure..."
-              rows={4}
-              onSlInput={(e: CustomEvent) => setJsonSchema((e.target as HTMLTextAreaElement).value)}
+          {stopWords.length > 0 ? (
+            <div
+              style={{
+                display: 'flex',
+                flexWrap: 'wrap',
+                gap: 'var(--spacing-base)',
+                marginBottom: 'var(--spacing-base)',
+                minHeight: '32px',
+                padding: 'var(--spacing-base)',
+                borderRadius: 'var(--spacing-sm)',
+                border: `1px solid var(--cs-border-color-light)`,
+                backgroundColor: `var(--cs-background-light)`,
+              }}
             >
-              <SlIcon slot="prefix" name="code-square" />
-            </SlTextarea>
-          </div>
-          <SlTooltip content="JSON schema is used to define the structure of the model's response format.">
-            <SlIcon
-              name="question-circle"
-              className="cursor-help mt-6"
-              style={{ color: `var(--cs-text-secondary)` }}
-            />
-          </SlTooltip>
-        </div>
-
-        {/* Data to Include */}
-        <div className="flex items-start gap-2">
-          <div className="flex-1">
-            <label className="block text-sm font-medium mb-2">Data to Include</label>
-            {dataToInclude.length > 0 ? (
-              <div
-                className="flex flex-wrap gap-2 mb-2 min-h-[32px] p-2 rounded"
-                style={{
-                  border: `1px solid var(--cs-border-color-light)`,
-                  backgroundColor: `var(--cs-background-light)`,
-                }}
-              >
-                {dataToInclude.map((data, index) => {
-                  return (
-                    <div
-                      key={index}
-                      className="flex items-center gap-1 px-2 py-1 rounded text-sm"
-                      style={{
-                        backgroundColor: `var(--cs-background-light)`,
-                        color: `var(--cs-text-primary)`,
-                      }}
+              {stopWords.map((word, index) => {
+                return (
+                  <div
+                    key={word}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 'var(--spacing-xs)',
+                      padding: 'var(--spacing-xs) var(--spacing-base)',
+                      borderRadius: 'var(--spacing-sm)',
+                      fontSize: 'var(--font-size-sm)',
+                      backgroundColor: 'var(--cs-background-light)',
+                      color: `var(--cs-text-primary)`,
+                    }}
+                  >
+                    <span>{word}</span>
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveStopWord(index)}
+                      className="hover:opacity-80 transition-opacity"
+                      style={{ color: `var(--cs-status-info)` }}
                     >
-                      <span>{data}</span>
-                      <button
-                        type="button"
-                        onClick={() => handleRemoveDataToInclude(index)}
-                        className="hover:opacity-80 transition-opacity"
-                        style={{ color: `var(--cs-status-warning)` }}
-                      >
-                        <SlIcon name="x" style={{ fontSize: 'var(--font-size-sm)' }} />
-                      </button>
-                    </div>
-                  );
-                })}
-              </div>
-            ) : (
-              <p className="text-sm mb-2 italic" style={{ color: `var(--cs-text-secondary)` }}>
-                Optional: Add custom data to enhance your analysis
-              </p>
-            )}
-            <div className="flex gap-2">
+                      <SlIcon name="x" style={{ fontSize: 'var(--font-size-sm)' }} />
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
+          ) : (
+            <p
+              style={{
+                fontSize: 'var(--font-size-sm)',
+                marginBottom: 'var(--spacing-base)',
+                fontStyle: 'italic',
+                color: 'var(--cs-text-secondary)',
+              }}
+            >
+              Optional: Add stop sequences to control output termination
+            </p>
+          )}
+          {stopWords.length < 4 && (
+            <div style={{ display: 'flex', gap: 'var(--spacing-base)' }}>
               <SlInput
-                placeholder="Enter additional data"
-                value={dataToIncludeInput}
+                placeholder="Enter stop sequence"
+                value={stopWordsInput}
                 onSlInput={(e: CustomEvent) =>
-                  setDataToIncludeInput((e.target as HTMLInputElement).value)
+                  setStopWordsInput((e.target as HTMLInputElement).value)
                 }
                 onKeyDown={(e: React.KeyboardEvent) => {
                   if (e.key === 'Enter') {
                     e.preventDefault();
-                    handleAddDataToInclude();
+                    handleAddStopWord();
                   }
                 }}
               />
-              <SlButton
-                size="small"
-                onClick={handleAddDataToInclude}
-                disabled={!dataToIncludeInput.trim()}
-              >
+              <SlButton size="small" onClick={handleAddStopWord} disabled={!stopWordsInput.trim()}>
                 <SlIcon name="plus" />
               </SlButton>
             </div>
+          )}
+          {stopWords.length >= 4 && (
+            <p style={{ fontSize: 'var(--font-size-sm)', color: 'var(--cs-text-secondary)' }}>
+              Maximum 4 stop sequences allowed
+            </p>
+          )}
+        </div>
+
+        {/* JSON Schema */}
+        <SlTextarea
+          value={jsonSchema}
+          placeholder="Enter JSON schema to define response structure..."
+          rows={4}
+          onSlInput={(e: CustomEvent) => setJsonSchema((e.target as HTMLTextAreaElement).value)}
+        >
+          <div
+            slot="label"
+            style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-base)' }}
+          >
+            JSON Schema
+            <SlTooltip content="JSON schema is used to define the structure of the model's response format.">
+              <SlIcon
+                name="question-circle"
+                className="cursor-help"
+                style={{ color: `var(--cs-text-secondary)` }}
+              />
+            </SlTooltip>
           </div>
-          <SlTooltip content="Additional key-value pairs provided from the trigger or preceding action output fields. This data is appended to the user prompt.">
-            <SlIcon
-              name="question-circle"
-              className="cursor-help mt-6"
-              style={{ color: `var(--cs-text-secondary)` }}
+          <SlIcon slot="prefix" name="code-square" />
+        </SlTextarea>
+
+        {/* Data to Include */}
+        <div>
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 'var(--spacing-base)',
+              fontSize: 'var(--font-size-sm)',
+              fontWeight: 'var(--font-weight-medium)',
+              marginBottom: 'var(--spacing-base)',
+            }}
+          >
+            Data to Include
+            <SlTooltip content="Additional key-value pairs provided from the trigger or preceding action output fields. This data is appended to the user prompt.">
+              <SlIcon
+                name="question-circle"
+                className="cursor-help"
+                style={{ color: `var(--cs-text-secondary)` }}
+              />
+            </SlTooltip>
+          </div>
+          {dataToInclude.length > 0 ? (
+            <div
+              style={{
+                display: 'flex',
+                flexWrap: 'wrap',
+                gap: 'var(--spacing-base)',
+                marginBottom: 'var(--spacing-base)',
+                minHeight: '32px',
+                padding: 'var(--spacing-base)',
+                borderRadius: 'var(--spacing-sm)',
+                border: `1px solid var(--cs-border-color-light)`,
+                backgroundColor: `var(--cs-background-light)`,
+              }}
+            >
+              {dataToInclude.map((data, index) => {
+                return (
+                  <div
+                    key={data}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 'var(--spacing-xs)',
+                      padding: 'var(--spacing-xs) var(--spacing-base)',
+                      borderRadius: 'var(--spacing-sm)',
+                      fontSize: 'var(--font-size-sm)',
+                      backgroundColor: `var(--cs-background-light)`,
+                      color: `var(--cs-text-primary)`,
+                    }}
+                  >
+                    <span>{data}</span>
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveDataToInclude(index)}
+                      className="hover:opacity-80 transition-opacity"
+                      style={{ color: `var(--cs-status-warning)` }}
+                    >
+                      <SlIcon name="x" style={{ fontSize: 'var(--font-size-sm)' }} />
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
+          ) : (
+            <p
+              style={{
+                fontSize: 'var(--font-size-sm)',
+                marginBottom: 'var(--spacing-base)',
+                fontStyle: 'italic',
+                color: 'var(--cs-text-secondary)',
+              }}
+            >
+              Optional: Add custom data to enhance your analysis
+            </p>
+          )}
+          <div style={{ display: 'flex', gap: 'var(--spacing-base)' }}>
+            <SlInput
+              placeholder="Enter additional data"
+              value={dataToIncludeInput}
+              onSlInput={(e: CustomEvent) =>
+                setDataToIncludeInput((e.target as HTMLInputElement).value)
+              }
+              onKeyDown={(e: React.KeyboardEvent) => {
+                if (e.key === 'Enter') {
+                  e.preventDefault();
+                  handleAddDataToInclude();
+                }
+              }}
             />
-          </SlTooltip>
+            <SlButton
+              size="small"
+              onClick={handleAddDataToInclude}
+              disabled={!dataToIncludeInput.trim()}
+            >
+              <SlIcon name="plus" />
+            </SlButton>
+          </div>
         </div>
       </div>
     </SlDetails>

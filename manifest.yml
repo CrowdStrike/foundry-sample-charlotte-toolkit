@@ -1,5 +1,7 @@
 name: Charlotte Toolkit
-description: AI-powered security analysis toolkit that leverages Charlotte AI to provide expert-level threat intelligence, automatic indicator extraction, and comprehensive security assessments
+description: AI-powered security analysis toolkit that leverages Charlotte AI to provide
+  expert-level threat intelligence, automatic indicator extraction, and comprehensive
+  security assessments
 logo: images/charlotte-logo.png
 vendor: CrowdStrike
 vendor_products: []

@@ -114,9 +114,11 @@ const ContextEntitySelector: React.FC<ContextEntitySelectorProps> = ({
 
             {/* Group header using <small> as recommended by Shoelace */}
             <small className="context-group-header">
-              <SlIcon name={groupConfig.icon} className="mr-2" />
+              <SlIcon name={groupConfig.icon} className="icon-spacing-right" />
               {groupConfig.name}
-              <SlBadge className="ml-2 context-entity-badge">{count}</SlBadge>
+              <SlBadge className="context-entity-badge icon-spacing-left">
+                {count}
+              </SlBadge>
             </small>
 
             {/* Group options */}

@@ -20,8 +20,15 @@ export const CodeBlock: React.FC<CodeBlockProps> = ({ children, className }) => 
   const language = className?.replace('language-', '') ?? 'text';
 
   return (
-    <div className="relative group">
-      <div className="flex items-center justify-between mb-2">
+    <div style={{ position: 'relative' }}>
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          marginBottom: 'var(--spacing-base)',
+        }}
+      >
         <SlBadge variant="neutral">{language}</SlBadge>
         <SlTooltip
           content={

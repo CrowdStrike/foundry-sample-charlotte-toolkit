@@ -23,9 +23,23 @@ const SubmitSection: React.FC<SubmitSectionProps> = ({
   const isDisabled = loading || isQueryEmpty || !quotaAcknowledged;
 
   return (
-    <div className="flex flex-col gap-3 mt-3">
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 'var(--spacing-xl)',
+        marginTop: 'var(--spacing-base)',
+      }}
+    >
       {/* Inline Quota Acknowledgment and Submit */}
-      <div className="flex items-center justify-between gap-4">
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          gap: 'var(--spacing-xl)',
+        }}
+      >
         <SlCheckbox
           size="small"
           checked={quotaAcknowledged}

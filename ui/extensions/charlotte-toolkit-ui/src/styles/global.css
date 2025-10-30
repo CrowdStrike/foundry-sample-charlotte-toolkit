@@ -10,7 +10,8 @@
 
 /* === VENDOR OVERRIDES === */
 
-/* Note: Vendor overrides removed - styles consolidated into component files */
+/* Shoelace component customizations for Charlotte Toolkit */
+@import "./vendor/shoelace-overrides.css";
 
 /* === MIXINS & PATTERNS === */
 @import "./mixins/responsive-patterns.css";
@@ -174,6 +175,7 @@
   justify-content: flex-start;
   gap: var(--spacing-base); /* 8px - consistent with design tokens */
   text-align: left;
+  margin-bottom: var(--spacing-lg);
 }
 
 .structured-analysis p,
@@ -199,7 +201,7 @@
 
 /* === CONTENT AREA ICON SPACING === */
 
-/* 
+/*
  * Targeted rules for content icon spacing (non-dropdown areas)
  * Note: Dropdown spacing is now handled by vendor/shoelace-overrides.css
  */
@@ -209,23 +211,54 @@ sl-icon {
   display: inline-flex;
   align-items: center;
   vertical-align: middle;
+  flex-shrink: 0;
 }
 
 /* Security analysis structured content - for list items that don't use slots */
 .structured-analysis li sl-icon:not([slot]) {
-  margin-right: var(--spacing-sm); /* 4px */
+  margin-right: var(--spacing-base); /* 8px */
 }
 
 /* Compact bullet lists - specific targeting for dot icons */
 .compact-bullet-list li sl-icon[name="dot"] {
-  margin-right: var(--spacing-xs); /* 2px - tighter for dot icons */
+  margin-right: var(--spacing-base); /* 8px - consistent with all icons */
 }
 
 /* Responsive adjustments for content areas */
 @media (max-width: var(--breakpoint-sm)) {
   .structured-analysis li sl-icon:not([slot]) {
-    margin-right: var(--spacing-xs); /* 2px on small screens */
+    margin-right: var(--spacing-base); /* 8px - consistent even on small screens */
   }
+}
+
+/* === SHOELACE FORM COMPONENT STYLING === */
+
+/* Fix icon spacing in SlSelect and SlTextarea prefix slots */
+sl-select::part(combobox),
+sl-textarea::part(base) {
+  gap: var(--spacing-sm); /* 4px spacing between prefix icon and text */
+}
+
+/* Additional prefix slot spacing for consistency */
+sl-select::part(prefix),
+sl-textarea::part(prefix) {
+  margin-right: var(--spacing-sm); /* 4px */
+}
+
+/* Style SlDetails summary to match tab navigation font size */
+sl-details::part(summary) {
+  font-size: var(--font-size-base); /* Match tab font size (14px) */
+  font-weight: var(--font-weight-medium); /* 500 */
+}
+
+/* Advanced Options specific styling for better visual hierarchy */
+.advanced-options-subtle::part(summary) {
+  font-size: var(--font-size-base); /* Ensure consistency */
+}
+
+/* Utility classes */
+.text-break {
+  word-break: break-word;
 }
 
 /* Global resets and base styles - if needed */
