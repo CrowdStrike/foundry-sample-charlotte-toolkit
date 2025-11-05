@@ -55,9 +55,7 @@ export const StructuredSecurityAnalysis: React.FC<StructuredSecurityAnalysisProp
             </p>
           ))
         ) : (
-          <p className="formatted-paragraph">
-            {data.executive_summary}
-          </p>
+          <p className="formatted-paragraph">{data.executive_summary}</p>
         )}
       </SlCard>
 
@@ -101,7 +99,10 @@ export const StructuredSecurityAnalysis: React.FC<StructuredSecurityAnalysisProp
             {needsFormatting(data.technical_details) ? (
               <div className="technical-details-formatted">
                 {formatSecurityText(data.technical_details, 'technical').map((paragraph, index) => (
-                  <div key={`technical-${index}-${paragraph.substring(0, 30)}`} className="technical-paragraph">
+                  <div
+                    key={`technical-${index}-${paragraph.substring(0, 30)}`}
+                    className="technical-paragraph"
+                  >
                     <ReactMarkdown components={renderers}>{paragraph}</ReactMarkdown>
                   </div>
                 ))}
@@ -118,9 +119,7 @@ export const StructuredSecurityAnalysis: React.FC<StructuredSecurityAnalysisProp
         <SlCard className="recommendations-details">
           <h3>
             <SlIcon name="lightbulb" />
-            <span className="text-break">
-              Priority Actions ({priorityActions.length})
-            </span>
+            <span className="text-break">Priority Actions ({priorityActions.length})</span>
           </h3>
           <ul className="compact-bullet-list">
             {priorityActions.map((action, index) => (
@@ -128,13 +127,8 @@ export const StructuredSecurityAnalysis: React.FC<StructuredSecurityAnalysisProp
                 key={`action-${index}-${action.substring(0, 30)}`}
                 className="recommendation-item"
               >
-                <SlIcon
-                  name="dot"
-                  className="secondary-text"
-                />
-                <span className="text-break">
-                  {action}
-                </span>
+                <SlIcon name="dot" className="secondary-text" />
+                <span className="text-break">{action}</span>
               </li>
             ))}
           </ul>
@@ -149,9 +143,7 @@ export const StructuredSecurityAnalysis: React.FC<StructuredSecurityAnalysisProp
             <span className="text-break">Analysis Methodology</span>
           </h3>
           <div className="reasoning-content">
-            <strong className="methodology-label">
-              Charlotte&apos;s Analytical Methodology:
-            </strong>
+            <strong className="methodology-label">Charlotte&apos;s Analytical Methodology:</strong>
             {needsFormatting(data.reasoning_assessment) ? (
               formatSecurityText(data.reasoning_assessment, 'reasoning').map((paragraph, index) => (
                 <p
@@ -162,9 +154,7 @@ export const StructuredSecurityAnalysis: React.FC<StructuredSecurityAnalysisProp
                 </p>
               ))
             ) : (
-              <p className="formatted-paragraph">
-                {data.reasoning_assessment}
-              </p>
+              <p className="formatted-paragraph">{data.reasoning_assessment}</p>
             )}
           </div>
         </SlCard>

@@ -35,7 +35,8 @@
         "noNonNullAssertion": "off"
       },
       "correctness": {
-        "useExhaustiveDependencies": "warn"
+        "useExhaustiveDependencies": "warn",
+        "useUniqueElementIds": "off"
       },
       "nursery": {
         "useSortedClasses": "off"

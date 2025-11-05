@@ -447,7 +447,6 @@
   margin-top: var(--spacing-sm);
 }
 
-
 /* Responsive adjustments for formatted text */
 @media (max-width: var(--breakpoint-md)) {
   .formatted-paragraph {

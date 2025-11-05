@@ -28,6 +28,7 @@
     "exactOptionalPropertyTypes": true,
     "noUncheckedIndexedAccess": true,
     "baseUrl": "./src",
+    "types": ["vitest/globals", "vitest/browser"],
     "paths": {
       "@/*": ["*"],
       "@/components/*": ["components/*"],
