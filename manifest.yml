@@ -1,86 +1,82 @@
-app_id: a91aa5a5fa7149b6b638cb37634b28e5
 name: Charlotte Toolkit
 description: AI-powered security analysis toolkit that leverages Charlotte AI to provide expert-level threat intelligence, automatic indicator extraction, and comprehensive security assessments
 logo: images/charlotte-logo.png
 vendor: CrowdStrike
 vendor_products: []
 use_case: Security Analysis
-manifest_version: "2023-05-09"
+manifest_version: '2023-05-09'
 ignored:
-    - ui/(extensions|pages)/[^\/]*?/node_modules
-    - ui/(extensions|pages)/.*/__tests__/.*
-    - ui/(extensions|pages)/.*/.*\.test\..*
-    - e2e
-    - e2e/.+
+- ui/(extensions|pages)/[^\/]*?/node_modules
+- ui/(extensions|pages)/.*/__tests__/.*
+- ui/(extensions|pages)/.*/.*\.test\..*
+- e2e
+- e2e/.+
 ui:
-    homepage: ""
-    extensions:
-        - id: ba8f332ae09642c18c37e7e67a1a3f3e
-          name: Charlotte Toolkit
-          description: Charlotte Toolkit UI
-          path: ui/extensions/charlotte-toolkit-ui/dist
-          entrypoint: ui/extensions/charlotte-toolkit-ui/dist/index.html
-          sockets:
-            - activity.detections.details
-            - ngsiem.workbench.details
-            - xdr.detections.panel
-          content_security_policy:
-            connect-src:
-                - self
-                - 'data:'
-                - https://cdn.jsdelivr.net
-            style-src:
-                - self
-                - unsafe-inline
-                - https://cdn.jsdelivr.net
-                - https://fonts.googleapis.com
-            style-src-elem:
-                - self
-                - unsafe-inline
-                - https://cdn.jsdelivr.net
-                - https://fonts.googleapis.com
-            script-src:
-                - self
-                - unsafe-inline
-                - unsafe-eval
-                - https://cdn.jsdelivr.net
-            form-action:
-                - self
-            img-src:
-                - self
-                - 'data:'
-                - https://cdn.jsdelivr.net
-            media-src:
-                - self
-            object-src:
-                - self
-          permissions: []
-          is_ui_builder: false
-    pages: {}
-    dashboards: {}
-    navigation: {}
+  homepage: ''
+  extensions:
+  - name: Charlotte Toolkit
+    description: Charlotte Toolkit UI
+    path: ui/extensions/charlotte-toolkit-ui/dist
+    entrypoint: ui/extensions/charlotte-toolkit-ui/dist/index.html
+    sockets:
+    - activity.detections.details
+    - ngsiem.workbench.details
+    - xdr.detections.panel
+    content_security_policy:
+      connect-src:
+      - self
+      - 'data:'
+      - https://cdn.jsdelivr.net
+      style-src:
+      - self
+      - unsafe-inline
+      - https://cdn.jsdelivr.net
+      - https://fonts.googleapis.com
+      style-src-elem:
+      - self
+      - unsafe-inline
+      - https://cdn.jsdelivr.net
+      - https://fonts.googleapis.com
+      script-src:
+      - self
+      - unsafe-inline
+      - unsafe-eval
+      - https://cdn.jsdelivr.net
+      form-action:
+      - self
+      img-src:
+      - self
+      - 'data:'
+      - https://cdn.jsdelivr.net
+      media-src:
+      - self
+      object-src:
+      - self
+    permissions: []
+    is_ui_builder: false
+  pages: {}
+  dashboards: {}
+  navigation: {}
 api_integrations: []
 rtr_scripts: []
 collections: []
 auth:
-    scopes:
-        - incidents:write
-        - incidents:read
-        - workflow:read
-        - workflow:write
-    permissions: {}
-    roles: []
+  scopes:
+  - incidents:write
+  - incidents:read
+  - workflow:read
+  - workflow:write
+  permissions: {}
+  roles: []
 functions: []
 workflows:
-    - id: 69485e1d50234bc6af8e77e0d46ceb49
-      name: Charlotte Toolkit Chat Completion
-      path: workflows/Charlotte_Toolkit_Chat_Completion.yml
-      permissions: []
+- name: Charlotte Toolkit Chat Completion
+  path: workflows/Charlotte_Toolkit_Chat_Completion.yml
+  permissions: []
 parsers: []
 logscale:
-    saved_searches: []
+  saved_searches: []
 lookup_files: []
 docs:
-    id: ba40459620504eaf9dfb8c8a8a43bad3
-    path: app_docs
-    entrypoint: README.md
+  path: app_docs
+  entrypoint: README.md
