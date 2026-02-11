@@ -9,7 +9,7 @@ import { BasePage } from './BasePage';
  * Supports testing Foundry extensions that appear in detection sockets:
  * - activity.detections.details (Endpoint Detections)
  * - xdr.detections.panel (XDR Detections)
- * - ngsiem.workbench.details (NGSIEM Cases)
+ * - ngsiem.workbench.details (NGSIEM Incidents)
  */
 export class SocketNavigationPage extends BasePage {
   constructor(page: Page) {
@@ -78,14 +78,14 @@ export class SocketNavigationPage extends BasePage {
    * Navigate to XDR Detections page (xdr.detections.panel socket)
    *
    * Note: Despite the socket name "xdr.detections.panel", this socket actually appears
-   * on the Cases page at /xdr/cases (previously Incidents at /xdr/incidents).
+   * on the Incidents page at /xdr/incidents (same as ngsiem.workbench.details).
    *
-   * Uses menu navigation: Menu → Next-Gen SIEM → Cases
+   * Uses menu navigation: Menu → Next-Gen SIEM → Incidents
    */
   async navigateToXDRDetections(): Promise<void> {
     return this.withTiming(
       async () => {
-        this.logger.info('Navigating to XDR Detections page (Cases)');
+        this.logger.info('Navigating to XDR Detections page (Incidents)');
 
         // Navigate to Foundry home first to ensure menu is available
         await this.navigateToPath('/foundry/home', 'Foundry home');
@@ -103,30 +103,30 @@ export class SocketNavigationPage extends BasePage {
         await ngsiemButton.click();
         await this.waiter.delay(500);
 
-        // Click "Cases" - use section-link selector to avoid the learn card
-        const casesLink = this.page.getByTestId('section-link').filter({ hasText: /Cases/i });
-        await casesLink.click();
+        // Click "Incidents" - use section-link selector to avoid the learn card
+        const incidentsLink = this.page.getByTestId('section-link').filter({ hasText: /Incidents/i });
+        await incidentsLink.click();
 
         await this.page.waitForLoadState('networkidle');
 
         const pageTitle = this.page.locator('h1, [role="heading"]').first();
         await expect(pageTitle).toBeVisible({ timeout: 10000 });
 
-        this.logger.success('Navigated to XDR Detections page (Cases)');
+        this.logger.success('Navigated to XDR Detections page (Incidents)');
       },
       'Navigate to XDR Detections'
     );
   }
 
   /**
-   * Navigate to NGSIEM Cases page (ngsiem.workbench.details socket)
-   * Uses menu navigation: Menu → Next-Gen SIEM → Cases
+   * Navigate to NGSIEM Incidents page (ngsiem.workbench.details socket)
+   * Uses menu navigation: Menu → Next-Gen SIEM → appropriate submenu → Incidents
    * Note: Requires NGSIEM SKU - may not be available in all environments
    */
-  async navigateToNGSIEMCases(): Promise<void> {
+  async navigateToNGSIEMIncidents(): Promise<void> {
     return this.withTiming(
       async () => {
-        this.logger.info('Navigating to Cases via Next-Gen SIEM menu');
+        this.logger.info('Navigating to NGSIEM Incidents page');
 
         // Navigate to Foundry home first to ensure menu is available
         await this.navigateToPath('/foundry/home', 'Foundry home');
@@ -144,18 +144,18 @@ export class SocketNavigationPage extends BasePage {
         await ngsiemButton.click();
         await this.waiter.delay(500);
 
-        // Look for Cases navigation - use section-link selector to avoid the learn card
-        const casesLink = this.page.getByTestId('section-link').filter({ hasText: /Cases/i });
-        await casesLink.click();
+        // Look for Incidents navigation - use section-link selector to avoid the learn card
+        const incidentsLink = this.page.getByTestId('section-link').filter({ hasText: /Incidents/i });
+        await incidentsLink.click();
 
         await this.page.waitForLoadState('networkidle');
 
         const pageTitle = this.page.locator('h1, [role="heading"]').first();
         await expect(pageTitle).toBeVisible({ timeout: 10000 });
 
-        this.logger.success('Navigated to Cases page via menu');
+        this.logger.success('Navigated to NGSIEM Incidents page');
       },
-      'Navigate to Cases via menu'
+      'Navigate to NGSIEM Incidents'
     );
   }
 

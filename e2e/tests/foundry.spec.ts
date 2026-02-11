@@ -10,10 +10,10 @@ test.describe('Charlotte Toolkit - E2E Tests', () => {
     await charlotteExtensionPage.verifyCharlotteExtensionRenders();
   });
 
-  test('should render Charlotte Toolkit extension in NGSIEM Cases (ngsiem.workbench.details)', async ({
+  test('should render Charlotte Toolkit extension in NGSIEM Incidents (ngsiem.workbench.details)', async ({
     charlotteExtensionPage,
   }) => {
-    await charlotteExtensionPage.navigateToNGSIEMCasesExtension();
+    await charlotteExtensionPage.navigateToNGSIEMIncidentsExtension();
     await charlotteExtensionPage.verifyCharlotteExtensionRenders();
   });
 
