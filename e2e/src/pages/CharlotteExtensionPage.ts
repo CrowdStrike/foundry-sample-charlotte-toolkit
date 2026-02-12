@@ -6,7 +6,7 @@ import { SocketNavigationPage } from './SocketNavigationPage';
  *
  * Extension appears in multiple sockets:
  * - activity.detections.details (Endpoint Detections)
- * - ngsiem.workbench.details (NGSIEM Incidents)
+ * - ngsiem.workbench.details (NGSIEM Cases)
  * - xdr.detections.panel (XDR Detections)
  *
  * Note: Charlotte AI functionality requires real detection context.
@@ -42,36 +42,37 @@ export class CharlotteExtensionPage extends SocketNavigationPage {
   }
 
   /**
-   * Navigate to Charlotte extension in NGSIEM Incidents socket
+   * Navigate to Charlotte extension in NGSIEM Cases socket
    * Socket: ngsiem.workbench.details
    *
    * This extension requires navigating to the Workbench view and clicking
    * on a graph node to reveal the extension panel.
    */
-  async navigateToNGSIEMIncidentsExtension(): Promise<void> {
+  async navigateToNGSIEMCasesExtension(): Promise<void> {
     return this.withTiming(
       async () => {
-        this.logger.info('Navigating to Charlotte extension in NGSIEM Incidents');
+        this.logger.info('Navigating to Charlotte extension in NGSIEM Cases');
 
-        // Navigate to NGSIEM incidents page
-        await this.navigateToNGSIEMIncidents();
+        // Navigate to Cases page
+        await this.navigateToNGSIEMCases();
 
-        // Wait for incidents to load
+        // Wait for cases to load
         await this.page.waitForLoadState('networkidle');
 
-        // Click on first incident to open details panel
-        const firstIncidentButton = this.page.locator('[role="gridcell"] button').first();
-        await firstIncidentButton.waitFor({ state: 'visible', timeout: 10000 });
-        await firstIncidentButton.click();
+        // Click on first case to open flyout dialog
+        const firstCaseButton = this.page.locator('[role="gridcell"] button').first();
+        await firstCaseButton.waitFor({ state: 'visible', timeout: 10000 });
+        await firstCaseButton.click();
 
-        // Wait for incident details to load
-        await this.page.waitForLoadState('networkidle');
+        // Wait for the flyout dialog to appear
+        const dialog = this.page.locator('[role="dialog"]');
+        await dialog.waitFor({ state: 'visible', timeout: 15000 });
+        this.logger.debug('Case flyout dialog opened');
 
-        // Navigate to full incident (Workbench view)
-        const seeFullIncidentLink = this.page.getByRole('link', { name: 'See full incident' });
-        await seeFullIncidentLink.waitFor({ state: 'visible', timeout: 10000 });
-        await seeFullIncidentLink.click();
-        this.logger.debug('Clicked See full incident link');
+        // Click "See full case" link to navigate to the case Workbench
+        const seeFullCaseLink = dialog.getByRole('link', { name: /See full case/i });
+        await seeFullCaseLink.waitFor({ state: 'visible', timeout: 10000 });
+        await seeFullCaseLink.click();
 
         // Wait for workbench to load
         await this.page.waitForLoadState('networkidle');
@@ -79,9 +80,9 @@ export class CharlotteExtensionPage extends SocketNavigationPage {
         // Use graph search to select a node (extension only appears when a node is selected)
         await this.clickGraphNode();
 
-        this.logger.success('Navigated to NGSIEM incident workbench with Charlotte Toolkit extension');
+        this.logger.success('Navigated to Cases workbench with Charlotte Toolkit extension');
       },
-      'Navigate to Charlotte Extension in NGSIEM Incidents'
+      'Navigate to Charlotte Extension in NGSIEM Cases'
     );
   }
 
@@ -134,31 +135,33 @@ export class CharlotteExtensionPage extends SocketNavigationPage {
    *
    * This extension requires navigating to the Workbench view and clicking
    * on a graph node to reveal the extension panel.
+   * Note: Despite the socket name, this now renders on the Cases Workbench.
    */
   async navigateToXDRDetectionsExtension(): Promise<void> {
     return this.withTiming(
       async () => {
         this.logger.info('Navigating to Charlotte extension in XDR Detections');
 
-        // Navigate to XDR detections page (which is actually the Incidents page)
+        // Navigate to XDR detections page (Cases)
         await this.navigateToXDRDetections();
 
-        // Wait for detections to load
+        // Wait for cases to load
         await this.page.waitForLoadState('networkidle');
 
-        // Click on first detection to open panel
-        const firstDetectionButton = this.page.locator('[role="gridcell"] button').first();
-        await firstDetectionButton.waitFor({ state: 'visible', timeout: 10000 });
-        await firstDetectionButton.click();
+        // Click on first case to open flyout dialog
+        const firstCaseButton = this.page.locator('[role="gridcell"] button').first();
+        await firstCaseButton.waitFor({ state: 'visible', timeout: 10000 });
+        await firstCaseButton.click();
 
-        // Wait for detection panel to load
-        await this.page.waitForLoadState('networkidle');
+        // Wait for the flyout dialog to appear
+        const dialog = this.page.locator('[role="dialog"]');
+        await dialog.waitFor({ state: 'visible', timeout: 15000 });
+        this.logger.debug('Case flyout dialog opened');
 
-        // Navigate to full incident (Workbench view)
-        const seeFullIncidentLink = this.page.getByRole('link', { name: 'See full incident' });
-        await seeFullIncidentLink.waitFor({ state: 'visible', timeout: 10000 });
-        await seeFullIncidentLink.click();
-        this.logger.debug('Clicked See full incident link');
+        // Click "See full case" link to navigate to the case Workbench
+        const seeFullCaseLink = dialog.getByRole('link', { name: /See full case/i });
+        await seeFullCaseLink.waitFor({ state: 'visible', timeout: 10000 });
+        await seeFullCaseLink.click();
 
         // Wait for workbench to load
         await this.page.waitForLoadState('networkidle');
