@@ -66,7 +66,7 @@ describe('CodeBlock Component', () => {
 
   describe('Component Rendering', () => {
     it('should render with basic props', () => {
-      render(<CodeBlock>const test = "hello";</CodeBlock>);
+      render(<CodeBlock>{'const test = "hello";'}</CodeBlock>);
 
       expect(screen.getByText('const test = "hello";')).toBeInTheDocument();
       expect(screen.getByTestId('sl-badge')).toBeInTheDocument();
@@ -74,19 +74,19 @@ describe('CodeBlock Component', () => {
     });
 
     it('should render with language class', () => {
-      render(<CodeBlock className="language-javascript">const test = "hello";</CodeBlock>);
+      render(<CodeBlock className="language-javascript">{'const test = "hello";'}</CodeBlock>);
 
       expect(screen.getByTestId('sl-badge')).toHaveTextContent('javascript');
     });
 
     it('should render with default language when no className', () => {
-      render(<CodeBlock>const test = "hello";</CodeBlock>);
+      render(<CodeBlock>{'const test = "hello";'}</CodeBlock>);
 
       expect(screen.getByTestId('sl-badge')).toHaveTextContent('text');
     });
 
     it('should render code in pre/code structure', () => {
-      const { container } = render(<CodeBlock className="language-python">print("hello")</CodeBlock>);
+      const { container } = render(<CodeBlock className="language-python">{'print("hello")'}</CodeBlock>);
 
       const pre = container.querySelector('pre');
       const code = container.querySelector('code');
@@ -203,7 +203,7 @@ describe('CodeBlock Component', () => {
         copyToClipboard: mockCopyToClipboard,
       });
 
-      render(<CodeBlock className="language-python">print("test")</CodeBlock>);
+      render(<CodeBlock className="language-python">{'print("test")'}</CodeBlock>);
 
       const tooltip = screen.getByTestId('sl-tooltip');
       expect(tooltip).toHaveAttribute('data-content', 'Copy python code to clipboard');
@@ -218,7 +218,7 @@ describe('CodeBlock Component', () => {
         copyToClipboard: mockCopyToClipboard,
       });
 
-      render(<CodeBlock className="language-javascript">console.log("test")</CodeBlock>);
+      render(<CodeBlock className="language-javascript">{'console.log("test")'}</CodeBlock>);
 
       const tooltip = screen.getByTestId('sl-tooltip');
       expect(tooltip).toHaveAttribute('data-content', 'Copied to clipboard!');

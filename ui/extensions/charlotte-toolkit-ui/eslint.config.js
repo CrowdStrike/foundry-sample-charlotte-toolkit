@@ -202,7 +202,7 @@ export default [
   // Test files configuration
   {
     name: 'charlotte-toolkit/tests',
-    files: ['**/*.test.{ts,tsx,js,jsx}', '**/*.spec.{ts,tsx,js,jsx}'],
+    files: ['**/*.test.{ts,tsx,js,jsx}', '**/*.spec.{ts,tsx,js,jsx}', '**/setupTests.ts'],
     languageOptions: {
       globals: {
         ...globals.jest

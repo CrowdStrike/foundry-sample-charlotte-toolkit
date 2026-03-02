@@ -34,7 +34,7 @@ describe('useCopyToClipboard', () => {
 
   describe('Successful Copy Operations', () => {
     it('should handle successful copy operation', async () => {
-      mockWriteText.mockResolvedValueOnce(undefined);
+      mockWriteText.mockResolvedValueOnce();
       const { result } = renderHook(() => useCopyToClipboard());
 
       await act(async () => {
@@ -47,7 +47,7 @@ describe('useCopyToClipboard', () => {
     });
 
     it('should reset state after default timeout', async () => {
-      mockWriteText.mockResolvedValueOnce(undefined);
+      mockWriteText.mockResolvedValueOnce();
       const { result } = renderHook(() => useCopyToClipboard());
 
       await act(async () => {
@@ -65,7 +65,7 @@ describe('useCopyToClipboard', () => {
     });
 
     it('should reset state after custom timeout', async () => {
-      mockWriteText.mockResolvedValueOnce(undefined);
+      mockWriteText.mockResolvedValueOnce();
       const { result } = renderHook(() => useCopyToClipboard());
 
       await act(async () => {
@@ -123,7 +123,7 @@ describe('useCopyToClipboard', () => {
 
   describe('Multiple Copy Operations', () => {
     it('should handle multiple sequential copy operations', async () => {
-      mockWriteText.mockResolvedValue(undefined);
+      mockWriteText.mockResolvedValue();
       const { result } = renderHook(() => useCopyToClipboard());
 
       // First copy
@@ -142,7 +142,7 @@ describe('useCopyToClipboard', () => {
     });
 
     it('should handle overlapping timeouts when multiple copies are triggered', async () => {
-      mockWriteText.mockResolvedValue(undefined);
+      mockWriteText.mockResolvedValue();
       const { result } = renderHook(() => useCopyToClipboard());
 
       // First copy with short timeout
@@ -171,7 +171,7 @@ describe('useCopyToClipboard', () => {
 
   describe('Text Content Handling', () => {
     it('should handle empty string', async () => {
-      mockWriteText.mockResolvedValueOnce(undefined);
+      mockWriteText.mockResolvedValueOnce();
       const { result } = renderHook(() => useCopyToClipboard());
 
       await act(async () => {
@@ -183,7 +183,7 @@ describe('useCopyToClipboard', () => {
     });
 
     it('should handle multiline text', async () => {
-      mockWriteText.mockResolvedValueOnce(undefined);
+      mockWriteText.mockResolvedValueOnce();
       const { result } = renderHook(() => useCopyToClipboard());
 
       const multilineText = 'line 1\nline 2\nline 3';
@@ -197,10 +197,10 @@ describe('useCopyToClipboard', () => {
     });
 
     it('should handle special characters', async () => {
-      mockWriteText.mockResolvedValueOnce(undefined);
+      mockWriteText.mockResolvedValueOnce();
       const { result } = renderHook(() => useCopyToClipboard());
 
-      const specialText = '!@#$%^&*()_+-={}[]|\\:";\'<>?,./"';
+      const specialText = String.raw`!@#$%^&*()_+-={}[]|\:";'<>?,./"`;
 
       await act(async () => {
         await result.current.copyToClipboard(specialText);
@@ -213,7 +213,7 @@ describe('useCopyToClipboard', () => {
 
   describe('Component Unmount', () => {
     it('should handle component unmount with pending timeout', async () => {
-      mockWriteText.mockResolvedValueOnce(undefined);
+      mockWriteText.mockResolvedValueOnce();
       const { result, unmount } = renderHook(() => useCopyToClipboard());
 
       await act(async () => {
@@ -234,7 +234,7 @@ describe('useCopyToClipboard', () => {
 
   describe('State Consistency', () => {
     it('should maintain consistent state relationship between copyState and isSuccess', async () => {
-      mockWriteText.mockResolvedValue(undefined);
+      mockWriteText.mockResolvedValue();
       const { result } = renderHook(() => useCopyToClipboard());
 
       // Initial state
@@ -256,7 +256,7 @@ describe('useCopyToClipboard', () => {
 
   describe('Edge Cases', () => {
     it('should handle zero timeout', async () => {
-      mockWriteText.mockResolvedValueOnce(undefined);
+      mockWriteText.mockResolvedValueOnce();
       const { result } = renderHook(() => useCopyToClipboard());
 
       await act(async () => {
@@ -273,7 +273,7 @@ describe('useCopyToClipboard', () => {
     });
 
     it('should handle negative timeout (should use default)', async () => {
-      mockWriteText.mockResolvedValueOnce(undefined);
+      mockWriteText.mockResolvedValueOnce();
       const { result } = renderHook(() => useCopyToClipboard());
 
       await act(async () => {

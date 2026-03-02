@@ -1,4 +1,5 @@
 // src/setupTests.ts
+/* eslint-disable no-undef */
 import '@testing-library/jest-dom';
 import { cleanup } from '@testing-library/react';
 
@@ -79,7 +80,7 @@ afterEach(() => {
   domCleanupQueue.forEach(cleanupFn => {
     try {
       cleanupFn();
-    } catch (error) {
+    } catch {
       // Ignore cleanup errors
     }
   });

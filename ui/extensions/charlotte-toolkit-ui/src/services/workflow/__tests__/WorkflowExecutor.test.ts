@@ -5,8 +5,7 @@ import {
   cancelWorkflowExecution,
   getWorkflowStatus,
 } from '../WorkflowExecutor';
-import type { WorkflowExecutionParams } from '../types';
-import { WorkflowStatus, WORKFLOW_CONFIG } from '../types';
+import { type WorkflowExecutionParams, WorkflowStatus } from '../types';
 
 // Mock external dependencies
 jest.mock('@crowdstrike/foundry-js', () => {
@@ -102,7 +101,7 @@ describe('WorkflowExecutor', () => {
       estimatedFormat: 'text',
       warnings: []
     });
-    mockFormatErrorMessage.mockImplementation((error: any) => error?.message || String(error));
+    mockFormatErrorMessage.mockImplementation((error: any) => error?.message ?? String(error));
   });
 
   describe('executeWorkflowWithCache', () => {

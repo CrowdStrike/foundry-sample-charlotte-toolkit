@@ -153,7 +153,7 @@ const code = "block";
   describe('convertJsonToMarkdown', () => {
     it('should handle empty input', () => {
       expect(convertJsonToMarkdown(null)).toBe('');
-      expect(convertJsonToMarkdown(undefined)).toBe('');
+      expect(convertJsonToMarkdown()).toBe('');
       expect(convertJsonToMarkdown({})).toBe('');
     });
 
@@ -281,7 +281,7 @@ const code = "block";
           related_iocs: {
             domains: ['malicious.com', 'bad-actor.net'],
             ips: ['1.2.3.4', '5.6.7.8'],
-            registry_keys: ['HKEY_LOCAL_MACHINE\\Software\\Malware'],
+            registry_keys: [String.raw`HKEY_LOCAL_MACHINE\Software\Malware`],
             hashes: ['abc123', 'def456']
           }
         }
@@ -394,7 +394,7 @@ const code = "block";
   describe('convertJsonToPlainText', () => {
     it('should handle empty input', () => {
       expect(convertJsonToPlainText(null)).toBe('');
-      expect(convertJsonToPlainText(undefined)).toBe('');
+      expect(convertJsonToPlainText()).toBe('');
       expect(convertJsonToPlainText({})).toBe('');
     });
 
@@ -661,7 +661,7 @@ const code = "block";
 
   describe('copyToClipboard', () => {
     it('should successfully copy text to clipboard', async () => {
-      mockClipboard.writeText.mockResolvedValue(undefined);
+      mockClipboard.writeText.mockResolvedValue();
       
       const result = await copyToClipboard('test text', 'plaintext');
       
@@ -679,7 +679,7 @@ const code = "block";
     });
 
     it('should work with different text content', async () => {
-      mockClipboard.writeText.mockResolvedValue(undefined);
+      mockClipboard.writeText.mockResolvedValue();
       
       const texts = ['simple text', 'text with\nnewlines', '{"json": "data"}', ''];
       
@@ -691,7 +691,7 @@ const code = "block";
     });
 
     it('should handle different formats parameter', async () => {
-      mockClipboard.writeText.mockResolvedValue(undefined);
+      mockClipboard.writeText.mockResolvedValue();
       
       const formats: CopyFormat[] = ['json', 'markdown', 'plaintext'];
       
@@ -755,7 +755,7 @@ const code = "block";
       expect(parsed.executive_summary).toBe('Test malware detected');
       
       // Test clipboard functionality
-      mockClipboard.writeText.mockResolvedValue(undefined);
+      mockClipboard.writeText.mockResolvedValue();
       const copyResult = await copyToClipboard(markdownText, 'markdown');
       expect(copyResult).toBe(true);
       
@@ -772,7 +772,7 @@ const code = "block";
       
       // Null/undefined data
       expect(convertJsonToMarkdown(null)).toBe('');
-      expect(convertJsonToPlainText(undefined)).toBe('');
+      expect(convertJsonToPlainText()).toBe('');
       expect(stripMarkdown('')).toBe('');
     });
 

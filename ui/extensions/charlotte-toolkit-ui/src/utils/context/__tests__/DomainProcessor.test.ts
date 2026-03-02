@@ -160,8 +160,8 @@ describe('DomainProcessor', () => {
 
       // Should have 1 TLD with 3 total instances and 3 domain entries
       expect(result).toHaveLength(4); // 1 TLD + 3 domains
-      
-      const tldEntry = result[0];
+
+      const [tldEntry] = result;
       expect(tldEntry.displayName).toBe('example.com (3 instances)');
       expect(tldEntry.entityData.totalCount).toBe(3);
       expect(tldEntry.entityData.domainCount).toBe(3);
@@ -178,12 +178,12 @@ describe('DomainProcessor', () => {
       const result = processDomains(entityValues);
 
       expect(result).toHaveLength(2); // 1 TLD + 1 domain (duplicates merged)
-      
-      const tldEntry = result[0];
+
+      const [tldEntry] = result;
       expect(tldEntry.entityData.totalCount).toBe(3);
       expect(tldEntry.entityData.sources).toEqual(['domain_names', 'email_addresses', 'users']);
       
-      const domainEntry = result[1];
+      const [, domainEntry] = result;
       expect(domainEntry.entityData.count).toBe(3);
       expect(domainEntry.entityData.sources).toEqual(['domain_names', 'email_addresses', 'users']);
     });
@@ -342,7 +342,7 @@ describe('DomainProcessor', () => {
 
     it('should not extract domain from non-email user_principal', () => {
       const detection = {
-        user_principal: 'DOMAIN\\username'
+        user_principal: String.raw`DOMAIN\username`
       };
 
       extractDomainsFromDetection(detection, options);

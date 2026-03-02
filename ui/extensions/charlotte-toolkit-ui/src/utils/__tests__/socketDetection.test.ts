@@ -156,7 +156,7 @@ describe('socketDetection', () => {
 
     it('should handle null/undefined context data', () => {
       const result1 = detectCurrentSocket(null);
-      const result2 = detectCurrentSocket(undefined);
+      const result2 = detectCurrentSocket();
       
       expect(result1.socket).toBe('unknown');
       expect(result2.socket).toBe('unknown');

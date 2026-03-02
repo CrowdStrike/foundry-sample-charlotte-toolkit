@@ -78,6 +78,9 @@ jest.mock('../../services/workflow', () => ({
 // Import components after mocks
 import Home from '../Home';
 import * as workflowService from '../../services/workflow';
+import { useContextProcessor } from '../../hooks/useContextProcessor';
+import { useJsonDataManager } from '../../hooks/useJsonDataManager';
+import { useTabManager } from '../../hooks/useTabManager';
 
 // Mock Shoelace components
 jest.mock('@shoelace-style/shoelace/dist/react', () => ({
@@ -89,7 +92,8 @@ jest.mock('@shoelace-style/shoelace/dist/react', () => ({
   SlIcon: ({ name, className, ...props }: any) => (
     <span data-testid="sl-icon" data-icon-name={name} className={className} {...props} />
   ),
-  SlTabGroup: React.forwardRef(({ children, placement, onSlTabShow, ...props }: any, ref: any) => (
+  // eslint-disable-next-line react/display-name
+  SlTabGroup: React.forwardRef(({ children, placement, ...props }: any, ref: any) => (
     <div data-testid="sl-tab-group" data-placement={placement} ref={ref} {...props}>
       {children}
     </div>
@@ -165,7 +169,7 @@ jest.mock('../QueryForm', () => {
           data-testid="temperature-input"
           type="number"
           value={props.temperature}
-          onChange={(e) => props.setTemperature(parseFloat(e.target.value))}
+          onChange={(e) => props.setTemperature(Number.parseFloat(e.target.value))}
           min="0" max="1" step="0.1"
         />
         <button
@@ -219,7 +223,7 @@ describe.skip('Home Component', () => {
       
       // Check for Response tab by finding it among all tabs
       const tabs = screen.getAllByTestId('sl-tab');
-      const responseTab = tabs.find(tab => tab.getAttribute('data-panel') === 'response');
+      const responseTab = tabs.find(tab => tab.dataset.panel === 'response');
       expect(responseTab).toBeInTheDocument();
       
       // JSON tab is conditionally rendered based on showJsonTab state (initially false)
@@ -241,7 +245,7 @@ describe.skip('Home Component', () => {
       render(<Home falcon={mockFalcon} />);
       // Find the response tab button by its data-panel attribute
       const tabs = screen.getAllByTestId('sl-tab');
-      const responseTab = tabs.find(tab => tab.getAttribute('data-panel') === 'response');
+      const responseTab = tabs.find(tab => tab.dataset.panel === 'response');
       expect(responseTab).toHaveAttribute('disabled');
     });
   });
@@ -467,18 +471,16 @@ describe.skip('Home Component', () => {
 
   describe('Hook Integration', () => {
     it('should call useContextProcessor with falcon data', () => {
-      const useContextProcessor = require('../../hooks/useContextProcessor').useContextProcessor;
       render(<Home falcon={mockFalcon} />);
-      
+
       expect(useContextProcessor).toHaveBeenCalledWith({
         falconData: mockFalcon.data,
       });
     });
 
     it('should call useJsonDataManager with correct parameters', () => {
-      const useJsonDataManager = require('../../hooks/useJsonDataManager').useJsonDataManager;
       render(<Home falcon={mockFalcon} />);
-      
+
       expect(useJsonDataManager).toHaveBeenCalledWith({
         falconData: mockFalcon.data,
         availableContextOptions: expect.any(Array),
@@ -493,9 +495,8 @@ describe.skip('Home Component', () => {
     });
 
     it('should call useTabManager with correct state', () => {
-      const useTabManager = require('../../hooks/useTabManager').useTabManager;
       render(<Home falcon={mockFalcon} />);
-      
+
       expect(useTabManager).toHaveBeenCalledWith({
         hasSubmittedQuery: false,
         loading: false,
