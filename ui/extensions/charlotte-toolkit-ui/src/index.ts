@@ -24,19 +24,11 @@ const initializeTheme = () => {
   // Simple system preference detection
   const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
 
-  if (prefersDark) {
-    document.documentElement.classList.add('theme-dark');
-  } else {
-    document.documentElement.classList.remove('theme-dark');
-  }
+  document.documentElement.classList.toggle('theme-dark', prefersDark);
 
   // Listen for system theme changes and update automatically
   window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
-    if (e.matches) {
-      document.documentElement.classList.add('theme-dark');
-    } else {
-      document.documentElement.classList.remove('theme-dark');
-    }
+    document.documentElement.classList.toggle('theme-dark', e.matches);
   });
 };
 

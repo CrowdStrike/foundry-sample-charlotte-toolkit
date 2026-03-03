@@ -64,10 +64,10 @@ describe('queryTemplates', () => {
     });
 
     it('should handle filenames with paths', () => {
-      const filename = 'C:\\Windows\\System32\\suspicious.dll';
+      const filename = String.raw`C:\Windows\System32\suspicious.dll`;
       const result = createFileQueryTemplate(filename);
       
-      expect(result).toContain('file "C:\\Windows\\System32\\suspicious.dll"');
+      expect(result).toContain(String.raw`file "C:\Windows\System32\suspicious.dll"`);
       expect(result).toContain('FILE ANALYSIS');
     });
 
@@ -219,10 +219,10 @@ describe('queryTemplates', () => {
     });
 
     it('should handle user with domain', () => {
-      const user = 'DOMAIN\\admin';
+      const user = String.raw`DOMAIN\admin`;
       const result = createUserQueryTemplate(user);
       
-      expect(result).toContain('user account "DOMAIN\\admin"');
+      expect(result).toContain(String.raw`user account "DOMAIN\admin"`);
     });
 
     it('should handle email-format username', () => {

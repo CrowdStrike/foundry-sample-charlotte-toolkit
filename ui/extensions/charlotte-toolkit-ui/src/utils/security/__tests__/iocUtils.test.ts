@@ -5,8 +5,8 @@ import type { StructuredSecurityResponse } from '../../../types/security';
 
 // Jest global declarations for TypeScript
 declare global {
-  var describe: (name: string, fn: () => void) => void;
-  var it: (name: string, fn: () => void) => void;
+  var describe: (name: string, function_: () => void) => void;
+  var it: (name: string, function_: () => void) => void;
   var expect: any;
 }
 
@@ -25,7 +25,7 @@ describe('IOC Utils', () => {
           ips: ['192.168.1.1'],
           domains: ['evil.com'],
           urls: ['http://evil.com/malware'],
-          file_paths: ['C:\\temp\\malware.exe']
+          file_paths: [String.raw`C:\temp\malware.exe`]
         },
         mitre_techniques: [
           {
@@ -98,7 +98,7 @@ describe('IOC Utils', () => {
           ips: ['1.2.3.4', '5.6.7.8'],
           domains: ['bad.com', 'evil.org'],
           urls: ['http://bad.com/malware'],
-          file_paths: ['C:\\temp\\bad.exe', '/tmp/malware']
+          file_paths: [String.raw`C:\temp\bad.exe`, '/tmp/malware']
         }
       };
 
@@ -107,7 +107,7 @@ describe('IOC Utils', () => {
       expect(result?.iocs?.ips).toEqual(['1.2.3.4', '5.6.7.8']);
       expect(result?.iocs?.domains).toEqual(['bad.com', 'evil.org']);
       expect(result?.iocs?.urls).toEqual(['http://bad.com/malware']);
-      expect(result?.iocs?.file_paths).toEqual(['C:\\temp\\bad.exe', '/tmp/malware']);
+      expect(result?.iocs?.file_paths).toEqual([String.raw`C:\temp\bad.exe`, '/tmp/malware']);
     });
 
     it('should handle response with MITRE techniques', () => {

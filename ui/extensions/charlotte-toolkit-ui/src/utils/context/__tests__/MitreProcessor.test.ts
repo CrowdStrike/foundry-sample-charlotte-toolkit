@@ -112,7 +112,7 @@ describe('MitreProcessor', () => {
 
     it('should handle null/undefined input', () => {
       expect(extractTechniqueId(null)).toBeNull();
-      expect(extractTechniqueId(undefined)).toBeNull();
+      expect(extractTechniqueId()).toBeNull();
       expect(extractTechniqueId({})).toBeNull();
     });
 
@@ -386,7 +386,7 @@ describe('MitreProcessor', () => {
     it('should handle empty/null input', () => {
       expect(processMITRETechniques({})).toEqual([]);
       expect(processMITRETechniques(null)).toEqual([]);
-      expect(processMITRETechniques(undefined)).toEqual([]);
+      expect(processMITRETechniques()).toEqual([]);
     });
 
     it('should process legacy mitre_techniques array', () => {

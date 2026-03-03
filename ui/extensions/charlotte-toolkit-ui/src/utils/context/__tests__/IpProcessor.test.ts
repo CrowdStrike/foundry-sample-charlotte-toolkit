@@ -40,7 +40,7 @@ describe('IpProcessor', () => {
 
     it('should handle null/undefined input', () => {
       expect(processIPs(null)).toEqual([]);
-      expect(processIPs(undefined)).toEqual([]);
+      expect(processIPs()).toEqual([]);
     });
 
     it('should process public IPv4 addresses', () => {
