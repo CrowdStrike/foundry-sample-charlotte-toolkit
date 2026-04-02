@@ -89,7 +89,7 @@ describe('ResponseDisplay Component', () => {
       expect(spinner).toBeInTheDocument();
       
       // Check if spinner has correct styles
-      const styleData = JSON.parse(spinner.getAttribute('data-style') || '{}');
+      const styleData = JSON.parse(spinner.dataset.style ?? '{}');
       expect(styleData['--track-width']).toBe('3px');
       expect(styleData['--track-color']).toBe('var(--cs-border-color-light, #e2e8f0)');
       expect(styleData['--indicator-color']).toBe('var(--cs-color-primary, #0ea5e9)');
@@ -137,7 +137,7 @@ describe('ResponseDisplay Component', () => {
     });
 
     it('should clear timers on unmount', () => {
-      const clearTimeoutSpy = jest.spyOn(global, 'clearTimeout');
+      const clearTimeoutSpy = jest.spyOn(globalThis, 'clearTimeout');
       const { unmount } = render(<ResponseDisplay {...defaultProps} loading={true} />);
 
       unmount();
@@ -196,7 +196,7 @@ describe('ResponseDisplay Component', () => {
 
       // Since trimming isn't explicitly done, this should actually show markdown
       // But if responseText is empty string, it shows empty state
-      const { rerender } = render(<ResponseDisplay {...defaultProps} responseText="" />);
+      render(<ResponseDisplay {...defaultProps} responseText="" />);
       expect(screen.getByText('Submit a query to see analysis results')).toBeInTheDocument();
     });
   });

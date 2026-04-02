@@ -25,7 +25,7 @@ jest.mock('../../../utils/context', () => ({
 // Mock TruncatedText component
 jest.mock('../../TruncatedText', () => {
   return function MockTruncatedText({ children, displayText }: any) {
-    return <span data-testid="truncated-text">{displayText || children}</span>;
+    return <span data-testid="truncated-text">{displayText ?? children}</span>;
   };
 });
 
@@ -36,7 +36,7 @@ jest.mock('@shoelace-style/shoelace/dist/react', () => ({
       <label>{label}</label>
       <select
         value={value}
-        onChange={(e) => onSlChange && onSlChange({ target: e.target })}
+        onChange={(e) => onSlChange?.({ target: e.target })}
         disabled={disabled}
         data-testid="context-select"
       >
@@ -493,6 +493,7 @@ describe('ContextEntitySelector', () => {
     });
 
     it('should call formatDisplayName utility', () => {
+      // eslint-disable-next-line @typescript-eslint/no-require-imports, no-undef
       const { formatDisplayName } = require('../../../utils/context');
       
       render(<ContextEntitySelector {...defaultProps} availableContextOptions={truncatedOptions} />);

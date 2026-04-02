@@ -52,7 +52,7 @@ describe('MITREDisplay', () => {
     // Default mocks
     mockFormatMitreDescription.mockImplementation((description: string) => [description]);
     mockBuildMitreUrl.mockImplementation((techniqueId: string) => `https://attack.mitre.org/techniques/${techniqueId}/`);
-    mockWriteText.mockResolvedValue(undefined);
+    mockWriteText.mockResolvedValue();
   });
 
   afterEach(() => {

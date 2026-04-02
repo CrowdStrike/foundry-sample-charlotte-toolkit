@@ -6,7 +6,6 @@ import {
   validateTemperature,
   validateJsonSchema,
   validateWorkflowParamsDetailed,
-  type ValidationResult,
 } from '../WorkflowValidator';
 import type { WorkflowExecutionParams } from '../types';
 

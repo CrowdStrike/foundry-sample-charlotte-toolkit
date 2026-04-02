@@ -27,7 +27,7 @@ describe('useFalconApi', () => {
 
   describe('Successful Initialization', () => {
     it('should initialize successfully when connect resolves', async () => {
-      mockFalconInstance.connect.mockResolvedValue(undefined);
+      mockFalconInstance.connect.mockResolvedValue();
 
       const { result } = renderHook(() => useFalconApi());
 
@@ -46,7 +46,7 @@ describe('useFalconApi', () => {
     });
 
     it('should create Falcon API instance only once', () => {
-      mockFalconInstance.connect.mockResolvedValue(undefined);
+      mockFalconInstance.connect.mockResolvedValue();
 
       const { result, rerender } = renderHook(() => useFalconApi());
 
@@ -64,7 +64,7 @@ describe('useFalconApi', () => {
       // First fail, then succeed on retry
       mockFalconInstance.connect
         .mockRejectedValueOnce(new Error('Connection failed'))
-        .mockResolvedValueOnce(undefined);
+        .mockResolvedValueOnce();
 
       const { result } = renderHook(() => useFalconApi());
 
@@ -78,7 +78,7 @@ describe('useFalconApi', () => {
       // The hook uses the same instance with useMemo([]), so we can't 
       // easily test re-initialization. Let's test a different scenario.
       // Create a fresh hook instance that succeeds immediately
-      mockFalconInstance.connect.mockResolvedValue(undefined);
+      mockFalconInstance.connect.mockResolvedValue();
       
       const { result: result2 } = renderHook(() => useFalconApi());
 
@@ -195,7 +195,7 @@ describe('useFalconApi', () => {
     });
 
     it('should handle multiple rapid re-renders during initialization', async () => {
-      mockFalconInstance.connect.mockResolvedValue(undefined);
+      mockFalconInstance.connect.mockResolvedValue();
 
       const { result, rerender } = renderHook(() => useFalconApi());
 
@@ -215,7 +215,7 @@ describe('useFalconApi', () => {
     it('should maintain state correctly with same falcon instance', async () => {
       // Since useMemo has empty dependency array, the falcon instance never changes
       // This test verifies that behavior is correct
-      mockFalconInstance.connect.mockResolvedValue(undefined);
+      mockFalconInstance.connect.mockResolvedValue();
 
       const { result, rerender } = renderHook(() => useFalconApi());
 
@@ -287,7 +287,7 @@ describe('useFalconApi', () => {
 
   describe('Integration Scenarios', () => {
     it('should work correctly with typical usage patterns', async () => {
-      mockFalconInstance.connect.mockResolvedValue(undefined);
+      mockFalconInstance.connect.mockResolvedValue();
 
       const { result } = renderHook(() => useFalconApi());
 
@@ -335,7 +335,7 @@ describe('useFalconApi', () => {
     });
 
     it('should maintain referential stability of falcon instance', async () => {
-      mockFalconInstance.connect.mockResolvedValue(undefined);
+      mockFalconInstance.connect.mockResolvedValue();
 
       const { result, rerender } = renderHook(() => useFalconApi());
 
@@ -360,7 +360,7 @@ describe('useFalconApi', () => {
     });
 
     it('should provide type-safe return values', async () => {
-      mockFalconInstance.connect.mockResolvedValue(undefined);
+      mockFalconInstance.connect.mockResolvedValue();
 
       const { result } = renderHook(() => useFalconApi());
 
@@ -392,7 +392,7 @@ describe('useFalconApi', () => {
       expect(result.current.isInitialized).toBe(false);
 
       // Mock subsequent successful connection
-      mockFalconInstance.connect.mockResolvedValueOnce(undefined);
+      mockFalconInstance.connect.mockResolvedValueOnce();
 
       // Call retry
       result.current.retry();
@@ -408,7 +408,7 @@ describe('useFalconApi', () => {
 
     it('should handle retry when already initialized', async () => {
       // Initially succeed
-      mockFalconInstance.connect.mockResolvedValue(undefined);
+      mockFalconInstance.connect.mockResolvedValue();
       
       const { result } = renderHook(() => useFalconApi());
 
@@ -431,7 +431,7 @@ describe('useFalconApi', () => {
 
     it('should handle retry failure', async () => {
       // Initially succeed
-      mockFalconInstance.connect.mockResolvedValueOnce(undefined);
+      mockFalconInstance.connect.mockResolvedValueOnce();
       
       const { result } = renderHook(() => useFalconApi());
 
@@ -458,7 +458,7 @@ describe('useFalconApi', () => {
 
   describe('Performance Considerations', () => {
     it('should not create multiple API instances on re-renders', () => {
-      mockFalconInstance.connect.mockResolvedValue(undefined);
+      mockFalconInstance.connect.mockResolvedValue();
 
       const { rerender } = renderHook(() => useFalconApi());
 
@@ -472,7 +472,7 @@ describe('useFalconApi', () => {
     });
 
     it('should not trigger multiple connect calls on rapid re-renders', async () => {
-      mockFalconInstance.connect.mockResolvedValue(undefined);
+      mockFalconInstance.connect.mockResolvedValue();
 
       const { result, rerender } = renderHook(() => useFalconApi());
 

@@ -25,12 +25,11 @@ describe('TruncatedText Component', () => {
   const defaultProps = {
     originalText: 'This is the full original text',
     displayText: 'This is the full original text',
-    children: <span>Test content</span>,
   };
 
   describe('Component Rendering', () => {
     it('should render children without tooltip when text is not truncated', () => {
-      render(<TruncatedText {...defaultProps} />);
+      render(<TruncatedText {...defaultProps}><span>Test content</span></TruncatedText>);
 
       expect(screen.getByText('Test content')).toBeInTheDocument();
       expect(screen.queryByTestId('sl-tooltip')).not.toBeInTheDocument();
@@ -42,33 +41,31 @@ describe('TruncatedText Component', () => {
         displayText: 'This is truncated...',
       };
 
-      render(<TruncatedText {...truncatedProps} />);
+      render(<TruncatedText {...truncatedProps}><span>Test content</span></TruncatedText>);
 
       expect(screen.getByText('Test content')).toBeInTheDocument();
       expect(screen.getByTestId('sl-tooltip')).toBeInTheDocument();
     });
 
     it('should render with different types of children', () => {
-      const stringChild = (
+      const { rerender } = render(
         <TruncatedText
           originalText="Full text"
           displayText="Truncated..."
-          children="String child"
-        />
+        >
+          {"String child"}
+        </TruncatedText>
       );
-
-      const { rerender } = render(stringChild);
       expect(screen.getByText('String child')).toBeInTheDocument();
 
-      const elementChild = (
+      rerender(
         <TruncatedText
           originalText="Full text"
           displayText="Truncated..."
-          children={<div data-testid="custom-element">Custom element</div>}
-        />
+        >
+          <div data-testid="custom-element">Custom element</div>
+        </TruncatedText>
       );
-
-      rerender(elementChild);
       expect(screen.getByTestId('custom-element')).toBeInTheDocument();
       expect(screen.getByText('Custom element')).toBeInTheDocument();
     });
@@ -80,8 +77,9 @@ describe('TruncatedText Component', () => {
         <TruncatedText
           originalText="This is a very long text that gets truncated"
           displayText="This is a very long..."
-          children={<span>Truncated content</span>}
-        />
+        >
+          <span>Truncated content</span>
+        </TruncatedText>
       );
 
       expect(screen.getByTestId('sl-tooltip')).toBeInTheDocument();
@@ -92,8 +90,9 @@ describe('TruncatedText Component', () => {
         <TruncatedText
           originalText="Short text"
           displayText="Short text"
-          children={<span>Non-truncated content</span>}
-        />
+        >
+          <span>Non-truncated content</span>
+        </TruncatedText>
       );
 
       expect(screen.queryByTestId('sl-tooltip')).not.toBeInTheDocument();
@@ -104,8 +103,9 @@ describe('TruncatedText Component', () => {
         <TruncatedText
           originalText=""
           displayText=""
-          children={<span>Empty text</span>}
-        />
+        >
+          <span>Empty text</span>
+        </TruncatedText>
       );
 
       expect(screen.queryByTestId('sl-tooltip')).not.toBeInTheDocument();
@@ -116,8 +116,9 @@ describe('TruncatedText Component', () => {
         <TruncatedText
           originalText="Original text"
           displayText=""
-          children={<span>Content</span>}
-        />
+        >
+          <span>Content</span>
+        </TruncatedText>
       );
 
       expect(screen.getByTestId('sl-tooltip')).toBeInTheDocument();
@@ -128,8 +129,9 @@ describe('TruncatedText Component', () => {
         <TruncatedText
           originalText=""
           displayText="Display text"
-          children={<span>Content</span>}
-        />
+        >
+          <span>Content</span>
+        </TruncatedText>
       );
 
       expect(screen.getByTestId('sl-tooltip')).toBeInTheDocument();
@@ -139,13 +141,14 @@ describe('TruncatedText Component', () => {
   describe('Tooltip Configuration', () => {
     it('should set correct tooltip content from originalText', () => {
       const originalText = 'This is the complete original text content';
-      
+
       render(
         <TruncatedText
           originalText={originalText}
           displayText="Truncated..."
-          children={<span>Content</span>}
-        />
+        >
+          <span>Content</span>
+        </TruncatedText>
       );
 
       const tooltip = screen.getByTestId('sl-tooltip');
@@ -157,8 +160,9 @@ describe('TruncatedText Component', () => {
         <TruncatedText
           originalText="Full text"
           displayText="Truncated..."
-          children={<span>Content</span>}
-        />
+        >
+          <span>Content</span>
+        </TruncatedText>
       );
 
       const tooltip = screen.getByTestId('sl-tooltip');
@@ -186,13 +190,14 @@ describe('TruncatedText Component', () => {
             originalText="Full text"
             displayText="Truncated..."
             placement={placement}
-            children={<span data-testid={`content-${placement}`}>Content</span>}
-          />
+          >
+            <span data-testid={`content-${placement}`}>Content</span>
+          </TruncatedText>
         );
 
         const tooltip = screen.getByTestId('sl-tooltip');
         expect(tooltip).toHaveAttribute('data-placement', placement);
-        
+
         // Clean up after each render
         unmount();
       });
@@ -203,8 +208,9 @@ describe('TruncatedText Component', () => {
         <TruncatedText
           originalText="Full text"
           displayText="Truncated..."
-          children={<span>Content</span>}
-        />
+        >
+          <span>Content</span>
+        </TruncatedText>
       );
 
       const tooltip = screen.getByTestId('sl-tooltip');
@@ -221,8 +227,9 @@ describe('TruncatedText Component', () => {
         <TruncatedText
           originalText="Text with   spaces"
           displayText="Text with spaces"
-          children={<span>Content</span>}
-        />
+        >
+          <span>Content</span>
+        </TruncatedText>
       );
 
       expect(screen.getByTestId('sl-tooltip')).toBeInTheDocument();
@@ -233,8 +240,9 @@ describe('TruncatedText Component', () => {
         <TruncatedText
           originalText="Text with special chars: @#$%^&*()"
           displayText="Text with special chars..."
-          children={<span>Content</span>}
-        />
+        >
+          <span>Content</span>
+        </TruncatedText>
       );
 
       const tooltip = screen.getByTestId('sl-tooltip');
@@ -246,8 +254,9 @@ describe('TruncatedText Component', () => {
         <TruncatedText
           originalText="Unicode text: 你好世界 émojis 🌟"
           displayText="Unicode text..."
-          children={<span>Content</span>}
-        />
+        >
+          <span>Content</span>
+        </TruncatedText>
       );
 
       const tooltip = screen.getByTestId('sl-tooltip');
@@ -256,14 +265,15 @@ describe('TruncatedText Component', () => {
 
     it('should handle very long text', () => {
       const longText = 'a'.repeat(1000);
-      const truncatedText = 'a'.repeat(50) + '...';
+      const truncatedText = `${'a'.repeat(50)}...`;
 
       render(
         <TruncatedText
           originalText={longText}
           displayText={truncatedText}
-          children={<span>Content</span>}
-        />
+        >
+          <span>Content</span>
+        </TruncatedText>
       );
 
       const tooltip = screen.getByTestId('sl-tooltip');
@@ -284,8 +294,9 @@ describe('TruncatedText Component', () => {
         <TruncatedText
           originalText="Same text"
           displayText="Same text"
-          children={complexChildren}
-        />
+        >
+          {complexChildren}
+        </TruncatedText>
       );
 
       expect(screen.getByText('First child')).toBeInTheDocument();
@@ -295,8 +306,9 @@ describe('TruncatedText Component', () => {
         <TruncatedText
           originalText="Different original text"
           displayText="Different display text"
-          children={complexChildren}
-        />
+        >
+          {complexChildren}
+        </TruncatedText>
       );
 
       expect(screen.getByText('First child')).toBeInTheDocument();
@@ -308,8 +320,9 @@ describe('TruncatedText Component', () => {
         <TruncatedText
           originalText="Original"
           displayText="Original"
-          children={<span>Content</span>}
-        />
+        >
+          <span>Content</span>
+        </TruncatedText>
       );
 
       expect(screen.queryByTestId('sl-tooltip')).not.toBeInTheDocument();
@@ -318,8 +331,9 @@ describe('TruncatedText Component', () => {
         <TruncatedText
           originalText="Original text"
           displayText="Truncated..."
-          children={<span>Content</span>}
-        />
+        >
+          <span>Content</span>
+        </TruncatedText>
       );
 
       expect(screen.getByTestId('sl-tooltip')).toBeInTheDocument();

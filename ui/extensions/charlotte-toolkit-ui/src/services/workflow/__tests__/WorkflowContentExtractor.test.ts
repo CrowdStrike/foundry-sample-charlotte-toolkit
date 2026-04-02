@@ -224,7 +224,7 @@ describe('WorkflowContentExtractor', () => {
     describe('error cases', () => {
       it('should throw error for null/undefined output data', () => {
         expect(() => extractWorkflowContent(null)).toThrow('No output data received from workflow');
-        expect(() => extractWorkflowContent(undefined)).toThrow('No output data received from workflow');
+        expect(() => extractWorkflowContent()).toThrow('No output data received from workflow');
       });
 
       it('should throw error when no content can be extracted', () => {
@@ -421,7 +421,7 @@ describe('WorkflowContentExtractor', () => {
         recommendedExtraction: null,
       });
 
-      expect(analyzeWorkflowOutput(undefined)).toEqual({
+      expect(analyzeWorkflowOutput()).toEqual({
         hasContent: false,
         contentFields: [],
         structure: 'simple',
@@ -720,7 +720,7 @@ describe('WorkflowContentExtractor', () => {
 
     it('should return empty object for null/undefined data', () => {
       expect(extractWorkflowMetadata(null)).toEqual({});
-      expect(extractWorkflowMetadata(undefined)).toEqual({});
+      expect(extractWorkflowMetadata()).toEqual({});
     });
 
     it('should return empty object for non-object data', () => {

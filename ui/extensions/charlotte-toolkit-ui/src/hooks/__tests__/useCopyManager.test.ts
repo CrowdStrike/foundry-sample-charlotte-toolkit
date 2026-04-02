@@ -2,7 +2,6 @@
 
 import { renderHook, act } from '@testing-library/react';
 import { useCopyManager } from '../useCopyManager';
-import { CopyFormat } from '../../utils/copyUtils';
 
 // Mock the dependencies
 jest.mock('../useCopyToClipboard', () => ({
@@ -23,7 +22,7 @@ jest.mock('../../utils/security/iocUtils', () => ({
 }));
 
 import { useCopyToClipboard } from '../useCopyToClipboard';
-import { formatForCopy, COPY_OPTIONS } from '../../utils/copyUtils';
+import { formatForCopy, COPY_OPTIONS, type CopyFormat } from '../../utils/copyUtils';
 import { parseStructuredResponse } from '../../utils/security/iocUtils';
 
 const mockUseCopyToClipboard = useCopyToClipboard as jest.MockedFunction<typeof useCopyToClipboard>;
@@ -511,7 +510,7 @@ describe('useCopyManager', () => {
       const invalidFormat = 'invalid' as CopyFormat;
       
       // Reset mocks to ensure clean state
-      mockCopyToClipboard.mockResolvedValue(undefined);
+      mockCopyToClipboard.mockResolvedValue();
       mockFormatForCopy.mockReturnValue('fallback text');
 
       const { result } = renderHook(() =>
@@ -537,7 +536,7 @@ describe('useCopyManager', () => {
       const validFormats: CopyFormat[] = ['raw', 'json', 'markdown'];
 
       // Reset mocks to ensure clean state
-      mockCopyToClipboard.mockResolvedValue(undefined);
+      mockCopyToClipboard.mockResolvedValue();
 
       const { result } = renderHook(() =>
         useCopyManager({ responseText })

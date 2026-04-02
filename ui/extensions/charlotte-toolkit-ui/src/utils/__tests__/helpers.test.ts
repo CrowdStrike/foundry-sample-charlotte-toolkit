@@ -339,7 +339,7 @@ describe('helpers', () => {
     });
 
     it('should handle undefined', () => {
-      const result = formatErrorMessage(undefined);
+      const result = formatErrorMessage();
       expect(result).toBe('An unexpected error occurred');
     });
 
