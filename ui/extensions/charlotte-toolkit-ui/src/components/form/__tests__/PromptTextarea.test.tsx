@@ -1,11 +1,12 @@
 // src/components/form/__tests__/PromptTextarea.test.tsx
 
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import PromptTextarea from '../PromptTextarea';
 
 // Mock Shoelace components
 jest.mock('@shoelace-style/shoelace/dist/react', () => ({
+  // eslint-disable-next-line react/display-name
   SlTextarea: React.forwardRef(({ children, label, value, rows, resize, placeholder, onSlInput }: any, ref) => (
     <div data-testid="sl-textarea">
       <label>{label}</label>
@@ -14,7 +15,7 @@ jest.mock('@shoelace-style/shoelace/dist/react', () => ({
         value={value}
         rows={rows}
         placeholder={placeholder}
-        onChange={(e) => onSlInput && onSlInput({ target: e.target })}
+        onChange={(e) => onSlInput?.({ target: e.target })}
         data-testid="textarea-input"
         data-resize={resize}
         style={{ height: 'auto' }}
@@ -168,7 +169,6 @@ describe('PromptTextarea', () => {
       };
 
       // Mock the ref callback to use our mock element
-      const originalCreateRef = React.createRef;
       jest.spyOn(React, 'useRef').mockReturnValue({
         current: mockTextareaElement
       });

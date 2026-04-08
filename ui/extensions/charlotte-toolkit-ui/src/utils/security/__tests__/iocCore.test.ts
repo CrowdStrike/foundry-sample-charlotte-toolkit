@@ -13,8 +13,8 @@ import {
 
 // Jest global declarations for TypeScript
 declare global {
-  var describe: (name: string, fn: () => void) => void;
-  var it: (name: string, fn: () => void) => void;
+  var describe: (name: string, function_: () => void) => void;
+  var it: (name: string, function_: () => void) => void;
   var expect: any;
 }
 
@@ -121,23 +121,23 @@ describe('IOC Core Utilities', () => {
 
     describe('Registry key detection', () => {
       it('should detect Windows registry keys', () => {
-        expect(detectIOCType('HKEY_LOCAL_MACHINE\\Software\\Microsoft')).toBe('registry');
-        expect(detectIOCType('HKCU\\Software\\Test')).toBe('registry');
+        expect(detectIOCType(String.raw`HKEY_LOCAL_MACHINE\Software\Microsoft`)).toBe('registry');
+        expect(detectIOCType(String.raw`HKCU\Software\Test`)).toBe('registry');
         expect(detectIOCType('HKLM/Software/Test')).toBe('registry'); // forward slash
-        expect(detectIOCType('HKU\\S-1-5-21\\Software')).toBe('registry');
+        expect(detectIOCType(String.raw`HKU\S-1-5-21\Software`)).toBe('registry');
       });
 
       it('should not detect invalid registry patterns', () => {
-        expect(detectIOCType('Software\\Microsoft')).toBe('path'); // detected as path due to backslash
-        expect(detectIOCType('INVALID_HIVE\\Software')).toBe('path'); // detected as path due to backslash
+        expect(detectIOCType(String.raw`Software\Microsoft`)).toBe('path'); // detected as path due to backslash
+        expect(detectIOCType(String.raw`INVALID_HIVE\Software`)).toBe('path'); // detected as path due to backslash
       });
     });
 
     describe('File path detection', () => {
       it('should detect Windows file paths', () => {
-        expect(detectIOCType('C:\\Windows\\System32')).toBe('path');
-        expect(detectIOCType('D:\\Program Files\\Test')).toBe('path');
-        expect(detectIOCType('C:\\temp\\file.exe')).toBe('path');
+        expect(detectIOCType(String.raw`C:\Windows\System32`)).toBe('path');
+        expect(detectIOCType(String.raw`D:\Program Files\Test`)).toBe('path');
+        expect(detectIOCType(String.raw`C:\temp\file.exe`)).toBe('path');
       });
 
       it('should detect Unix file paths', () => {
@@ -147,9 +147,9 @@ describe('IOC Core Utilities', () => {
       });
 
       it('should detect relative paths with separators', () => {
-        expect(detectIOCType('folder\\file.txt')).toBe('path');
+        expect(detectIOCType(String.raw`folder\file.txt`)).toBe('path');
         expect(detectIOCType('folder/file.txt')).toBe('path');
-        expect(detectIOCType('..\\parent\\file')).toBe('path');
+        expect(detectIOCType(String.raw`..\parent\file`)).toBe('path');
       });
 
       it('should not detect simple filenames without paths', () => {

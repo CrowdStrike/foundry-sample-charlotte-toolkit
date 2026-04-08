@@ -35,11 +35,11 @@ jest.mock('../MitreDisplay', () => ({
 
 // Mock ReactMarkdown
 jest.mock('react-markdown', () => {
-  return ({ children, components }: any) => (
+  return function MockReactMarkdown({ children, _components }: any) { return (
     <div data-testid="react-markdown">
       {children}
     </div>
-  );
+  ); };
 });
 
 // Mock Shoelace components

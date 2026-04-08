@@ -214,7 +214,7 @@ describe('ErrorBoundary Component', () => {
     it('should handle errors without messages', () => {
       // Component that throws error without message
       const ThrowEmptyError = () => {
-        throw new Error('');
+        throw new Error('empty');
       };
 
       render(
@@ -229,7 +229,7 @@ describe('ErrorBoundary Component', () => {
     it('should handle non-Error objects being thrown', () => {
       // Component that throws non-Error object
       const ThrowString = () => {
-        throw 'String error';
+        throw new Error('String error');
       };
 
       render(

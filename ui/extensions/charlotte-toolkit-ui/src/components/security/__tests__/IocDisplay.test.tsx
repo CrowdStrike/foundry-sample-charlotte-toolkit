@@ -45,7 +45,7 @@ describe('IOCDisplay', () => {
       ioc.replace(/\./g, '[.]').replace(/http/g, 'hxxp')
     );
     
-    mockWriteText.mockResolvedValue(undefined);
+    mockWriteText.mockResolvedValue();
   });
 
   afterEach(() => {
@@ -59,7 +59,7 @@ describe('IOCDisplay', () => {
         ips: ['192.168.1.1', '8.8.8.8'],
         domains: ['malicious.com', 'evil.org'],
         urls: ['http://malicious.com/payload', 'https://evil.org/malware'],
-        file_paths: ['C:\\temp\\malware.exe', '/usr/bin/suspicious']
+        file_paths: [String.raw`C:\temp\malware.exe`, '/usr/bin/suspicious']
       };
 
       render(<IOCDisplay iocs={iocs} />);
@@ -76,7 +76,7 @@ describe('IOCDisplay', () => {
       expect(screen.getByText('192[.]168[.]1[.]1')).toBeInTheDocument();
       expect(screen.getByText('malicious[.]com')).toBeInTheDocument();
       expect(screen.getByText('hxxp://malicious[.]com/payload')).toBeInTheDocument();
-      expect(screen.getByText('C:\\temp\\malware[.]exe')).toBeInTheDocument();
+      expect(screen.getByText(String.raw`C:\temp\malware[.]exe`)).toBeInTheDocument();
     });
 
     it('should handle empty IOC arrays', () => {
@@ -366,7 +366,7 @@ describe('IOCDisplay', () => {
           'ftp://bad-actor.net/trojan.bin'
         ],
         file_paths: [
-          'C:\\Windows\\System32\\malware.exe',
+          String.raw`C:\Windows\System32\malware.exe`,
           '/usr/bin/suspicious',
           '~/Downloads/payload.sh'
         ]

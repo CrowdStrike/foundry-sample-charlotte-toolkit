@@ -198,7 +198,8 @@ describe('useContextProcessor', () => {
         { initialProps: { falconData: initialData } }
       );
 
-      const initialOptions = result.current.availableContextOptions;
+      // Access result to verify initial processing
+      expect(result.current.availableContextOptions).toEqual(mockContextOptions);
 
       // Change the falconData
       rerender({ falconData: updatedData });
@@ -575,7 +576,7 @@ describe('useContextProcessor', () => {
         .mockReturnValueOnce(optionsArrays[3])
         .mockReturnValueOnce(optionsArrays[4]);
 
-      const { result, rerender } = renderHook(
+      const { rerender } = renderHook(
         ({ data }) => useContextProcessor({ falconData: data }),
         { initialProps: { data: { incident: { id: '1' } } } }
       );
@@ -620,7 +621,7 @@ describe('useContextProcessor', () => {
         []
       ];
 
-      scenarios.forEach((falconData, index) => {
+      scenarios.forEach((falconData, _index) => {
         const emptyOptions: ContextOption[] = [];
         const emptyCounts = {
           total: 0,

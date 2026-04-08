@@ -1,4 +1,5 @@
 // src/hooks/__tests__/useJsonDataManager.test.ts
+/* eslint-disable no-undef */
 
 import { renderHook, act } from '@testing-library/react';
 import { useJsonDataManager } from '../useJsonDataManager';
@@ -27,7 +28,7 @@ describe('useJsonDataManager', () => {
     socket_name: 'Test Incident',
   };
 
-  const mockProps = {
+  const mockProperties = {
     falconData: {
       incident: {
         id: 'inc_123',
@@ -79,7 +80,7 @@ describe('useJsonDataManager', () => {
     it('should initialize with null jsonContextData when no falconData', () => {
       const { result } = renderHook(() =>
         useJsonDataManager({
-          ...mockProps,
+          ...mockProperties,
           falconData: null,
         })
       );
@@ -89,17 +90,17 @@ describe('useJsonDataManager', () => {
 
     it('should initialize jsonContextData when falconData is provided', () => {
       const { result } = renderHook(() =>
-        useJsonDataManager(mockProps)
+        useJsonDataManager(mockProperties)
       );
 
       expect(result.current.jsonContextData).not.toBeNull();
       expect(result.current.jsonContextData?.falcon_context.socket_info).toEqual(mockSocketInfo);
-      expect(result.current.jsonContextData?.falcon_context.falcon_object.full_data).toEqual(mockProps.falconData);
-      expect(result.current.jsonContextData?.falcon_context.falcon_object.available_entities).toEqual(mockProps.availableContextOptions);
+      expect(result.current.jsonContextData?.falcon_context.falcon_object.full_data).toEqual(mockProperties.falconData);
+      expect(result.current.jsonContextData?.falcon_context.falcon_object.available_entities).toEqual(mockProperties.availableContextOptions);
     });
 
     it('should return correct copy states', () => {
-      const { result } = renderHook(() => useJsonDataManager(mockProps));
+      const { result } = renderHook(() => useJsonDataManager(mockProperties));
 
       expect(result.current.contextCopyState).toBe('clipboard');
       expect(result.current.requestCopyState).toBe('clipboard');
@@ -120,7 +121,7 @@ describe('useJsonDataManager', () => {
     };
 
     it('should initialize request data and return updated context', () => {
-      const { result } = renderHook(() => useJsonDataManager(mockProps));
+      const { result } = renderHook(() => useJsonDataManager(mockProperties));
 
       let updatedContext;
       act(() => {
@@ -133,7 +134,7 @@ describe('useJsonDataManager', () => {
     });
 
     it('should update request data without changing timestamp', () => {
-      const { result } = renderHook(() => useJsonDataManager(mockProps));
+      const { result } = renderHook(() => useJsonDataManager(mockProperties));
 
       act(() => {
         result.current.initializeRequestData(mockRequestParams);
@@ -162,7 +163,7 @@ describe('useJsonDataManager', () => {
     };
 
     it('should update response data with calculated execution time', () => {
-      const { result } = renderHook(() => useJsonDataManager(mockProps));
+      const { result } = renderHook(() => useJsonDataManager(mockProperties));
 
       act(() => {
         result.current.updateResponseData(mockResponseData);
@@ -178,11 +179,11 @@ describe('useJsonDataManager', () => {
 
   describe('Copy Operations', () => {
     beforeEach(() => {
-      mockCopyToClipboard.mockResolvedValue(undefined);
+      mockCopyToClipboard.mockResolvedValue();
     });
 
     it('should copy falcon context data', async () => {
-      const { result } = renderHook(() => useJsonDataManager(mockProps));
+      const { result } = renderHook(() => useJsonDataManager(mockProperties));
 
       await act(async () => {
         await result.current.copyFalconContext();
@@ -194,7 +195,7 @@ describe('useJsonDataManager', () => {
     });
 
     it('should copy raw response content', async () => {
-      const { result } = renderHook(() => useJsonDataManager(mockProps));
+      const { result } = renderHook(() => useJsonDataManager(mockProperties));
 
       const responseData = {
         executionStartTime: '2024-01-01T10:00:00.000Z',

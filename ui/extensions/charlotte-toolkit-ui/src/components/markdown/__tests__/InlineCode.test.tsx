@@ -26,7 +26,7 @@ jest.mock('@shoelace-style/shoelace/dist/react', () => ({
       role="button"
     />
   ),
-  SlTooltip: ({ children, content, placement, distance, hoist }: any) => (
+  SlTooltip: ({ children, content, placement, _distance, _hoist }: any) => (
     <div data-testid="sl-tooltip" data-content={content} data-placement={placement}>
       {children}
     </div>
