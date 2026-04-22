@@ -118,6 +118,12 @@
     "minimatch@7": "7.4.8",
     "minimatch@9": "9.0.7",
     "lodash": "4.17.23",
-    "flatted": "3.4.2"
+    "flatted": "3.4.2",
+    "handlebars": "4.7.9",
+    "picomatch@2": "2.3.2",
+    "picomatch@4": "4.0.4",
+    "brace-expansion@2": "2.0.3",
+    "brace-expansion@5": "5.0.5",
+    "yaml": "2.8.3"
   }
 }

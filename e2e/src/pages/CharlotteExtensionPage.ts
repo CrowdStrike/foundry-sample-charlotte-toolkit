@@ -214,11 +214,11 @@ export class CharlotteExtensionPage extends SocketNavigationPage {
         }
 
         // Verify iframe loads
-        await expect(this.page.locator('iframe')).toBeVisible({ timeout: 15000 });
+        await expect(this.page.locator('iframe[name="portal"]')).toBeVisible({ timeout: 15000 });
         this.logger.info('Extension iframe loaded');
 
         // Verify iframe content
-        const iframe: FrameLocator = this.page.frameLocator('iframe');
+        const iframe: FrameLocator = this.page.frameLocator('iframe[name="portal"]');
 
         // Check for Charlotte branding/title - looking for Charlotte Toolkit or Charlotte AI references
         const hasCharlotteContent = await Promise.race([
