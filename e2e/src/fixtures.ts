@@ -1,7 +1,9 @@
 import { test as baseTest } from '@playwright/test';
-import { AppCatalogPage } from './pages/AppCatalogPage';
+import {
+  AppCatalogPage,
+  config,
+} from '@crowdstrike/foundry-playwright';
 import { CharlotteExtensionPage } from './pages/CharlotteExtensionPage';
-import { config } from './config/TestConfig';
 
 type FoundryFixtures = {
   appCatalogPage: AppCatalogPage;
@@ -10,21 +12,6 @@ type FoundryFixtures = {
 };
 
 export const test = baseTest.extend<FoundryFixtures>({
-  // Configure page with centralized settings
-  page: async ({ page }, use) => {
-    const timeouts = config.getPlaywrightTimeouts();
-    page.setDefaultTimeout(timeouts.timeout);
-
-    // Log configuration on first use
-    if (!process.env.CONFIG_LOGGED) {
-      config.logSummary();
-      process.env.CONFIG_LOGGED = 'true';
-    }
-
-    await use(page);
-  },
-
-  // Page object fixtures
   appCatalogPage: async ({ page }, use) => {
     await use(new AppCatalogPage(page));
   },
@@ -33,7 +20,6 @@ export const test = baseTest.extend<FoundryFixtures>({
     await use(new CharlotteExtensionPage(page));
   },
 
-  // App name from config
   appName: async ({}, use) => {
     await use(config.appName);
   },
