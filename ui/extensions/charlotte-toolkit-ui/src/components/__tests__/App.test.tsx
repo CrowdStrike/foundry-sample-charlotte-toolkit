@@ -1,6 +1,6 @@
 // src/components/__tests__/App.test.tsx
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import App from '../App';
 import * as useFalconApiHook from '../../hooks/useFalconApi';
 
@@ -171,7 +171,7 @@ describe('App Component', () => {
       render(<App />);
 
       expect(screen.getByText(/Home Component with falcon:/)).toBeInTheDocument();
-      expect(screen.getByText(new RegExp(JSON.stringify(mockFalcon).replace(/[{}]/g, '\\$&')))).toBeInTheDocument();
+      expect(screen.getByText(new RegExp(JSON.stringify(mockFalcon).replace(/[{}]/g, String.raw`\$&`)))).toBeInTheDocument();
     });
   });
 

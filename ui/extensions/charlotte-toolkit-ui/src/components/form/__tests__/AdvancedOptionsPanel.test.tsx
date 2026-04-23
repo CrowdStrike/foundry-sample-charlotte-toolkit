@@ -14,11 +14,11 @@ jest.mock('@shoelace-style/shoelace/dist/react', () => ({
       {children}
     </details>
   ),
-  SlCheckbox: ({ children, checked, onSlChange }: any) => (
+  SlCheckbox: ({ _children, checked, onSlChange }: any) => (
     <input
       type="checkbox"
       checked={checked}
-      onChange={(e) => onSlChange && onSlChange({ target: e.target })}
+      onChange={(e) => onSlChange?.({ target: e.target })}
       data-testid="show-json-checkbox"
     />
   ),
@@ -27,7 +27,7 @@ jest.mock('@shoelace-style/shoelace/dist/react', () => ({
       <label>{label}</label>
       <select
         value={value}
-        onChange={(e) => onSlChange && onSlChange({ target: e.target })}
+        onChange={(e) => onSlChange?.({ target: e.target })}
         data-testid="temperature-select-input"
       >
         {children}
@@ -59,7 +59,7 @@ jest.mock('@shoelace-style/shoelace/dist/react', () => ({
         value={value}
         placeholder={placeholder}
         rows={rows}
-        onChange={(e) => onSlInput && onSlInput({ target: e.target })}
+        onChange={(e) => onSlInput?.({ target: e.target })}
         data-testid="json-schema-input"
       />
       {children}
@@ -70,7 +70,7 @@ jest.mock('@shoelace-style/shoelace/dist/react', () => ({
       type="text"
       placeholder={placeholder}
       value={value}
-      onChange={(e) => onSlInput && onSlInput({ target: e.target })}
+      onChange={(e) => onSlInput?.({ target: e.target })}
       onKeyDown={onKeyDown}
       data-testid="sl-input"
     />
@@ -327,7 +327,6 @@ describe('AdvancedOptionsPanel', () => {
     });
 
     it('should not add more than 4 stop words', async () => {
-      const user = userEvent.setup();
       const setStopWords = jest.fn();
       render(
         <AdvancedOptionsPanel
@@ -382,7 +381,6 @@ describe('AdvancedOptionsPanel', () => {
     });
 
     it('should call setJsonSchema when text is entered', async () => {
-      const user = userEvent.setup();
       const setJsonSchema = jest.fn();
       render(<AdvancedOptionsPanel {...defaultProps} setJsonSchema={setJsonSchema} />);
       
@@ -420,15 +418,14 @@ describe('AdvancedOptionsPanel', () => {
     });
 
     it('should add data to include when add button is clicked', async () => {
-      const user = userEvent.setup();
       const setDataToInclude = jest.fn();
       render(<AdvancedOptionsPanel {...defaultProps} setDataToInclude={setDataToInclude} />);
       
       // Find the second input (first is for stop words)
       const inputs = screen.getAllByTestId('sl-input');
-      const dataInput = inputs[1]; // Second input is for data to include
+      const [, dataInput] = inputs; // Second input is for data to include
       const buttons = screen.getAllByTestId('sl-button');
-      const addButton = buttons[1]; // Second button is for data to include
+      const [, addButton] = buttons; // Second button is for data to include
       
       fireEvent.change(dataInput, { target: { value: 'newdata' } });
       fireEvent.click(addButton);
@@ -437,12 +434,11 @@ describe('AdvancedOptionsPanel', () => {
     });
 
     it('should add data to include when Enter key is pressed', async () => {
-      const user = userEvent.setup();
       const setDataToInclude = jest.fn();
       render(<AdvancedOptionsPanel {...defaultProps} setDataToInclude={setDataToInclude} />);
-      
+
       const inputs = screen.getAllByTestId('sl-input');
-      const dataInput = inputs[1];
+      const [, dataInput] = inputs;
       
       fireEvent.change(dataInput, { target: { value: 'newdata' } });
       fireEvent.keyDown(dataInput, { key: 'Enter' });
@@ -451,14 +447,13 @@ describe('AdvancedOptionsPanel', () => {
     });
 
     it('should not add empty data to include', async () => {
-      const user = userEvent.setup();
       const setDataToInclude = jest.fn();
       render(<AdvancedOptionsPanel {...defaultProps} setDataToInclude={setDataToInclude} />);
-      
+
       const inputs = screen.getAllByTestId('sl-input');
-      const dataInput = inputs[1];
+      const [, dataInput] = inputs;
       const buttons = screen.getAllByTestId('sl-button');
-      const addButton = buttons[1];
+      const [, addButton] = buttons;
       
       fireEvent.change(dataInput, { target: { value: '   ' } });
       fireEvent.click(addButton);
@@ -467,14 +462,13 @@ describe('AdvancedOptionsPanel', () => {
     });
 
     it('should trim whitespace from data to include', async () => {
-      const user = userEvent.setup();
       const setDataToInclude = jest.fn();
       render(<AdvancedOptionsPanel {...defaultProps} setDataToInclude={setDataToInclude} />);
-      
+
       const inputs = screen.getAllByTestId('sl-input');
-      const dataInput = inputs[1];
+      const [, dataInput] = inputs;
       const buttons = screen.getAllByTestId('sl-button');
-      const addButton = buttons[1];
+      const [, addButton] = buttons;
       
       fireEvent.change(dataInput, { target: { value: '  trimmed  ' } });
       fireEvent.click(addButton);
@@ -509,12 +503,10 @@ describe('AdvancedOptionsPanel', () => {
 
   describe('State Management', () => {
     it('should maintain separate input states for stop words and data to include', async () => {
-      const user = userEvent.setup();
       render(<AdvancedOptionsPanel {...defaultProps} />);
       
       const inputs = screen.getAllByTestId('sl-input');
-      const stopWordsInput = inputs[0];
-      const dataInput = inputs[1];
+      const [stopWordsInput, dataInput] = inputs;
       
       fireEvent.change(stopWordsInput, { target: { value: 'stopword' } });
       fireEvent.change(dataInput, { target: { value: 'datavalue' } });
@@ -524,7 +516,6 @@ describe('AdvancedOptionsPanel', () => {
     });
 
     it.skip('should clear input after adding stop word', async () => {
-      const user = userEvent.setup();
       const setStopWords = jest.fn();
       render(<AdvancedOptionsPanel {...defaultProps} setStopWords={setStopWords} />);
       
@@ -540,14 +531,13 @@ describe('AdvancedOptionsPanel', () => {
     });
 
     it('should clear input after adding data to include', async () => {
-      const user = userEvent.setup();
       const setDataToInclude = jest.fn();
       render(<AdvancedOptionsPanel {...defaultProps} setDataToInclude={setDataToInclude} />);
-      
+
       const inputs = screen.getAllByTestId('sl-input');
-      const dataInput = inputs[1];
+      const [, dataInput] = inputs;
       const buttons = screen.getAllByTestId('sl-button');
-      const addButton = buttons[1];
+      const [, addButton] = buttons;
       
       fireEvent.change(dataInput, { target: { value: 'test' } });
       fireEvent.click(addButton);
@@ -575,8 +565,8 @@ describe('AdvancedOptionsPanel', () => {
       render(<AdvancedOptionsPanel {...defaultProps} setDataToInclude={setDataToInclude} />);
       
       const inputs = screen.getAllByTestId('sl-input');
-      const dataInput = inputs[1];
-      
+      const [, dataInput] = inputs;
+
       fireEvent.change(dataInput, { target: { value: 'test' } });
       fireEvent.keyDown(dataInput, { key: 'Tab' });
       

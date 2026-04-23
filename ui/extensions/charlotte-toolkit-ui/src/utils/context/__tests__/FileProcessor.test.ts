@@ -38,7 +38,7 @@ describe('FileProcessor', () => {
 
     it('should handle null/undefined input', () => {
       expect(processFiles(null, null)).toEqual([]);
-      expect(processFiles(undefined, undefined)).toEqual([]);
+      expect(processFiles()).toEqual([]);
     });
 
     it('should process files with positional association', () => {

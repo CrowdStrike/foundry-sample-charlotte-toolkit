@@ -163,7 +163,7 @@ describe('LRUResponseCache', () => {
 
     it('should handle negative TTL', () => {
       const now = 1000000;
-      const dateNowSpy = mockDate(now);
+      mockDate(now);
       
       cache.set('key1', mockResponse, -1000);
       
@@ -358,7 +358,7 @@ describe('LRUResponseCache', () => {
       keys.forEach(key => cache.set(key, mockResponse));
       
       // Get all keys in reverse order
-      keys.reverse().forEach(key => {
+      keys.toReversed().forEach(key => {
         expect(cache.get(key)).toBeTruthy();
       });
       

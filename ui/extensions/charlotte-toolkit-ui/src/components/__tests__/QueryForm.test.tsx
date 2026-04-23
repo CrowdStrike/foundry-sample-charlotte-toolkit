@@ -23,7 +23,7 @@ jest.mock('@shoelace-style/shoelace/dist/react', () => ({
           <span data-testid="sl-icon-cpu" data-slot="prefix">cpu</span>
         </div>
         <select
-          value={value || ''}
+          value={value ?? ''}
           onChange={(e) => {
             const customEvent = new CustomEvent('sl-change');
             Object.defineProperty(customEvent, 'target', {
@@ -44,7 +44,7 @@ jest.mock('@shoelace-style/shoelace/dist/react', () => ({
       {children}
     </option>
   ),
-  SlIcon: ({ name, slot, ...props }: any) => null, // Don't render to avoid nesting issues
+  SlIcon: ({ _name, _slot, ..._props }: any) => null, // Don't render to avoid nesting issues
 }));
 
 // Mock subcomponents
@@ -66,7 +66,7 @@ jest.mock('../form/ContextEntitySelector', () => {
   return function MockContextEntitySelector(props: any) {
     return (
       <div data-testid="context-entity-selector">
-        <div data-testid="selected-context-entity">{props.selectedContextEntity || 'null'}</div>
+        <div data-testid="selected-context-entity">{props.selectedContextEntity ?? 'null'}</div>
         <div data-testid="available-context-options">{props.availableContextOptions.length}</div>
         <button onClick={() => props.setSelectedContextEntity('test-entity')}>
           Set Entity
@@ -111,7 +111,7 @@ jest.mock('../form/SubmitSection', () => {
 });
 
 describe('QueryForm Component', () => {
-  const mockProps = {
+  const mockProperties = {
     query: 'test query',
     setQuery: jest.fn(),
     modelName: 'claude-latest',
@@ -144,7 +144,7 @@ describe('QueryForm Component', () => {
 
   describe('Component Rendering', () => {
     it('should render all subcomponents', () => {
-      render(<QueryForm {...mockProps} />);
+      render(<QueryForm {...mockProperties} />);
 
       expect(screen.getByTestId('context-entity-selector')).toBeInTheDocument();
       expect(screen.getByTestId('prompt-textarea')).toBeInTheDocument();
@@ -154,7 +154,7 @@ describe('QueryForm Component', () => {
     });
 
     it('should render model selection with correct label and value', () => {
-      render(<QueryForm {...mockProps} />);
+      render(<QueryForm {...mockProperties} />);
 
       expect(screen.getByText('Model')).toBeInTheDocument();
       // Check for the selected option text instead of displayValue with Shoelace components
@@ -162,7 +162,7 @@ describe('QueryForm Component', () => {
     });
 
     it('should render all model options', () => {
-      render(<QueryForm {...mockProps} />);
+      render(<QueryForm {...mockProperties} />);
 
       CHARLOTTE_MODEL_OPTIONS.forEach(option => {
         expect(screen.getByText(option.label)).toBeInTheDocument();
@@ -170,14 +170,14 @@ describe('QueryForm Component', () => {
     });
 
     it('should render CPU icon in model select', () => {
-      render(<QueryForm {...mockProps} />);
+      render(<QueryForm {...mockProperties} />);
 
       expect(screen.getByTestId('sl-icon-cpu')).toBeInTheDocument();
       expect(screen.getByTestId('sl-icon-cpu')).toHaveAttribute('data-slot', 'prefix');
     });
 
     it('should have correct CSS classes for layout', () => {
-      const { container } = render(<QueryForm {...mockProps} />);
+      const { container } = render(<QueryForm {...mockProperties} />);
 
       const mainDiv = container.firstChild as HTMLElement;
       expect(mainDiv).toHaveClass('flex', 'flex-col', 'gap-4', 'isolate');
@@ -186,17 +186,17 @@ describe('QueryForm Component', () => {
 
   describe('Model Selection', () => {
     it.skip('should handle model change event', () => {
-      render(<QueryForm {...mockProps} />);
+      render(<QueryForm {...mockProperties} />);
 
       const select = screen.getByDisplayValue('claude-latest');
       fireEvent.change(select, { target: { value: 'gpt-4o' } });
 
-      expect(mockProps.setModelName).toHaveBeenCalledWith('gpt-4o');
+      expect(mockProperties.setModelName).toHaveBeenCalledWith('gpt-4o');
     });
 
     it.skip('should render with different model selected', () => {
       const propsWithDifferentModel = {
-        ...mockProps,
+        ...mockProperties,
         modelName: 'claude-3-7-sonnet',
       };
 
@@ -206,11 +206,11 @@ describe('QueryForm Component', () => {
     });
 
     it.skip('should maintain model value across re-renders', () => {
-      const { rerender } = render(<QueryForm {...mockProps} />);
+      const { rerender } = render(<QueryForm {...mockProperties} />);
 
       expect(screen.getByDisplayValue('claude-latest')).toBeInTheDocument();
 
-      const updatedProps = { ...mockProps, modelName: 'gpt-4o' };
+      const updatedProps = { ...mockProperties, modelName: 'gpt-4o' };
       rerender(<QueryForm {...updatedProps} />);
 
       expect(screen.getByDisplayValue('gpt-4o')).toBeInTheDocument();
@@ -219,20 +219,20 @@ describe('QueryForm Component', () => {
 
   describe('Props Passing to Subcomponents', () => {
     it('should pass correct props to ContextEntitySelector', () => {
-      render(<QueryForm {...mockProps} />);
+      render(<QueryForm {...mockProperties} />);
 
       expect(screen.getByTestId('selected-context-entity')).toHaveTextContent('entity-1');
       expect(screen.getByTestId('available-context-options')).toHaveTextContent('2');
     });
 
     it('should pass correct props to PromptTextarea', () => {
-      render(<QueryForm {...mockProps} />);
+      render(<QueryForm {...mockProperties} />);
 
       expect(screen.getByTestId('query-value')).toHaveTextContent('test query');
     });
 
     it('should pass correct props to SubmitSection', () => {
-      render(<QueryForm {...mockProps} />);
+      render(<QueryForm {...mockProperties} />);
 
       expect(screen.getByTestId('quota-acknowledged')).toHaveTextContent('false');
       expect(screen.getByTestId('loading')).toHaveTextContent('false');
@@ -240,7 +240,7 @@ describe('QueryForm Component', () => {
     });
 
     it('should pass correct props to AdvancedOptionsPanel', () => {
-      render(<QueryForm {...mockProps} />);
+      render(<QueryForm {...mockProperties} />);
 
       expect(screen.getByTestId('show-json-tab')).toHaveTextContent('true');
       expect(screen.getByTestId('temperature')).toHaveTextContent('0.5');
@@ -252,47 +252,47 @@ describe('QueryForm Component', () => {
 
   describe('Callback Functions', () => {
     it('should handle context entity selector callbacks', () => {
-      render(<QueryForm {...mockProps} />);
+      render(<QueryForm {...mockProperties} />);
 
       fireEvent.click(screen.getByText('Set Entity'));
-      expect(mockProps.setSelectedContextEntity).toHaveBeenCalledWith('test-entity');
+      expect(mockProperties.setSelectedContextEntity).toHaveBeenCalledWith('test-entity');
 
       fireEvent.click(screen.getByText('Update Context Query'));
-      expect(mockProps.setQuery).toHaveBeenCalledWith('updated query');
+      expect(mockProperties.setQuery).toHaveBeenCalledWith('updated query');
     });
 
     it('should handle prompt textarea callbacks', () => {
-      render(<QueryForm {...mockProps} />);
+      render(<QueryForm {...mockProperties} />);
 
       fireEvent.click(screen.getByText('Update Prompt Query'));
-      expect(mockProps.setQuery).toHaveBeenCalledWith('new query');
+      expect(mockProperties.setQuery).toHaveBeenCalledWith('new query');
     });
 
     it('should handle submit section callbacks', () => {
-      render(<QueryForm {...mockProps} />);
+      render(<QueryForm {...mockProperties} />);
 
       fireEvent.click(screen.getByText('Toggle Quota'));
-      expect(mockProps.setQuotaAcknowledged).toHaveBeenCalledWith(true);
+      expect(mockProperties.setQuotaAcknowledged).toHaveBeenCalledWith(true);
 
       fireEvent.click(screen.getByText('Submit'));
-      expect(mockProps.handleSubmit).toHaveBeenCalled();
+      expect(mockProperties.handleSubmit).toHaveBeenCalled();
     });
   });
 
   describe('Loading State', () => {
     it('should display loading state correctly', () => {
-      const loadingProps = { ...mockProps, loading: true };
+      const loadingProps = { ...mockProperties, loading: true };
       render(<QueryForm {...loadingProps} />);
 
       expect(screen.getByTestId('loading')).toHaveTextContent('true');
     });
 
     it('should handle loading state changes', () => {
-      const { rerender } = render(<QueryForm {...mockProps} />);
+      const { rerender } = render(<QueryForm {...mockProperties} />);
 
       expect(screen.getByTestId('loading')).toHaveTextContent('false');
 
-      const loadingProps = { ...mockProps, loading: true };
+      const loadingProps = { ...mockProperties, loading: true };
       rerender(<QueryForm {...loadingProps} />);
 
       expect(screen.getByTestId('loading')).toHaveTextContent('true');
@@ -301,7 +301,7 @@ describe('QueryForm Component', () => {
 
   describe('Edge Cases', () => {
     it('should handle empty query', () => {
-      const emptyQueryProps = { ...mockProps, query: '' };
+      const emptyQueryProps = { ...mockProperties, query: '' };
       render(<QueryForm {...emptyQueryProps} />);
 
       expect(screen.getByTestId('query-value')).toHaveTextContent('');
@@ -309,14 +309,14 @@ describe('QueryForm Component', () => {
     });
 
     it('should handle null selected context entity', () => {
-      const nullEntityProps = { ...mockProps, selectedContextEntity: null };
+      const nullEntityProps = { ...mockProperties, selectedContextEntity: null };
       render(<QueryForm {...nullEntityProps} />);
 
       expect(screen.getByTestId('selected-context-entity')).toHaveTextContent('null');
     });
 
     it('should handle empty context options', () => {
-      const emptyOptionsProps = { ...mockProps, availableContextOptions: [] };
+      const emptyOptionsProps = { ...mockProperties, availableContextOptions: [] };
       render(<QueryForm {...emptyOptionsProps} />);
 
       expect(screen.getByTestId('available-context-options')).toHaveTextContent('0');
@@ -324,7 +324,7 @@ describe('QueryForm Component', () => {
 
     it('should handle empty arrays for optional props', () => {
       const emptyArrayProps = {
-        ...mockProps,
+        ...mockProperties,
         stopWords: [],
         dataToInclude: [],
       };
@@ -335,7 +335,7 @@ describe('QueryForm Component', () => {
     });
 
     it('should handle empty JSON schema', () => {
-      const emptySchemaProps = { ...mockProps, jsonSchema: '' };
+      const emptySchemaProps = { ...mockProperties, jsonSchema: '' };
       render(<QueryForm {...emptySchemaProps} />);
 
       expect(screen.getByTestId('json-schema')).toHaveTextContent('');
@@ -348,10 +348,10 @@ describe('QueryForm Component', () => {
     });
 
     it('should not re-render when props are unchanged', () => {
-      const { rerender } = render(<QueryForm {...mockProps} />);
+      const { rerender } = render(<QueryForm {...mockProperties} />);
 
       // Force a re-render with the same props
-      rerender(<QueryForm {...mockProps} />);
+      rerender(<QueryForm {...mockProperties} />);
 
       // Component should still be rendered correctly
       expect(screen.getByTestId('context-entity-selector')).toBeInTheDocument();
@@ -361,13 +361,13 @@ describe('QueryForm Component', () => {
 
   describe('Accessibility', () => {
     it('should have proper labeling for model select', () => {
-      render(<QueryForm {...mockProps} />);
+      render(<QueryForm {...mockProperties} />);
 
       expect(screen.getByText('Model')).toBeInTheDocument();
     });
 
     it('should maintain focus management through subcomponents', () => {
-      render(<QueryForm {...mockProps} />);
+      render(<QueryForm {...mockProperties} />);
 
       // All interactive elements should be present
       expect(screen.getByText('Set Entity')).toBeInTheDocument();
