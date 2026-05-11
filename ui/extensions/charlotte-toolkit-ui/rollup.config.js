@@ -10,7 +10,6 @@ import postcss from 'rollup-plugin-postcss';
 import terser from '@rollup/plugin-terser';
 import image from '@rollup/plugin-image';
 import { visualizer } from 'rollup-plugin-visualizer';
-import brotli from 'rollup-plugin-brotli';
 import tailwindcss from '@tailwindcss/postcss';
 
 // Environment configuration
@@ -141,14 +140,6 @@ export default defineConfig({
       compress: {
         drop_console: true,
         drop_debugger: true
-      }
-    })] : []),
-
-    // Brotli compression only (better than gzip)
-    ...(isProd ? [brotli({
-      filter: (file) => file.endsWith('.js') || file.endsWith('.css') || file.endsWith('.html'),
-      options: {
-        quality: 11
       }
     })] : []),
 
