@@ -48,7 +48,7 @@
     "identity-obj-proxy": "3.0.0",
     "jest": "30.1.3",
     "jest-environment-jsdom": "30.1.2",
-    "postcss": "8.4.49",
+    "postcss": "8.5.14",
     "prettier": "3.6.2",
     "rollup": "4.59.0",
     "rollup-plugin-postcss": "4.0.2",
@@ -111,18 +111,19 @@
   "overrides": {
     "stable": "0.1.8",
     "svgo": "3.3.3",
-    "serialize-javascript": "7.0.3",
+    "serialize-javascript": "7.0.5",
     "tar": "7.5.11",
     "minimatch@3": "3.1.4",
     "minimatch@7": "7.4.8",
     "minimatch@9": "9.0.7",
-    "lodash": "4.17.23",
+    "lodash": "4.18.1",
     "flatted": "3.4.2",
     "handlebars": "4.7.9",
     "picomatch@2": "2.3.2",
     "picomatch@4": "4.0.4",
     "brace-expansion@2": "2.0.3",
     "brace-expansion@5": "5.0.5",
-    "yaml": "2.8.3"
+    "yaml": "2.8.3",
+    "uuid": "13.0.1"
   }
 }
