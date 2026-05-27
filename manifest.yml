@@ -1,4 +1,3 @@
-app_id: c402448427134c72a46cbd4b492530ae
 name: Charlotte Toolkit
 description: AI-powered security analysis toolkit that leverages Charlotte AI to provide expert-level threat intelligence, automatic indicator extraction, and comprehensive security assessments
 logo: images/charlotte-logo.png
@@ -15,8 +14,7 @@ ignored:
 ui:
     homepage: ""
     extensions:
-        - id: 7296115e75164da19cb6f1e23f05d393
-          name: Charlotte Toolkit
+        - name: Charlotte Toolkit
           description: Charlotte Toolkit UI
           path: ui/extensions/charlotte-toolkit-ui/dist
           entrypoint: ui/extensions/charlotte-toolkit-ui/dist/index.html
@@ -72,8 +70,7 @@ auth:
     roles: []
 functions: []
 workflows:
-    - id: 15c13526f5084a0f9d119e88487eca50
-      name: Charlotte Toolkit Chat Completion
+    - name: Charlotte Toolkit Chat Completion
       path: workflows/Charlotte_Toolkit_Chat_Completion.yml
       permissions: []
 parsers: []
@@ -81,6 +78,5 @@ logscale:
     saved_searches: []
 lookup_files: []
 docs:
-    id: ae68a43504dc4e95b26cea169495b9a5
     path: app_docs
     entrypoint: README.md
