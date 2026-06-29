@@ -1,24 +1,26 @@
 import { Page, FrameLocator, expect } from '@playwright/test';
 import { SocketNavigationPage } from '@crowdstrike/foundry-playwright';
 
+const CI_TIMEOUT = 60_000;
+
 export class CharlotteExtensionPage extends SocketNavigationPage {
   constructor(page: Page) {
     super(page);
   }
 
-  // Override to use 30s portal iframe timeout (foundry-playwright hardcodes 15s).
-  // TODO: Remove once foundry-playwright bumps the portal timeout to use config.extensionTimeout.
+  // Override to use 60s timeouts for CI (foundry-playwright hardcodes 15s for portal iframe).
+  // TODO: Remove once foundry-playwright uses config.extensionTimeout for the portal iframe wait.
   async expandExtensionInSocket(extensionName: string): Promise<FrameLocator> {
     return this.withTiming(async () => {
       this.logger.info(`Expanding extension: ${extensionName}`);
       await this.scrollToExtension(extensionName);
       const extensionButton = this.page.getByRole('button', { name: new RegExp(extensionName, 'i') }).first();
-      await expect(extensionButton).toBeVisible({ timeout: 30000 });
+      await expect(extensionButton).toBeVisible({ timeout: CI_TIMEOUT });
       const isExpanded = await extensionButton.getAttribute('aria-expanded');
       if (isExpanded === 'false' || isExpanded === null) {
         await extensionButton.click();
       }
-      await expect(this.page.locator('iframe[name="portal"]')).toBeVisible({ timeout: 30000 });
+      await expect(this.page.locator('iframe[name="portal"]')).toBeVisible({ timeout: CI_TIMEOUT });
       this.logger.success(`Extension "${extensionName}" expanded`);
       return this.page.frameLocator('iframe[name="portal"]');
     }, `Expand extension "${extensionName}"`);
