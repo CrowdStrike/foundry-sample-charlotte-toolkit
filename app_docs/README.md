@@ -1,8 +1,5 @@
 # Charlotte Toolkit - AI Security Analysis
 
-> **Author**: Nathan Labadie (nathan.labadie@crowdstrike.com)  
-> **Version**: 1.1.0 (Gold Release)
-
 ## What is Charlotte Toolkit?
 
 Charlotte Toolkit brings AI-powered security analysis directly into your CrowdStrike Falcon incidents. Instead of switching between tools or copying data, Charlotte provides expert-level security analysis right where you're working.
@@ -137,5 +134,3 @@ Charlotte provides comprehensive analysis in several sections:
 ---
 
 **Charlotte Toolkit v1.1.0 (Gold Release)** - AI-powered security analysis for CrowdStrike Falcon
-
-*Built by Nathan Labadie (nathan.labadie@crowdstrike.com)*
