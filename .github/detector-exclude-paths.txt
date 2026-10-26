@@ -1,3 +1,22 @@
 # False positives - sample/placeholder values, not real secrets
 \.github/*
 \.githooks/*
+
+# file already deleted but preserved in history with false positive so excluding
+e2e/src/authenticate.cjs
+
+# Additional false positives (build output, lock files, sample data)
+ui/extensions/charlotte-toolkit-ui/dist/vendor-mdzentjy849.js
+ui/extensions/charlotte-toolkit-ui/dist/vendor-mdzentjy849.js.map
+ui/extensions/charlotte-toolkit-ui/dist/vendor-mdxf528lbbb.js
+ui/extensions/charlotte-toolkit-ui/dist/vendor-mdxf528lbbb.js.br
+ui/extensions/charlotte-toolkit-ui/dist/vendor-mdxsi6h8jb9.js.br
+ui/extensions/charlotte-toolkit-ui/dist/vendor-mf4bob09t8l.js
+ui/extensions/charlotte-toolkit-ui/dist/vendor-mf4bob09t8l.js.br
+ui/extensions/charlotte-toolkit-ui/dist/vendor-mfv6jzq6sxy.js.br
+ui/extensions/charlotte-toolkit-ui/dist/vendor-mit9hj5dudz.js.br
+ui/extensions/charlotte-toolkit-ui/dist/vendor-mkqc31fq82g.js.br
+ui/extensions/charlotte-toolkit-ui/dist/vendor-mmjj7uyr2y8.js.br
+ui/extensions/charlotte-toolkit-ui/dist/vendor-mnnglee4dmz.js
+ui/extensions/charlotte-toolkit-ui/dist/vendor-mnnglee4dmz.js.br
+ui/extensions/charlotte-toolkit-ui/dist/vendor-mpba3h0ypa3.js
